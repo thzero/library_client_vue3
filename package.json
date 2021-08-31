@@ -1,5 +1,5 @@
 {
-  "name": "@thzero/library_client_vue",
+  "name": "@thzero/library_client_vue3",
   "version": "0.14.2",
   "version_major": 0,
   "version_minor": 14,
@@ -10,12 +10,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thzero/library_client_vue.git"
+    "url": "git+https://github.com/thzero/library_client_vue3.git"
   },
   "bugs": {
-    "url": "https://github.com/thzero/library_client_vue/issues"
+    "url": "https://github.com/thzero/library_client_vue3/issues"
   },
-  "homepage": "https://github.com/thzero/library_client_vue#readme",
+  "homepage": "https://github.com/thzero/library_client_vue3#readme",
   "scripts": {
     "cli-update": "./node_modules/.bin/library-cli --updateversion --pi",
     "test": "echo \"Error: no test specified\" && exit 1"
