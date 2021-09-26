@@ -139,6 +139,26 @@ class Utility {
 	static settings() {
 		return GlobalUtility.$injector.getService(LibraryConstants.InjectorKeys.SERVICE_SETTINGS);
 	}
+
+	static updateArrayById(array, object) {
+		if (!object)
+			return;
+
+		// let index = array.findIndex(function(element) {
+		// 	return element && element.id == object.id
+		// })
+		// if (index === -1)
+		// 	array.push(object)
+		// else
+		// 	array[index] = object
+
+		// return array
+		const result = [
+			...array.filter(element => element.id !== object.id),
+			object
+		];
+		return result;
+	}
 }
 
 export default Utility;
