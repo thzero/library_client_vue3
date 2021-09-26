@@ -24,8 +24,8 @@
   "dependencies": {
     "@thzero/library_client": "^0.14",
     "@thzero/library_common": "^0.13",
-    "@vuelidate/core": "^2.0.0-alpha.24",
-    "@vuelidate/validators": "^2.0.0-alpha.21",
+    "@vuelidate/core": "^2.0.0-alpha.26",
+    "@vuelidate/validators": "^2.0.0-alpha.22",
     "easy-rbac": "^3.1.1",
     "highlight.js": "^11.2.0",
     "marked": "^3.0.4",
