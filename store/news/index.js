@@ -3,6 +3,8 @@ import LibraryConstants from '@thzero/library_client/constants';
 import GlobalUtility from '@thzero/library_client/utility/global';
 import LibraryUtility from '@thzero/library_common/utility';
 
+import Response from '@thzero/library_common/response';
+
 const store = {
 	state: {
 		latest: null
