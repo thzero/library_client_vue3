@@ -24,11 +24,10 @@
   "dependencies": {
     "@thzero/library_client": "^0.15",
     "@thzero/library_common": "^0.15",
-    "@vuelidate/core": "^2.0.0-alpha.30",
-    "@vuelidate/validators": "^2.0.0-alpha.24",
+    "@vuelidate/core": "^2.0.0-alpha.32",
+    "@vuelidate/validators": "^2.0.0-alpha.25",
     "easy-rbac": "^3.1.1",
     "highlight.js": "^11.3.1",
-    "marked": "^3.0.8",
     "mitt": "^3.0.0",
     "vee-validate": "^4.4.6",
     "vue": "^3.0.0",
