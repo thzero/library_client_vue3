@@ -6,7 +6,7 @@ import {} from '@thzero/library_common/utility/string';
 
 // eslint-disable-next-line
 // async function start(app, router, storeRequest, vuetify, bootFiles, starter) {
-async function start(app, router, storeRequest, bootFiles, starter) {
+async function start(app, router, storeRequest, bootFiles, starter, options) {
 	let store = null;
 	try {
 		const obj = new storeRequest();
@@ -33,7 +33,8 @@ async function start(app, router, storeRequest, bootFiles, starter) {
 						framework,
 						app,
 						router,
-						store
+						store,
+						options
 					});
 					continue;
 				}
@@ -43,7 +44,8 @@ async function start(app, router, storeRequest, bootFiles, starter) {
 						framework,
 						app,
 						router,
-						store
+						store,
+						options
 					);
 					continue;
 				}
