@@ -73,10 +73,6 @@ class Utility {
 		return true;
 	}
 
-	static fullscreen(vuetify) {
-		return vuetify.breakpoint.xs;
-	}
-
 	static handleError(object, serverErrors, response) {
 		if (!object || !serverErrors || !response)
 			return;
@@ -106,36 +102,7 @@ class Utility {
 
 		GlobalUtility.$navRouter.push('/');
 	}
-
-	static overlayImageWidth() {
-		const width = (window.innerWidth > window.innerHeight ? window.innerHeight : window.innerWidth);
-		if (width > 512)
-			return '512px';
-
-		return width * 0.75 + 'px';
-	}
-
-	static overlayProgressSize() {
-		return (window.innerWidth > window.innerHeight ? window.innerHeight : window.innerWidth) * 0.25;
-	}
-
-	static randomKeyGen() {
-		const high = 100000000000;
-		const low = 0;
-		return Math.floor(Math.random() * (high - low) + low);
-	}
-
-	static selectBlank(array, prompt) {
-		if (!array)
-			return array;
-
-		prompt = prompt ? '<' + prompt + '>' : '';
-
-		const temp = array.slice(0);
-		temp.unshift({ id: null, name: prompt });
-		return temp;
-	}
-
+	
 	static settings() {
 		return GlobalUtility.$injector.getService(LibraryConstants.InjectorKeys.SERVICE_SETTINGS);
 	}
