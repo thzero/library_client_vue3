@@ -13,11 +13,12 @@ async function start(app, router, storeRequest, bootFiles, starter, options) {
 		store = await obj.execute();
 	}
 	catch (err) {
-		store = storeRequest;
+		console.log(err);
+		throw Error('Unable to create store.');
 	}
 
 	if (!store)
-		throw Error('Unable to create store.');
+		throw Error('Invalid store.');
 
 	const framework = createApp(app);
 
