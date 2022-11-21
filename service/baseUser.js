@@ -40,7 +40,9 @@ class VueBaseUserService extends BaseUserService {
 	}
 
 	get token() {
-		return this._serviceStore.state.user.token;
+		if (this._serviceStore.state.user) 
+			return this._serviceStore.state.user.token;
+		return null;
 	}
 }
 
