@@ -1,5 +1,9 @@
 import { createStore } from 'vuex';
 
+import LibraryConstants from '@thzero/library_client/constants';
+
+import GlobalUtility from '@thzero/library_client/utility/global';
+
 import NotImplementedError from '@thzero/library_common/errors/notImplemented';
 
 import adminNews from './admin/news';
@@ -9,11 +13,13 @@ import news from './news';
 import user from './user';
 
 class BaseStore {
-	async execute() {
+	async initialize() {
 		this.actionDispatcher = {};
 
 		this.store = this._init();
 
+		this.actionDispatcher = this.store.dispatcher;
+		
 		this._addModule('adminNews', adminNews);
 		this._addModule('adminUsers', adminUsers);
 		this._addModule('news', news);
@@ -27,13 +33,14 @@ class BaseStore {
 		if (pluginPersist)
 			this.store.plugins = [pluginPersist.plugin];
 
-		this.actionDispatcher.root = this.store.dispatcher;
 		delete this.store.dispatcher;
 
 		// const vuexStore = new Vuex.Store(this.store);
 		this.store = createStore(this.store);
 		this.store.dispatcher = this.actionDispatcher;
 
+		this.store.$logger = GlobalUtility.$injector.getService(LibraryConstants.InjectorKeys.SERVICE_LOGGER);
+		GlobalUtility.$store = this.store;
 		return this.store;
 	}
 

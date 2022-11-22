@@ -4,7 +4,8 @@ import AdminBaseServices from '@thzero/library_client/boot/adminBaseServices';
 
 import eventService from '../service/event';
 import routerService from '../service/router';
-import storeService from '../service/store';
+import storeService from '../service/store/pinia'; // STORE TYPE
+// import storeService from '../service/store/vuex'; // STORE TYPE
 import translateService from '../service/translate';
 
 class VueBaseServices extends AdminBaseServices {

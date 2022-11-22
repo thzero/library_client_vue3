@@ -4,7 +4,7 @@ import { defineRule } from 'vee-validate';
 
 class BaseValidate {
 	// eslint-disable-next-line
-	async execute(Vue, app, router, store) {
+	async execute(Vue, app, router) {
 		defineRule('required', value => {
 			if (!value || !value.length) {
 				return 'This field is required';
@@ -13,7 +13,7 @@ class BaseValidate {
 			return true;
 		});
 // 	// eslint-disable-next-line
-// 	async execute(Vue, app, router, store) {
+// 	async execute(Vue, app, router) {
 // 		extend('decimal', {
 // 			validate: (value, { decimals = '*', separator = '.' } = {}) => {
 // 				if (value === null || value === undefined || value === '') {

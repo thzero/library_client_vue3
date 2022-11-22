@@ -8,7 +8,7 @@ import NotImplementedError from '@thzero/library_common/errors/notImplemented';
 
 class VueBasei18n extends Basei18n {
 	// eslint-disable-next-line
-	async execute(framework, app, router, store) {
+	async execute(framework, app, router) {
 		// Set i18n instance on app
 		const i18n = createI18n({
 			locale: 'en-us',

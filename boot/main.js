@@ -7,19 +7,6 @@ import {} from '@thzero/library_common/utility/string';
 // eslint-disable-next-line
 // async function start(app, router, storeRequest, vuetify, bootFiles, starter) {
 async function start(app, router, storeRequest, bootFiles, starter, options) {
-	let store = null;
-	try {
-		const obj = new storeRequest();
-		store = await obj.execute();
-	}
-	catch (err) {
-		console.log(err);
-		throw Error('Unable to create store.');
-	}
-
-	if (!store)
-		throw Error('Invalid store.');
-
 	const framework = createApp(app);
 
 	if (bootFiles && (bootFiles.length > 0)) {
@@ -34,7 +21,6 @@ async function start(app, router, storeRequest, bootFiles, starter, options) {
 						framework,
 						app,
 						router,
-						store,
 						options
 					});
 					continue;
@@ -45,7 +31,6 @@ async function start(app, router, storeRequest, bootFiles, starter, options) {
 						framework,
 						app,
 						router,
-						store,
 						options
 					);
 					continue;
@@ -65,12 +50,27 @@ async function start(app, router, storeRequest, bootFiles, starter, options) {
 	}
 
 	GlobalUtility.$navRouter = router;
-	GlobalUtility.$store = store;
+
+	let storeWrapper = null;
+	try {
+		storeWrapper = new storeRequest();
+	}
+	catch (err) {
+		console.log(err);
+		throw Error('Invalid store wrapper.');
+	}
+
+	let storeInitialized = null;
+	try {
+		storeInitialized = await storeWrapper.initialize();
+	}
+	catch (err) {
+		console.log(err);
+		throw Error('Invalid store.');
+	}
 
 	if (!starter) {
-		// new Vue(vueApp).$mount('#app');
-		// framework.use(store).use(router).mount('#app');
-		framework.use(store).use(router).mount('#app');
+		framework.use(storeInitialized).use(router).mount('#app');
 		return;
 	}
 
@@ -79,14 +79,14 @@ async function start(app, router, storeRequest, bootFiles, starter, options) {
 			framework,
 			app,
 			router,
-			store
+			store: GlobalUtility.$store
 		});
 
 		result
 			// eslint-disable-next-line
 			.then(values => {
 				// new Vue(vueApp).$mount('#app');
-				framework.use(store).use(router).mount('#app');
+				framework.use(storeInitialized).use(router).mount('#app');
 			})
 			.catch(err => {
 				// eslint-disable-next-line
