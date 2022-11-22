@@ -29,6 +29,8 @@
     "easy-rbac": "^3.2.0",
     "highlight.js": "^11.6.0",
     "mitt": "^3.0.0",
+    "pinia": "^2.0.24",
+    "pinia-plugin-persist": "^1.0.0",
     "vee-validate": "^4.6.4",
     "vue": "^3.2.13",
     "vue-i18n": "^9.1.9",
