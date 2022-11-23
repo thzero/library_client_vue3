@@ -60,48 +60,66 @@ async function start(app, router, storeRequest, bootFiles, starter, options) {
 		throw Error('Invalid store wrapper.');
 	}
 
-	let storeInitialized = null;
+	let storeInitialize = null;
 	try {
-		storeInitialized = await storeWrapper.initialize();
+		storeInitialize = await storeWrapper.initialize();
 	}
 	catch (err) {
 		console.log(err);
 		throw Error('Invalid store.');
 	}
+	
+	const storeSetup = storeWrapper.setup();
+	if (storeSetup)
+		framework.use(storeInitialize).use(storeSetup.func, storeSetup.options).use(router).mount('#app');
+	else 
+		framework.use(storeInitialize).use(router).mount('#app');
 
-	if (!starter) {
-		framework.use(storeInitialized).use(router).mount('#app');
-		return;
-	}
-
-	try {
-		const result = starter({
+	if (starter) {
+		starter({
 			framework,
 			app,
 			router,
 			store: GlobalUtility.$store
-		});
-
-		result
+		}).catch(err => {
 			// eslint-disable-next-line
-			.then(values => {
-				// new Vue(vueApp).$mount('#app');
-				framework.use(storeInitialized).use(router).mount('#app');
-			})
-			.catch(err => {
-				// eslint-disable-next-line
-				console.error('boot error:', err);
-			});
+			console.error('boot error:', err);
+		});
 	}
-	catch (err) {
-		if (err && err.url) {
-			window.location.href = err.url;
-			return;
-		}
 
-		// eslint-disable-next-line
-		console.error('boot error:', err);
-	}
+	// if (!starter) {
+	// 	framework.use(storeInitialized).use(router).mount('#app');
+	// 	return;
+	// }
+
+	// try {
+	// 	const result = starter({
+	// 		framework,
+	// 		app,
+	// 		router,
+	// 		store: GlobalUtility.$store
+	// 	});
+
+	// 	result
+	// 		// eslint-disable-next-line
+	// 		.then(values => {
+	// 			// new Vue(vueApp).$mount('#app');
+	// 			framework.use(storeInitialized).use(router).mount('#app');
+	// 		})
+	// 		.catch(err => {
+	// 			// eslint-disable-next-line
+	// 			console.error('boot error:', err);
+	// 		});
+	// }
+	// catch (err) {
+	// 	if (err && err.url) {
+	// 		window.location.href = err.url;
+	// 		return;
+	// 	}
+
+	// 	// eslint-disable-next-line
+	// 	console.error('boot error:', err);
+	// }
 }
 
 export default start;
