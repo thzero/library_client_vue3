@@ -20,17 +20,10 @@ const store = {
 			const response = await service.refreshSettings(correlationId, this.user);
 			this.$logger.debug('store.user', 'refreshUserSettings', 'response', response);
 			if (Response.hasSucceeded(response) && response.results)
-				// commit('setUserSettings', { correlationId: correlationId, user: response.results });
 				this.setUser(response.results);
 			return response;
 		},
 		async resetUser(correlationId) {
-			// commit('resetUser', correlationId);
-			// state.claims = null;
-			// state.isLoggedIn = false;
-			// state.token = null;
-			// state.tokenResult = null;
-			// state.user = null;
 			this.$patch({
 				claims: null,
 				isLoggedIn: false,
@@ -40,15 +33,12 @@ const store = {
 			});
 		},
 		async setUserAuthCompleted(correlationId, authCompleted) {
-			// commit('setUserAuthCompleted', params);
 			this.authCompleted = authCompleted;
 		},
 		async setUserClaims(correlationId, claims) {
-			// commit('setUserClaims', params);
 			this.claims = claims;
 		},
 		async setUserLoggedIn(correlationId, isLoggedIn) {
-			// commit('setUserLoggedIn', params);
 			this.isLoggedIn = isLoggedIn;
 		},
 		async setUserSettings(correlationId, settings) {
@@ -56,13 +46,8 @@ const store = {
 			settings = VueUtility.settings().mergeUser(params.correlationId, settings);
 			const response = await service.updateSettings(params.correlationId, this.user, settings);
 			this.$logger.debug('store.user', 'setUserSettings', 'response', response);
-			if (Response.hasSucceeded(response) && response.results) {
-				// commit('setUserSettings', { correlationId: params.correlationId, user: response.results });
-				// const user = response.results;
-				// user.settings = VueUtility.settings().mergeUser(correlationId, user.settings);
-				// state.user = user;
+			if (Response.hasSucceeded(response) && response.results)
 				this.setUser(correlationId, response.results);
-			}
 			return response;
 		},
 		async setUserSettings2(correlationId, settings) {
@@ -79,52 +64,16 @@ const store = {
 			return response;
 		},
 		async setUserTokenResult(correlationId, tokenResult) {
-			// commit('setUserTokenResult', params);
-			// state.tokenResult = tokenResult;
-			// state.token = tokenResult ? tokenResult.token : null;
 			this.$patch({
 				tokenResult: null,
 				token: tokenResult ? tokenResult.token : null
 			});
 		},
 		async setUser(correlationId, user) {
-			// commit('setUser', params);
 			if (user)
 				user.settings = VueUtility.settings().mergeUser(correlationId, user.settings);
 			this.user = user;
 		}
-	},
-	mutations: {
-		// eslint-disable-next-line
-		// resetUser(state, correlationId) {
-		// 	state.claims = null;
-		// 	state.isLoggedIn = false;
-		// 	state.token = null;
-		// 	state.tokenResult = null;
-		// 	state.user = null;
-		// },
-		// setUserAuthCompleted(state, params) {
-		// 	state.authCompleted = params.authCompleted;
-		// },
-		// setUserClaims(state, params) {
-		// 	state.claims = params.claims;
-		// },
-		// setUserLoggedIn(state, params) {
-		// 	state.isLoggedIn = params.isLoggedIn;
-		// },
-		// setUserSettings(state, params) {
-		// 	params.user.settings = VueUtility.settings().mergeUser(params.correlationId, params.user.settings);
-		// 	state.user = params.user;
-		// },
-		// setUserTokenResult(state, params) {
-		// 	state.tokenResult = params.tokenResult;
-		// 	state.token = params.tokenResult ? params.tokenResult.token : null;
-		// },
-		// setUser(state, params) {
-		// 	if (params.user)
-		// 		params.user.settings = VueUtility.settings().mergeUser(params.correlationId, params.user.settings);
-		// 	state.user = params.user;
-		// }
 	},
 	dispatcher: {
 		async refreshUserSettings(correlationId) {
