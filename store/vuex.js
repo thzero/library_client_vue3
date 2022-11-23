@@ -10,7 +10,7 @@ import adminNews from './admin/news';
 import adminUsers from './admin/users';
 
 import news from './news';
-import user from './user';
+import user from '@thzero/library_client_vue3/store/user/vuex';
 
 class BaseStore {
 	async initialize() {

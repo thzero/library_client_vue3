@@ -1,7 +1,7 @@
 import LibraryConstants from '@thzero/library_client/constants';
 
 import GlobalUtility from '@thzero/library_client/utility/global';
-import VueUtility from '../../utility/index';
+import VueUtility from '@thzero/library_client_vue3/utility';
 
 import Response from '@thzero/library_common/response';
 
