@@ -55,7 +55,7 @@ class BaseStore {
 			options: {
 				actionDispatcher: this.actionDispatcher,
 				addModule: this._addModule,
-				initModules: this._initModules(),
+				initModules: this._initModules,
 				logger: logger,
 				pinia: this.pinia,
 				pluginPersist: this._initPluginPersist(),
