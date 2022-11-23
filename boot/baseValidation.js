@@ -1,19 +1,6 @@
-import { defineRule } from 'vee-validate';
-
-// import { ValidationObserver, ValidationProvider, extend } from 'vee-validate/dist/vee-validate.full.min';
-
 class BaseValidate {
 	// eslint-disable-next-line
 	async execute(Vue, app, router) {
-		defineRule('required', value => {
-			if (!value || !value.length) {
-				return 'This field is required';
-			}
-
-			return true;
-		});
-// 	// eslint-disable-next-line
-// 	async execute(Vue, app, router) {
 // 		extend('decimal', {
 // 			validate: (value, { decimals = '*', separator = '.' } = {}) => {
 // 				if (value === null || value === undefined || value === '') {
@@ -57,9 +44,6 @@ class BaseValidate {
 // 		});
 
 		this._initialize();
-
-// 		Vue.component('ValidationObserver', ValidationObserver);
-// 		Vue.component('ValidationProvider', ValidationProvider);
 	}
 
 	// eslint-disable-next-line
