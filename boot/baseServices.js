@@ -3,7 +3,7 @@ import GlobalUtility from '@thzero/library_client/utility/global';
 import AdminBaseServices from '@thzero/library_client/boot/adminBaseServices';
 
 import eventService from '../service/event';
-import routerService from '../service/router'; // STORE TYPE
+import routerService from '../service/router';
 import translateService from '../service/translate';
 
 class VueBaseServices extends AdminBaseServices {
