@@ -6,4 +6,14 @@
 
 An opinionated library of common functionality to bootstrap a VueJs 3.0 based SPA application.
 
+## Installation
+
 [![NPM](https://nodei.co/npm/@thzero/library_common.png?compact=true)](https://npmjs.org/package/@thzero/library_client_vue3)
+
+### Requirements
+
+#### NodeJs
+
+Requires 
+* [library_common](https://npmjs.org/package/@thzero/library_common)
+* [library_client](https://npmjs.org/package/@thzero/library_client)
