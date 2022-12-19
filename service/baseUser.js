@@ -20,19 +20,19 @@ class VueBaseUserService extends BaseUserService {
 	}
 
 	async setAuthCompleted(correlationId) {
-		await this._serviceStore.dispatcher.user.setAuthCompleted(correlationId, true);
+		await this._serviceStore.dispatcher.user.setUserAuthCompleted(correlationId, true);
 	}
 
 	async setClaims(correlationId, claims) {
-		await this._serviceStore.dispatcher.user.setClaims(correlationId, claims);
+		await this._serviceStore.dispatcher.user.setUserClaims(correlationId, claims);
 	}
 
 	async setLoggedIn(correlationId, value) {
-		await this._serviceStore.dispatcher.user.setLoggedIn(correlationId, value);
+		await this._serviceStore.dispatcher.user.setUserLoggedIn(correlationId, value);
 	}
 	
 	async setTokenResult(correlationId, tokenResult) {
-		await this._serviceStore.dispatcher.user.setTokenResult(correlationId, tokenResult);
+		await this._serviceStore.dispatcher.user.setUserTokenResult(correlationId, tokenResult);
 	}
 
 	async setUser(correlationId, user) {
