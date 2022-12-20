@@ -137,9 +137,10 @@ or
 * Copy the files in the '_config' folder to the root folder of the application.
 
   * .browserslistrc
-  * .eslintrc
-  * babel.config.js
-  * vue.config.js
+  * .eslintignore
+  * .eslintrc.js
+  * jsconfig.json
+  * vite.js
 
 ### Package.json
 
