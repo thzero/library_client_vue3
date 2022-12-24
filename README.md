@@ -134,6 +134,8 @@ or
 
 ### Development
 
+if using Vite cli...
+
 * Copy the files in the '_config' folder to the root folder of the application.
 
   * .browserslistrc
@@ -141,6 +143,17 @@ or
   * .eslintrc.js
   * jsconfig.json
   * vite.js
+
+If using Vue cli...
+
+* Copy the files in the '_config' folder to the root folder of the application.
+
+  * .browserslistrc
+  * .eslintignore
+  * .eslintrc.js
+  * babel.config.js
+  * jsconfig.json
+  * vue.config.js
 
 ### Package.json
 

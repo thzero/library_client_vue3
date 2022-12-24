@@ -1,13 +1,9 @@
-// Plugins
-import vue from '@vitejs/plugin-vue'
-import vuetify from 'vite-plugin-vuetify'
 
-// Utilities
-import { defineConfig } from 'vite'
-import { fileURLToPath, URL } from 'node:url'
-
-import fs from 'fs';
-import path from 'path';
+const { defineConfig } = require('@vue/cli-service');
+const fs = require('fs');
+const path = require('path');
+const webpack = require('webpack');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 let configEnv = process.env.NODE_ENV;
 console.log('vue.config.NODE_ENV', configEnv);
@@ -58,33 +54,46 @@ try {
   console.log(err);
 }
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    vue(),
-    // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
-    vuetify({
-      autoImport: true,
-    }),
+module.exports = defineConfig({
+
+    configureWebpack: {
+		devtool: 'source-map',
+		module: {
+			rules: [
+				{
+					test: /locales/,
+					loader: '@alienfast/i18next-loader'
+					// options here
+					// query: { overrides: [ '../node_modules/lib/locales' ] }
+				}
+			]
+		},
+		plugins: [
+			// new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }),
+			new webpack.ContextReplacementPlugin(
+				/highlight\.js\/lib\/languages$/,
+				new RegExp(`^./(${['javascript'].join('|')})$`)
+			)
+		],
+		resolve: {
+			alias: {
+				'local-config': path.join(__dirname, `./src/config/${configEnv}.json`),
+				'open-source-config': path.join(__dirname, './src/openSource.js')
+			}
+		}
+	},
+
+	css: {
+		extract: { ignoreOrder: true }
+	},
+  transpileDependencies: [
+    'quasar'
   ],
-  define: { 'process.env': {} },
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-      'local-config': fileURLToPath(new URL(`./src/config/${configEnv}.json`, import.meta.url)),
-      'open-source-config': fileURLToPath(new URL(`./src/openSource.js`, import.meta.url)),
-    },
-    extensions: [
-      '.js',
-      '.json',
-      '.jsx',
-      '.mjs',
-      '.ts',
-      '.tsx',
-      '.vue',
-    ],
-  },
-  server: {
-    port: 3000,
-  },
-})
+
+  pluginOptions: {
+    quasar: {
+      importStrategy: 'kebab',
+      rtlSupport: false
+    }
+  }
+});

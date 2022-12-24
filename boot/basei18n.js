@@ -10,12 +10,16 @@ class VueBasei18n extends Basei18n {
 	// eslint-disable-next-line
 	async execute(framework, app, router) {
 		// Set i18n instance on app
-		const i18n = createI18n({
+		let options = {
 			locale: 'en-us',
 			fallbackLocale: 'en',
 			messages: this._initMessages(), // messages,
-			silentTranslationWarn: true
-		});
+			missingWarn: false,
+			silentFallbackWarn: true,
+			silentTranslationWarn: true,
+		};
+		this._initOptions(options);
+		const i18n = createI18n(options);
 		framework.use(i18n);
 		GlobalUtility.i18n = i18n.global;
 		GlobalUtility.$trans = i18n.global;
@@ -23,6 +27,9 @@ class VueBasei18n extends Basei18n {
 
 	_initMessages() {
 		throw new NotImplementedError();
+	}
+
+	_initOptions(options) {
 	}
 }
 
