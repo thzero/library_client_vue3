@@ -13,9 +13,9 @@ class VueBasei18n extends Basei18n {
 		let options = {
 			locale: 'en-us',
 			fallbackLocale: 'en',
-			fallbackWarn: false,
 			messages: this._initMessages(), // messages,
 			missingWarn: false,
+			silentFallbackWarn: true,
 			silentTranslationWarn: true,
 		};
 		this._initOptions(options);
