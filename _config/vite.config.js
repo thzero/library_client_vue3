@@ -22,7 +22,7 @@ if (config) {
 }
 else
 	configEnv = 'development';
-console.log('vue.config.NODE_ENV', configEnv);
+console.log('vue.config._CONFIG_ENV', configEnv);
 
 const dir = path.join(__dirname, 'node_modules', '@thzero');
 const dirs = fs.readdirSync(dir);
@@ -52,7 +52,7 @@ for (const item of dirs) {
 }
 
 try {
-  const openSourceJs = `/* eslint-disable */\n/* GENERATED FILE - DO NOT EDIT */\nexport default () => { return [ ${items.join(`, `)} ]; }`;
+  const openSourceJs = `/* eslint-disable */\n/* GENERATED FILE - DO NOT EDIT */\nexport function useDependenciesClientBase () { return [ ${items.join(`, `)} ]; }`;
   fs.writeFileSync(path.join(__dirname, 'src', 'openSource.js'), openSourceJs);
 } catch (err) {
   console.log(err);
