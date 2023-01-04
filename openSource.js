@@ -37,6 +37,13 @@ export default () => {
         },
         {
             category: 'client',
+            name: 'vue-cookie-comply',
+            url: 'https://github.com/yaiks/vue-cookie-comply',
+            licenseName: 'MIT',
+            licenseUrl: 'https://github.com/yaiks/vue-cookie-comply/blob/main/LICENSE'
+        },
+        {
+            category: 'client',
             name: 'vue3-async-computed',
             url: 'https://github.com/mainclass/vue3-async-computed'
         },
