@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        ref: dev
+        ref: test
     - name: Node Dependencies
       run: |
         npm install --no-package-lock
