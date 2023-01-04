@@ -77,7 +77,7 @@ class Utility {
 		if (!object || !serverErrors || !response)
 			return;
 
-		const errors = {};
+		let errors = {};
 		let error;
 		for (const field in response.errors) {
 			error = Utility.applyError(response.errors[field]);
@@ -92,6 +92,11 @@ class Utility {
 		}
 
 		object.setErrors(errors);
+		// object.validation().applyResult({
+		//     errors: [ GlobalUtility.$trans.t(`${Constants.ErrorCodes.Suffix}.${messageCode}`, messageParams) ],
+		//     valid: false,
+		//     failedRules: {} // should be empty since this is a manual error.
+		//   })
 	}
 
 	static invalid(next) {
@@ -102,9 +107,58 @@ class Utility {
 
 		GlobalUtility.$navRouter.push('/');
 	}
-	
+
+	static randomKeyGen() {
+		const high = 100000000000;
+		const low = 0;
+		return Math.floor(Math.random() * (high - low) + low);
+	}
+
 	static settings() {
 		return GlobalUtility.$injector.getService(LibraryConstants.InjectorKeys.SERVICE_SETTINGS);
+	}
+
+	static selectBlank(array, prompt) {
+		if (!array)
+			return array;
+
+		prompt = prompt ? '<' + prompt + '>' : '';
+
+		const temp = array.slice(0);
+		temp.unshift({ id: null, name: prompt });
+		return temp;
+	}
+	
+	static selectOptions(options, trans, prefix, funcId, funcName, funcValue) {
+		if (!options || !trans || !Array.isArray(options))
+			return [];
+
+		prefix = (prefix && prefix !== '') ? prefix + '.' : '';
+
+		const output = options.map(l => {
+			let id = l;
+			if (funcId)
+				id = funcId(l);
+
+			let nameLookup = id;
+			if (funcName)
+				nameLookup = funcName(l);
+			nameLookup = prefix + nameLookup;
+			let name = trans(nameLookup);
+			if (String.isNullOrEmpty(name) || name === nameLookup)
+				name = trans(nameLookup + '.title');
+
+			let value = l;
+			if (funcValue)
+				value = funcValue(l);
+
+			return {
+				id: id,
+				name: name,
+				value: value
+			};
+		});
+		return output;
 	}
 }
 
