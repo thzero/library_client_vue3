@@ -1,4 +1,4 @@
-name: Publish CI Without Version
+name: Publish CI Alpha
 
 on:
     workflow_dispatch:
@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        ref: test
+        ref: alpha
     - name: Node Dependencies
       run: |
         npm install --no-package-lock
