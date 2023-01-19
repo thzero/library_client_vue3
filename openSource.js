@@ -23,10 +23,10 @@ export default () => {
         },
         {
             category: 'client',
-            name: 'vee-validate',
-            url: 'https://github.com/logaretm/vee-validate',
+            name: 'vuelidate',
+            url: 'https://github.com/vuelidate/vuelidate',
             licenseName: 'MIT',
-            licenseUrl: 'https://github.com/logaretm/vee-validate/blob/master/LICENSE'
+            licenseUrl: 'https://github.com/vuelidate/vuelidate/blob/next/LICENSE'
         },
         {
             category: 'client',
