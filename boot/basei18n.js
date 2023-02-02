@@ -1,6 +1,6 @@
 import { createI18n } from 'vue-i18n';
 
-import GlobalUtility from '@thzero/library_client/utility/global';
+import LibraryClientUtility from '@thzero/library_client/utility/index';
 
 import Basei18n from '@thzero/library_client/boot/basei18n';
 
@@ -21,8 +21,8 @@ class VueBasei18n extends Basei18n {
 		this._initOptions(options);
 		const i18n = createI18n(options);
 		framework.use(i18n);
-		GlobalUtility.i18n = i18n.global;
-		GlobalUtility.$trans = i18n.global;
+		LibraryClientUtility.i18n = i18n.global;
+		LibraryClientUtility.$trans = i18n.global;
 	}
 
 	_initMessages() {

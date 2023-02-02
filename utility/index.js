@@ -1,12 +1,12 @@
 import { unref } from 'vue';
 
 import Constants from '../constants';
-import LibraryConstants from '@thzero/library_client/constants';
+import LibraryClientConstants from '@thzero/library_client/constants';
 import LibraryCommonConstants from '@thzero/library_common/constants';
 
-import GlobalUtility from '@thzero/library_client/utility/global';
+import LibraryClientUtility from '@thzero/library_client/utility/index';
 
-class Utility {
+class LibraryClientVueUtility {
 	static applyError(error, messageParams) {
 		if (!error)
 			return null;
@@ -32,7 +32,7 @@ class Utility {
 				let suffix = param.suffix;
 				if (String.isNullOrEmpty(suffix))
 					suffix = Constants.ErrorCodes.SuffixParams;
-				param.value = GlobalUtility.$trans.t(`${suffix}.${param.value}`);
+				param.value = LibraryClientUtility.$trans.t(`${suffix}.${param.value}`);
 			}
 			messageParams[field] = param.value;
 		}
@@ -41,7 +41,7 @@ class Utility {
 			messageCode = Constants.ErrorCodes.Default;
 
 		return {
-			message: GlobalUtility.$trans.t(`${Constants.ErrorCodes.Suffix}.${messageCode}`, messageParams),
+			message: LibraryClientUtility.$trans.t(`${Constants.ErrorCodes.Suffix}.${messageCode}`, messageParams),
 			field: (error.field ? error.field : LibraryCommonConstants.ErrorFields.Generic)
 		};
 	}
@@ -103,7 +103,7 @@ class Utility {
 
 		object.setErrors(errors);
 		// object.validation().applyResult({
-		//     errors: [ GlobalUtility.$trans.t(`${Constants.ErrorCodes.Suffix}.${messageCode}`, messageParams) ],
+		//     errors: [ LibraryClientUtility.$trans.t(`${Constants.ErrorCodes.Suffix}.${messageCode}`, messageParams) ],
 		//     valid: false,
 		//     failedRules: {} // should be empty since this is a manual error.
 		//   })
@@ -115,7 +115,7 @@ class Utility {
 			return;
 		}
 
-		GlobalUtility.$navRouter.push('/');
+		LibraryClientUtility.$navRouter.push('/');
 	}
 
 	static overlayImageWidth() {
@@ -180,7 +180,7 @@ class Utility {
 	}
 
 	static settings() {
-		return GlobalUtility.$injector.getService(LibraryConstants.InjectorKeys.SERVICE_SETTINGS);
+		return LibraryClientUtility.$injector.getService(LibraryClientConstants.InjectorKeys.SERVICE_SETTINGS);
 	}
 
 	static updateArrayById(array, object) {
@@ -204,4 +204,4 @@ class Utility {
 	}
 }
 
-export default Utility;
+export default LibraryClientVueUtility;
