@@ -1,4 +1,4 @@
-const Constants = {
+const VueConstants = {
 	ErrorCodes: {
 		Suffix: 'errors',
 		SuffixParams: 'errors.params',
@@ -6,4 +6,4 @@ const Constants = {
 	}
 };
 
-export default Constants;
+export default VueConstants;

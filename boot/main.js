@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 
-import GlobalUtility from '@thzero/library_client/utility/global';
+import LibraryClientUtility from '@thzero/library_client/utility/index';
 
 import {} from '@thzero/library_common/utility/string';
 
@@ -49,7 +49,7 @@ async function start(app, router, storeRequest, bootFiles, starter, options) {
 		}
 	}
 
-	GlobalUtility.$navRouter = router;
+	LibraryClientUtility.$navRouter = router;
 
 	let storeWrapper = null;
 	try {
@@ -80,7 +80,7 @@ async function start(app, router, storeRequest, bootFiles, starter, options) {
 			framework,
 			app,
 			router,
-			store: GlobalUtility.$store
+			store: LibraryClientUtility.$store
 		}).catch(err => {
 			// eslint-disable-next-line
 			console.error('boot error:', err);
@@ -97,7 +97,7 @@ async function start(app, router, storeRequest, bootFiles, starter, options) {
 	// 		framework,
 	// 		app,
 	// 		router,
-	// 		store: GlobalUtility.$store
+	// 		store: LibraryClientUtility.$store
 	// 	});
 
 	// 	result
