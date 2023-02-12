@@ -1,5 +1,3 @@
-import { unref } from 'vue';
-
 import Constants from '../constants';
 import LibraryClientConstants from '@thzero/library_client/constants';
 import LibraryCommonConstants from '@thzero/library_common/constants';
@@ -73,14 +71,6 @@ class LibraryClientVueUtility {
 			next();
 
 		return true;
-	}
-
-	static fullscreen(vuetify) {
-		return Utility.fullscreenDisplay(vuetify.display);
-	}
-
-	static fullscreenDisplay(display) {
-		return unref(unref(display).xs);
 	}
 
 	static handleError(object, serverErrors, response) {
