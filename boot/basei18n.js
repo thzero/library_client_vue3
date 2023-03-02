@@ -2,11 +2,11 @@ import { createI18n } from 'vue-i18n';
 
 import LibraryClientUtility from '@thzero/library_client/utility/index';
 
-import Basei18n from '@thzero/library_client/boot/basei18n';
+import i18nBaseBoot from '@thzero/library_client/boot/basei18n';
 
 import NotImplementedError from '@thzero/library_common/errors/notImplemented';
 
-class VueBasei18n extends Basei18n {
+class Vuei18nBaseBoot extends i18nBaseBoot {
 	// eslint-disable-next-line
 	async execute(framework, app, router) {
 		// Set i18n instance on app
@@ -33,4 +33,4 @@ class VueBasei18n extends Basei18n {
 	}
 }
 
-export default VueBasei18n;
+export default Vuei18nBaseBoot;
