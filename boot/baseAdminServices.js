@@ -1,12 +1,12 @@
 import LibraryClientUtility from '@thzero/library_client/utility/index';
 
-import ServicesBaseBoot from '@thzero/library_client/boot/baseServices';
+import AdminServicesBaseBoot from '@thzero/library_client/boot/adminBaseServices';
 
 import eventService from '../service/event';
 import routerService from '../service/router';
 import translateService from '../service/translate';
 
-class VueServicesBaseBoot extends ServicesBaseBoot {
+class VueAdminServicesBaseBoot extends AdminServicesBaseBoot {
 	_initializeInjector(framework, injector) {
 		LibraryClientUtility.$injector = injector;
 	}
@@ -24,4 +24,4 @@ class VueServicesBaseBoot extends ServicesBaseBoot {
 	}
 }
 
-export default VueServicesBaseBoot;
+export default VueAdminServicesBaseBoot;
