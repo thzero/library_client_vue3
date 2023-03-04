@@ -4,7 +4,7 @@ import VueCookieComply from 'vue-cookie-comply';
 
 export default class CookieComply {
 	// eslint-disable-next-line
-	async execute(framework, app, router) {
+	async execute(framework) {
 		framework.use(VueCookieComply);
 	}
 }
