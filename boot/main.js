@@ -5,11 +5,89 @@ import LibraryClientUtility from '@thzero/library_client/utility/index';
 import {} from '@thzero/library_common/utility/string';
 
 // eslint-disable-next-line
-// async function start(app, router, storeRequest, vuetify, bootFiles, starter) {
-async function start(app, router, storeRequest, bootFiles, starter, options) {
-	const framework = createApp(app);
+async function start(appComponent, router, storeRequest, bootFiles, starter, options) {
+	const framework = createApp(appComponent);
+
+	// if (bootFiles && (bootFiles.length > 0)) {
+	// 	let obj;
+	// 	for (const bootFile of bootFiles) {
+	// 		if (typeof bootFile !== 'function')
+	// 			continue;
+
+	// 		try {
+	// 			try {
+	// 				await bootFile({
+	// 					framework,
+	// 					router,
+	// 					options
+	// 				});
+	// 				continue;
+	// 			}
+	// 			catch (err) {
+	// 				obj = new bootFile();
+	// 				await obj.execute(
+	// 					framework,
+	// 					router,
+	// 					options
+	// 				);
+	// 				continue;
+	// 			}
+	// 		}
+	// 		catch (err) {
+	// 			if (err && err.url) {
+	// 				window.location.href = err.url;
+	// 				return;
+	// 			}
+
+	// 			// eslint-disable-next-line
+	// 			console.error('boot error:', err);
+	// 			return;
+	// 		}
+	// 	}
+	// }
+
+	LibraryClientUtility.$navRouter = router;
+	if (router)
+		framework.use(router);
+
+	let storeWrapper;
+	let storeInitialize;
+	let storeSetup;
+	if (storeRequest) {
+		try {
+			storeWrapper = new storeRequest();
+		}
+		catch (err) {
+			console.log(err);
+			throw Error('Invalid store wrapper.');
+		}
+
+		if (storeWrapper) {
+			try {
+				storeInitialize = await storeWrapper.initialize();
+			}
+			catch (err) {
+				console.log(err);
+				throw Error('Invalid store initialization.');
+			}
+
+			try {
+				storeSetup = storeWrapper.setup();
+			}
+			catch (err) {
+				console.log(err);
+				throw Error('Invalid store setup.');
+			}
+		}
+	}
+
+	if (storeInitialize && storeSetup)
+		framework.use(storeInitialize).use(storeSetup.func, storeSetup.options).use(router);
+	else if (storeInitialize)
+		framework.use(storeInitialize).use(router);
 
 	if (bootFiles && (bootFiles.length > 0)) {
+		const store = LibraryClientUtility.$store;
 		let obj;
 		for (const bootFile of bootFiles) {
 			if (typeof bootFile !== 'function')
@@ -19,8 +97,8 @@ async function start(app, router, storeRequest, bootFiles, starter, options) {
 				try {
 					await bootFile({
 						framework,
-						app,
 						router,
+						store,
 						options
 					});
 					continue;
@@ -29,8 +107,8 @@ async function start(app, router, storeRequest, bootFiles, starter, options) {
 					obj = new bootFile();
 					await obj.execute(
 						framework,
-						app,
 						router,
+						store,
 						options
 					);
 					continue;
@@ -49,31 +127,7 @@ async function start(app, router, storeRequest, bootFiles, starter, options) {
 		}
 	}
 
-	LibraryClientUtility.$navRouter = router;
-
-	let storeWrapper = null;
-	try {
-		storeWrapper = new storeRequest();
-	}
-	catch (err) {
-		console.log(err);
-		throw Error('Invalid store wrapper.');
-	}
-
-	let storeInitialize = null;
-	try {
-		storeInitialize = await storeWrapper.initialize();
-	}
-	catch (err) {
-		console.log(err);
-		throw Error('Invalid store.');
-	}
-	
-	const storeSetup = storeWrapper.setup();
-	if (storeSetup)
-		framework.use(storeInitialize).use(storeSetup.func, storeSetup.options).use(router).mount('#app');
-	else 
-		framework.use(storeInitialize).use(router).mount('#app');
+	framework.mount('#app');
 
 	if (starter) {
 		starter({

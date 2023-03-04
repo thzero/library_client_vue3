@@ -2,7 +2,7 @@ import BaseBoot from '@thzero/library_client/boot/base';
 
 class ValidateBaseBoot extends BaseBoot {
 	// eslint-disable-next-line
-	async execute(Vue, app, router) {
+	async execute(framework, router) {
 // 		extend('decimal', {
 // 			validate: (value, { decimals = '*', separator = '.' } = {}) => {
 // 				if (value === null || value === undefined || value === '') {
