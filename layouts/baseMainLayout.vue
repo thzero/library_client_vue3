@@ -7,7 +7,7 @@ import LibraryClientUtility from '@thzero/library_client/utility/index';
 
 import { useBaseLayout } from './baseLayout';
 
-import DialogSupport from '@/library_vue/components/support/dialog';
+import DialogSupport from '@thzero/library_client_vue3/components/support/dialog';
 
 export function useBaseMainLayout(props, context, options) {
 	const {

@@ -8,7 +8,7 @@ import LibraryCommonUtility from '@thzero/library_common/utility/index';
 
 import Response from '@thzero/library_common/response';
 
-import { useBasePageEditComponent } from '@/library_vue/components/basePageEdit';
+import { useBasePageEditComponent } from '@thzero/library_client_vue3/components/basePageEdit';
 
 export function useBaseSettingsComponent(props, context, options) {
 	const {
