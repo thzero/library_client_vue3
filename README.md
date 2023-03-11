@@ -206,7 +206,7 @@ The boot folder holds the boot scripts for application services and plugins.
 * Update the script with the following code.
 
 ```
-import VueBasei18n from '@/library_vue/boot/basei18n';
+import VueBasei18n from '@thzero/library_client_vue3/boot/basei18n';
 
 import resources from '@/locales';
 
@@ -226,7 +226,7 @@ import versionService from '@/service/version';
 
 // TODO:Constants for service imports
 
-import BaseServices from '@/library_vue/boot/baseServices';
+import BaseServices from '@thzero/library_client_vue3/boot/baseServices';
 
 class Services extends BaseServices {
 	_initialize() {
@@ -253,7 +253,7 @@ export default Services;
 * Update the script with the following code.
 
 ```
-import BaseValidation from '@/library_vue/boot/baseValidation';
+import BaseValidation from '@thzero/library_client_vue3/boot/baseValidation';
 
 class Validation extends BaseValidation {
 	_initialize(extend) {
@@ -477,7 +477,7 @@ Install the ![@thzero/library_client_vue3_store_pinia](https://www.npmjs.com/pac
 </template>
 
 <script>
-import baseApp from '@/library_vue/components/baseApp';
+import baseApp from '@thzero/library_client_vue3/components/baseApp';
 
 export default {
 	name: 'App',
@@ -506,29 +506,23 @@ export default {
 * Replace the code in the 'main.js' script with the following code.
 
 ```
-import {
-	Notify
-} from 'quasar';
-
-import app from '@/components/App.vue';
+import App from '@/components/App.vue';
 import router from '@/router';
 
 import bootEventBus from '@thzero/library_client_vue3/boot/eventBus';
 import booti18n from '@/boot/i18n';
 import { bootServices, store } from '@/boot/services';
-import bootUi from '@/library_vue_quasar/boot/ui';
+import bootUi from '@thzero/library_client_vue3/boot/ui';
 import bootValidate from '@/boot/validate';
 import bootWebComponents from '@thzero/library_client_vue3/boot/webComponents';
 
+import store from '@/store/pinia';
+
+const starter = null;
+const options = {};
+
 import start from '@thzero/library_client_vue3/boot/main';
-start(app, router, store, [ booti18n, bootEventBus, bootServices, bootValidate, bootUi, bootWebComponents ], null, {
-    plugins: {
-      Notify
-    },
-    config: {
-      notify: { /* look at QuasarConfOptions from the API card */ }
-    }
-});
+start(App, router, store, [ booti18n, bootEventBus, bootServices, bootValidate, bootUi ], starter, options);
 ```
 
 ### Router.js
