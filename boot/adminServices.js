@@ -1,6 +1,6 @@
 import LibraryClientUtility from '@thzero/library_client/utility/index';
 
-import AdminServicesBaseBoot from '@thzero/library_client/boot/adminBaseServices';
+import AdminServicesBaseBoot from '@thzero/library_client/boot/adminServices';
 
 import eventService from '@thzero/library_client_vue3/service/event';
 import routerService from '@thzero/library_client_vue3/service/router';
