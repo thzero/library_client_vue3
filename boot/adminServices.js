@@ -1,5 +1,3 @@
-import LibraryClientUtility from '@thzero/library_client/utility/index';
-
 import AdminServicesBaseBoot from '@thzero/library_client/boot/adminServices';
 
 import eventService from '@thzero/library_client_vue3/service/event';
@@ -9,10 +7,6 @@ import translateService from '@thzero/library_client_vue3/service/translate';
 class VueAdminServicesBaseBoot extends AdminServicesBaseBoot {
 	async _initialize() {
 		await super._initialize();
-	}
-
-	_initializeInjector(framework, injector) {
-		LibraryClientUtility.$injector = injector;
 	}
 
 	_initializeEvent(injector) {
