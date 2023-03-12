@@ -5,7 +5,7 @@ import LibraryClientUtility from '@thzero/library_client/utility/index';
 // import LibraryClientVueUtility from '@thzero/library_client_vue/utility/index';
 import LibraryCommonUtility from '@thzero/library_common/utility';
 
-import { useBaseEditComponent } from '@/library_vue/components/baseEdit';
+import { useBaseEditComponent } from '@thzero/library_client_vue3/components/baseEdit';
 
 import DialogSupport from '../support/dialog';
 
