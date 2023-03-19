@@ -1,12 +1,18 @@
 import { createApp } from 'vue';
 
 import LibraryClientUtility from '@thzero/library_client/utility/index';
+import LIbraryCommonUtility from '@thzero/library_common/utility/index';
 
 import {} from '@thzero/library_common/utility/string';
 
 // eslint-disable-next-line
 async function start(appComponent, router, storeRequest, bootFiles, starter, options) {
 	const framework = createApp(appComponent);
+
+	if (options) {
+		if (options.idGeneratorOverride)
+			LIbraryCommonUtility.setIdGenerator(options.idGeneratorOverride);
+	}
 
 	// if (bootFiles && (bootFiles.length > 0)) {
 	// 	let obj;
