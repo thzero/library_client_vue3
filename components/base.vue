@@ -12,7 +12,7 @@ export function useBaseComponent(props, context, options) {
 	const logger = LibraryClientUtility.$injector.getService(LibraryClientConstants.InjectorKeys.SERVICE_LOGGER);
 
 	const correlationId = () => {
-		return LibraryCommonUtility.generateId();
+		return LibraryCommonUtility.correlationId();
 	};
 	const error = (clazz, method, message, err, code, errors, correlationId) => {
 		return Response.error(clazz, method, message, err, code, errors, correlationId);
