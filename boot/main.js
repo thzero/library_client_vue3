@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 
 import LibraryClientUtility from '@thzero/library_client/utility/index';
-import LIbraryCommonUtility from '@thzero/library_common/utility/index';
+import LibraryCommonUtility from '@thzero/library_common/utility/index';
 
 import {} from '@thzero/library_common/utility/string';
 
@@ -11,7 +11,7 @@ async function start(appComponent, router, storeRequest, bootFiles, starter, opt
 
 	if (options) {
 		if (options.idGeneratorOverride)
-			LIbraryCommonUtility.setIdGenerator(options.idGeneratorOverride);
+			LibraryCommonUtility.setIdGenerator(options.idGeneratorOverride);
 	}
 
 	// if (bootFiles && (bootFiles.length > 0)) {
