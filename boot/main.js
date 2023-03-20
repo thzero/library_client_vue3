@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 
 import LibraryClientUtility from '@thzero/library_client/utility/index';
-import LIbraryCommonUtility from '@thzero/library_common/utility/index';
+import LibraryCommonUtility from '@thzero/library_common/utility/index';
 
 import {} from '@thzero/library_common/utility/string';
 
@@ -10,8 +10,14 @@ async function start(appComponent, router, storeRequest, bootFiles, starter, opt
 	const framework = createApp(appComponent);
 
 	if (options) {
-		if (options.idGeneratorOverride)
-			LIbraryCommonUtility.setIdGenerator(options.idGeneratorOverride);
+		if (options.idGenerator) {
+			if (options.idGenerator.override)
+				LibraryCommonUtility.setIdGenerator(options.idGenerator.override);
+			if (options.idGenerator.lengthLong)
+				LibraryCommonUtility.setIdGeneratorLengthLong(options.idGenerator.lengthLong);
+				if (options.idGenerator.lengthShort)
+					LibraryCommonUtility.setIdGeneratorLengthShort(options.idGenerator.lengthShort);
+		}
 	}
 
 	// if (bootFiles && (bootFiles.length > 0)) {
