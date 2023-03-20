@@ -10,8 +10,14 @@ async function start(appComponent, router, storeRequest, bootFiles, starter, opt
 	const framework = createApp(appComponent);
 
 	if (options) {
-		if (options.idGeneratorOverride)
-			LibraryCommonUtility.setIdGenerator(options.idGeneratorOverride);
+		if (options.idGenerator) {
+			if (options.idGenerator.override)
+				LibraryCommonUtility.setIdGenerator(options.idGenerator.override);
+			if (options.idGenerator.lengthLong)
+				LibraryCommonUtility.setIdGeneratorLengthLong(options.idGenerator.lengthLong);
+				if (options.idGenerator.lengthShort)
+					LibraryCommonUtility.setIdGeneratorLengthShort(options.idGenerator.lengthShort);
+		}
 	}
 
 	// if (bootFiles && (bootFiles.length > 0)) {
