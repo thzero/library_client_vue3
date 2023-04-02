@@ -11,7 +11,8 @@ export function useBaseSupportComponent(props, context, options) {
 		logger,
 		noBreakingSpaces,
 		notImplementedError,
-		success
+		success,
+		successResponse
 	} = useBaseComponent(props, context, options);
 
 	return {
@@ -23,7 +24,8 @@ export function useBaseSupportComponent(props, context, options) {
 		logger,
 		noBreakingSpaces,
 		notImplementedError,
-		success
+		success,
+		successResponse
 	};
 };
 </script>

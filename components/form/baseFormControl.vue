@@ -20,11 +20,12 @@ export function useBaseFormControlComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 		isSaving,
 		serverErrors,
 		setErrors
 	} = useBaseEditComponent(props, context, options);
-	
+
 	if (!props.dirtyCheck)
 		throw Error('Requires dirtyCheck callback.');
 
@@ -51,7 +52,7 @@ export function useBaseFormControlComponent(props, context, options) {
 	const overlayLoading = computed(() => {
 		return isSaving.value && props.autoSave;
 	});
-	
+
 	const handleClear = async (correlationId) => {
 		isClearing.value = true;
 		try {
@@ -80,7 +81,7 @@ export function useBaseFormControlComponent(props, context, options) {
 				logger.error('useBaseFormControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationIdI);
 				// TODO
 				// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationIdI);
-				
+
 				const notify = LibraryCommonUtility.isNotNull(notify) ? notify : true;
 				if (props.notify && notify)
 					setNotify(correlationId, props.notifyMessageError);
@@ -136,7 +137,7 @@ export function useBaseFormControlComponent(props, context, options) {
 
 					// TODO
 					// LibraryClientVueUtility.handleError($refs.obs, instance.ctx.serverErrors, response, correlationIdI);
-				
+
 					const notify = LibraryCommonUtility.isNotNull(notify) ? notify : true;
 					if (props.notify && notify)
 						setNotify(correlationId, props.notifyMessageError);
@@ -186,6 +187,7 @@ export function useBaseFormControlComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 		isSaving,
 		serverErrors,
 		setErrors,

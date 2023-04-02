@@ -19,6 +19,10 @@ export const baseFormDialogControlProps = {
 		type: Boolean,
 		default: false
 	},
+	invalidOverride: {
+		type: Boolean,
+		default: null
+	},
 	label: {
 		type: String,
 		default: ''
@@ -54,6 +58,10 @@ export const baseFormDialogControlProps = {
 	resetDialog: {
 		type: Function,
 		default: null
+	},
+	resetOnSignal: {
+		type: Boolean,
+		default: true
 	},
 	scrollable: {
 		type: Boolean,

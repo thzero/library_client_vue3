@@ -15,7 +15,8 @@ export function useBaseNotFoundComponent(props, context, options) {
 		logger,
 		noBreakingSpaces,
 		notImplementedError,
-		success
+		success,
+		successResponse
 	} = useBaseComponent(props, context, options);
 
 	const imageWidth = computed(() => {
@@ -40,6 +41,7 @@ export function useBaseNotFoundComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 		clickHome,
 		imageWidth
 	};

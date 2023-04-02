@@ -17,7 +17,8 @@ export function useBaseAuthComponent(props, context, options) {
 		logger,
 		noBreakingSpaces,
 		notImplementedError,
-		success
+		success,
+		successResponse
 	} = useBaseComponent(props, context, options);
 
 	const serviceFeatures = LibraryClientUtility.$injector.getService(LibraryClientConstants.InjectorKeys.SERVICE_FEATURES);
@@ -70,6 +71,7 @@ export function useBaseAuthComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 		allowRememberMe,
 		authenticated,
 		disabled,

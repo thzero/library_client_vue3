@@ -16,7 +16,8 @@ export function useBaseConfirmationDialogComponent(props, context, options) {
 		logger,
 		noBreakingSpaces,
 		notImplementedError,
-		success
+		success,
+		successResponse
 	} = useBaseComponent(props, context, options);
 
 	const dialogSignal = ref(false);
@@ -63,6 +64,7 @@ export function useBaseConfirmationDialogComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 		dialogCancel,
 		dialogOk,
 		dialogSignal,

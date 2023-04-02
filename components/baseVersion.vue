@@ -14,6 +14,7 @@ export function useBaseVersionComponent(props, context) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 	} = useBaseComponent(props, context);
 
 	const version = computed(() => {
@@ -30,6 +31,7 @@ export function useBaseVersionComponent(props, context) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 		version
 	};
 };

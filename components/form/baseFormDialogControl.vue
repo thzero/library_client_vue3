@@ -3,7 +3,6 @@ import { computed, onMounted, ref, watch } from 'vue';
 
 import LibraryClientUtility from '@thzero/library_client/utility/index';
 // import LibraryClientVueUtility from '@thzero/library_client_vue/utility/index';
-import LibraryCommonUtility from '@thzero/library_common/utility';
 
 import { useBaseEditComponent } from '@thzero/library_client_vue3/components/baseEdit';
 
@@ -20,6 +19,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 		isSaving,
 		serverErrors,
 		setErrors
@@ -51,13 +51,13 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 	const handleClear = () => {
 		const correlationIdI = correlationId();
 		logger.debug('useBaseFormDialogControlComponent', 'clear', 'clear', null, correlationIdI);
-		reset(correlationIdI, false);
+		reset(correlationIdI, true);
 	};
 	const handleClose = () => {
 		const correlationIdI = correlationId();
 		serverErrors.value = [];
 		dialogSignal.value = false;
-		reset(correlationIdI);
+		reset(correlationIdI, false);
 		logger.debug('useBaseFormDialogControlComponent', 'cancel', 'cancel', null, correlationIdI);
 		context.emit('close');
 	};
@@ -79,9 +79,8 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 				logger.error('useBaseFormDialogControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationIdI);
 				// TODO
 				// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationIdI);
-				
-				const notify = LibraryCommonUtility.isNotNull(notify) ? notify : true;
-				if (props.notify && notify)
+
+				if (props.notify)
 					setNotify(correlationId, props.notifyMessageError);
 
 				return;
@@ -107,7 +106,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 
 		notify = notify !== null || notify !== undefined ? notify : true;
 		if (props.notify && notify)
-			setNotify(correlationIdI, props.notifyMessageReset);
+			setNotify(correlationId, props.notifyMessageReset);
 	};
 	const setNotify = (correlationId, message, transformed) => {
 		if (String.isNullOrEmpty(message))
@@ -142,9 +141,8 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 					logger.error('useBaseFormDialogControlComponent', 'submit', 'response', response, correlationIdI);
 					// TODO
 					// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationIdI);
-					
-					const notify = LibraryCommonUtility.isNotNull(notify) ? notify : true;
-					if (props.notify && notify)
+
+					if (props.notify)
 						setNotify(correlationId, props.notifyMessageError);
 
 					return;
@@ -177,6 +175,9 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 			logger.debug('useBaseFormDialogControlComponent', 'signal', 'value', value, correlationIdI);
 			dialogSignal.value = value;
 			logger.debug('useBaseFormDialogControlComponent', 'signal', 'dialogSignal', dialogSignal.value, correlationIdI);
+
+			if (value && props.resetOnSignal)
+				reset(correlationIdI, false);
 		}
 	);
 	watch(() => props.validation,
@@ -204,6 +205,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 		isSaving,
 		serverErrors,
 		setErrors,

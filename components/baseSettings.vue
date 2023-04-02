@@ -21,6 +21,7 @@ export function useBaseSettingsComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 		isSaving,
 		serverErrors,
 		setErrors,
@@ -48,7 +49,7 @@ export function useBaseSettingsComponent(props, context, options) {
 	const user = computed(() => {
 		return serviceStore.user;
 	});
-	
+
 	const cancel = async () => {
 		await reset(correlationId(), true);
 	};
@@ -97,6 +98,7 @@ export function useBaseSettingsComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 		isSaving,
 		serverErrors,
 		setErrors,

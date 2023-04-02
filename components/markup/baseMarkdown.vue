@@ -17,7 +17,8 @@ export function useBaseMarkdownComponent(props, context, options) {
 		logger,
 		noBreakingSpaces,
 		notImplementedError,
-		success
+		success,
+		successResponse
 	} = useBaseComponent(props, context, options);
 
 	const serviceMarkup = LibraryClientUtility.$injector.getService(LibraryClientConstants.InjectorKeys.SERVICE_MARKUP_PARSER);
@@ -45,6 +46,7 @@ export function useBaseMarkdownComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 		display,
 		markdownClass,
 		serviceMarkup
