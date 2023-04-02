@@ -1,6 +1,6 @@
 
 <script>
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import LibraryCommonUtility from '@thzero/library_common/utility/index';
 
@@ -22,10 +22,15 @@ export function useBaseConfirmationDialogComponent(props, context, options) {
 
 	const dialogSignal = ref(false);
 	const internalItem = ref(null);
+	const invalid = ref(false);
+
+	const buttonOkDisabled = computed(() => {
+		return invalid.value;
+	});
 
 	const dialogCancel = () => {
 		dialogSignal.value = false;
-		$emit('cancel');
+		context.emit('cancel');
 	};
 	const dialogOk = async () => {
 		const correlationIdI = correlationId();
@@ -65,11 +70,13 @@ export function useBaseConfirmationDialogComponent(props, context, options) {
 		notImplementedError,
 		success,
 		successResponse,
+		buttonOkDisabled,
 		dialogCancel,
 		dialogOk,
 		dialogSignal,
 		handleError,
-		internalItem
+		internalItem,
+		invalid
 	};
 };
 </script>
