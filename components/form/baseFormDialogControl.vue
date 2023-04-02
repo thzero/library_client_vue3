@@ -5,6 +5,7 @@ import LibraryClientUtility from '@thzero/library_client/utility/index';
 // import LibraryClientVueUtility from '@thzero/library_client_vue/utility/index';
 
 import { useBaseEditComponent } from '@thzero/library_client_vue3/components/baseEdit';
+import { useNotify } from '@thzero/library_client_vue3/components/notify';
 
 import DialogSupport from '../support/dialog';
 
@@ -25,16 +26,24 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		setErrors
 	} = useBaseEditComponent(props, context, options);
 
+	const {
+		notifyColor,
+		notifyMessage,
+		notifySignal,
+		notifyTimeout,
+		setNotify
+	} = useNotify(props, context, options);
+
 	const dialogHeightI = ref(300);
 	const dialogDeleteConfirmSignal = ref(new DialogSupport());
 	const dialogSignal = ref(false);
 	const dirty = ref(false);
 	const loading = ref(false);
 	const invalid = ref(true);
-	const notifyColor = ref(null);
-	const notifyMessage = ref(null);
-	const notifySignal = ref(false);
-	const notifyTimeout = ref(3000);
+	// const notifyColor = ref(null);
+	// const notifyMessage = ref(null);
+	// const notifySignal = ref(false);
+	// const notifyTimeout = ref(3000);
 
 	const buttonOkDisabled = computed(() => {
 		if (dirty.value === false)
@@ -108,18 +117,18 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		if (props.notify && notify)
 			setNotify(correlationId, props.notifyMessageReset);
 	};
-	const setNotify = (correlationId, message, transformed) => {
-		if (String.isNullOrEmpty(message))
-			return;
+	// const setNotify = (correlationId, message, transformed) => {
+	// 	if (String.isNullOrEmpty(message))
+	// 		return;
 
-		message = (!transformed ? LibraryClientUtility.$trans.t(message) : message);
-		if (String.isNullOrEmpty(message))
-			return;
+	// 	message = (!transformed ? LibraryClientUtility.$trans.t(message) : message);
+	// 	if (String.isNullOrEmpty(message))
+	// 		return;
 
-		notifyColor.value = null;
-		notifyMessage.value = (!transformed ? LibraryClientUtility.$trans.t(message) : message);
-		notifySignal.value = true;
-	};
+	// 	notifyColor.value = null;
+	// 	notifyMessage.value = (!transformed ? LibraryClientUtility.$trans.t(message) : message);
+	// 	notifySignal.value = true;
+	// };
 	const submit = async () => {
 		const correlationIdI = correlationId();
 		try {
@@ -209,6 +218,11 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		isSaving,
 		serverErrors,
 		setErrors,
+		notifyColor,
+		notifyMessage,
+		notifySignal,
+		notifyTimeout,
+		setNotify,
 		buttonOkDisabled,
 		dialogHeightI,
 		dialogDeleteConfirmSignal,
@@ -220,15 +234,15 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		handleDelete,
 		handleDeleteConfirmOk,
 		loading,
-		notifyColor,
-		notifyMessage,
-		notifySignal,
-		notifyTimeout,
+		// notifyColor,
+		// notifyMessage,
+		// notifySignal,
+		// notifyTimeout,
 		onResize,
 		reset,
 		scrollableI,
 		scrollableHeightI,
-		setNotify,
+		// setNotify,
 		submit
 	};
 };
