@@ -14,8 +14,9 @@ export function useBaseCopyrightComponent(props, context) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 	} = useBaseComponent(props, context);
-	
+
 	const author = computed(() => {
 		return props.modelValue &&  props.modelValue.client && props.modelValue.client.author ? props.modelValue.client.author : '';
 	});
@@ -45,6 +46,7 @@ export function useBaseCopyrightComponent(props, context) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 		author,
 		authorUrl,
 		copyright,

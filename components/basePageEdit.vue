@@ -17,6 +17,7 @@ export function useBasePageEditComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 		isSaving,
 		serverErrors,
 		setErrors
@@ -27,7 +28,7 @@ export function useBasePageEditComponent(props, context, options) {
 	const dirtyCheck = (correlationId, controlDirtyState) => {
 		return dirty.value = controlDirtyState.value;
 	};
-	const leaveCheck = () => { 
+	const leaveCheck = () => {
 		if (!dirty.value)
 			return true;
 
@@ -40,7 +41,7 @@ export function useBasePageEditComponent(props, context, options) {
 
 		return event.returnValue = LibraryClientUtility.$trans.t('questions.formDirty');
 	};
-	
+
 	onBeforeRouteLeave(async (to, from, next) => {
 		if (!leaveCheck())
 			return;
@@ -64,6 +65,7 @@ export function useBasePageEditComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 		isSaving,
 		serverErrors,
 		setErrors,

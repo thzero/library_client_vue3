@@ -18,7 +18,8 @@ export function useBaseOpenSourceComponent(props, context, options) {
 		logger,
 		noBreakingSpaces,
 		notImplementedError,
-		success
+		success,
+		successResponse
 	} = useBaseComponent(props, context);
 
 	const serviceStore = LibraryClientUtility.$injector.getService(LibraryConstants.InjectorKeys.SERVICE_STORE);
@@ -61,7 +62,7 @@ export function useBaseOpenSourceComponent(props, context, options) {
 		dependenciesClient.value = combineDependencies(
 			await initializeDependenciesClientBase(),
 			'client');
-		
+
 		if (options && LibraryCommonUtility.isObject(options) && LibraryCommonUtility.isFunction(options.initializeDependenciesClientFramework))
 			dependenciesClient.value = combineDependencies(
 				dependenciesClient.value,
@@ -90,6 +91,7 @@ export function useBaseOpenSourceComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 		combineDependencies,
 		data,
 		dependenciesClient,

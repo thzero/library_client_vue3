@@ -14,11 +14,12 @@ export function useBaseEditComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 	} = useBaseComponent(props, context, options);
-	
+
 	const isSaving = ref(false);
 	const serverErrors = ref([]);
-	
+
 	const setErrors = (errors) => {
 		serverErrors.value = errors !== null ? errors : [];
 		isSaving.value = false;
@@ -34,6 +35,7 @@ export function useBaseEditComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
+		successResponse,
 		isSaving,
 		serverErrors,
 		setErrors

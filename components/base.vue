@@ -34,8 +34,11 @@ export function useBaseComponent(props, context, options) {
 	const notImplementedError = () => {
 		throw new NotImplementedError();
 	};
-	const success = (correlationId) => {
-		return Response.success(correlationId);
+	const success = (correlationId, results) => {
+		return Response.success(correlationId, results);
+	};
+	const successResponse = (correlationId, results) => {
+		return Response.success(correlationId, results);
 	};
 
 	return {
@@ -47,7 +50,8 @@ export function useBaseComponent(props, context, options) {
 		logger,
 		noBreakingSpaces,
 		notImplementedError,
-		success
+		success,
+		successResponse
 	};
 };
 </script>
