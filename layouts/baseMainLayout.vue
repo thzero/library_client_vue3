@@ -28,7 +28,8 @@ export function useBaseMainLayout(props, context, options) {
 
 	const closeOnContentClick = ref(true);
 	const dialogSignOut = ref(new DialogSupport());
-	const drawer = ref(false);
+	const displayDrawer = ref(false);
+	const displayFooter = ref(options ? options.displayFooter ?? true : true);
 
 	const isAuthCompleted = computed(() => {
 		return serviceStore.user != null ? serviceStore.userAuthCompleted : false;
@@ -60,7 +61,7 @@ export function useBaseMainLayout(props, context, options) {
 		await serviceAuth.signOut(correlationId());
 	};
 	const toggleDrawer = async () => {
-		drawer.value = !drawer.value;
+		displayDrawer.value = !displayDrawer.value;
 		LibraryClientUtility.$EventBus.emit('toggle-drawer');
 	};
 
@@ -84,7 +85,8 @@ export function useBaseMainLayout(props, context, options) {
 		clickSupport,
 		dialogSignOut,
 		dialogSignOutOk,
-		drawer,
+		displayDrawer,
+		displayFooter,
 		isAuthCompleted,
 		isLoggedIn,
 		serviceAuth,
