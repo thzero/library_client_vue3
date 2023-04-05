@@ -33,9 +33,13 @@ export function useBaseControlEditComponent(props, context, options) {
 		return value;
 	};
 	const errorI = computed(() => {
-		return props.validation ? props.validation[vid] ? props.validation[vid].$silentErrors && (props.validation[vid].$silentErrors.length > 0) : false : true;
+		if (props.readonly)
+			return false;
+		return props.validation ? props.validation[vid] ? props.validation[vid].$silentErrors && (props.validation[vid].$silentErrors.length > 0) : false : false;
 	});
 	const errorsI = computed(() => {
+		if (props.readonly)
+			return [];
 		return props.validation ? props.validation[vid] ? props.validation[vid].$silentErrors : [] : [];
 	});
 	const hideDetails = computed(() => {
