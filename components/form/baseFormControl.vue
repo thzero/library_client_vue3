@@ -26,8 +26,8 @@ export function useBaseFormControlComponent(props, context, options) {
 		setErrors
 	} = useBaseEditComponent(props, context, options);
 
-	if (!props.dirtyCheck)
-		throw Error('Requires dirtyCheck callback.');
+	// if (!props.dirtyCallback)
+	// 	throw Error('Requires dirtyCallback callback.');
 
 	const dialogDeleteConfirmSignal = ref(new DialogSupport());
 	const dirty = ref(false);
@@ -173,7 +173,14 @@ export function useBaseFormControlComponent(props, context, options) {
 	);
 	watch(() => dirty.value,
 		(value) => {
-			props.dirtyCheck(correlationId(), dirty);
+			if (props.dirtyCallback)
+				props.dirtyCallback(correlationId(), dirty);
+		}
+	);
+	watch(() => invalid.value,
+		(value) => {
+			if (props.invalidCallback)
+				props.invalidCallback(correlationId(), invalid);
 		}
 	);
 
