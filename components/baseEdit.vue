@@ -14,7 +14,7 @@ export function useBaseEditComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
-		successResponse,
+		successResponse
 	} = useBaseComponent(props, context, options);
 
 	const isSaving = ref(false);

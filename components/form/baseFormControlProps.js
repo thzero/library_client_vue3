@@ -27,13 +27,17 @@ export const baseFormControlProps = {
 		type: String,
 		default: 'buttons.ok'
 	},
-	dirtyCheck: {
+	dirtyCallback: {
 		type: Function,
 		default: () => null
 	},
 	disabled: {
 		type: Boolean,
 		default: false
+	},
+	invalidCallback: {
+		type: Function,
+		default: () => null
 	},
 	label: {
 		type: String,
@@ -61,6 +65,10 @@ export const baseFormControlProps = {
 	},
 	preCompleteOk: {
 		type: Function,
+		default: null
+	},
+	readonly: {
+		type: Boolean,
 		default: null
 	},
 	resetForm: {

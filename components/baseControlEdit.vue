@@ -43,7 +43,7 @@ export function useBaseControlEditComponent(props, context, options) {
 		return props.validation ? props.validation[vid] ? props.validation[vid].$silentErrors : [] : [];
 	});
 	const hideDetails = computed(() => {
-		return (!errorsI || (errorsI && errorsI.length === 0));
+		return (!errorsI.value || (errorsI.value && errorsI.value.length === 0));
 	});
 	const initValue = (value) => {
 		innerValue.value = convertValue(value);
