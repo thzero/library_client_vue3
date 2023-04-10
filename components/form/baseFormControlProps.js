@@ -3,6 +3,14 @@ export const baseFormControlProps = {
 		type: Boolean,
 		default: false
 	},
+	buttonCancel: {
+		type: Boolean,
+		default: false
+	},
+	buttonCancelName: {
+		type: String,
+		default: 'buttons.cancel'
+	},
 	buttonClear: {
 		type: Boolean,
 		default: true
@@ -58,6 +66,10 @@ export const baseFormControlProps = {
 	notifyMessageSaved: {
 		type: String,
 		default: 'messages.saved'
+	},
+	preCompleteCancel: {
+		type: Function,
+		default: null
 	},
 	preCompleteDelete: {
 		type: Function,

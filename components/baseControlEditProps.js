@@ -3,6 +3,10 @@ export const useBaseControlEditProps = {
 		type: Function,
 		default: () => {}
 	},
+	clearable: {
+		type: Boolean,
+		default: true
+	},
 	disabled: {
 		type: Boolean,
 		default: false
