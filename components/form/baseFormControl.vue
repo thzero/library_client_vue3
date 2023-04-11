@@ -181,8 +181,7 @@ export function useBaseFormControlComponent(props, context, options) {
 					// TODO
 					// LibraryClientVueUtility.handleError($refs.obs, instance.ctx.serverErrors, response, correlationIdI);
 
-					const notify = LibraryCommonUtility.isNotNull(notify) ? notify : true;
-					if (props.notify && notify)
+					if (props.notify)
 						setNotify(correlationId, props.notifyMessageError);
 
 					return;
