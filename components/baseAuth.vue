@@ -40,19 +40,20 @@ export function useBaseAuthComponent(props, context, options) {
 		await serviceAuth.signIn(correlationId());
 	};
 
-	// onBeforeCreate(async () => {
-	// 	authenticated.value = await serviceAuth.isAuthenticated;
+	// (async () => {
+	// 	authenticated.value = serviceAuth.isAuthenticated;
 	// 	if (authenticated.value)
 	// 		LibraryClientUtility.$navRouter.push('/');
-	// });
-	(async () => {
-		authenticated.value = await serviceAuth.isAuthenticated;
-		if (authenticated.value)
-			LibraryClientUtility.$navRouter.push('/');
-	})();
+	// })();
 
 	onMounted(async () => {
-		await serviceAuth.signInCompleted();
+		// TODO: not sure what this was doing...
+		// await serviceAuth.signInCompleted();
+
+		authenticated.value = await serviceAuth.isAuthenticated();
+		if (authenticated.value)
+			LibraryClientUtility.$navRouter.push('/');
+
 		LibraryClientUtility.$EventBus.on('auth', isLoggedIn => {
 			logger.debug('useBaseAuthComponent', 'mounted', 'isLoggedIn', isLoggedIn, this.correlationId());
 			isLoggedIn.value = isLoggedIn;
