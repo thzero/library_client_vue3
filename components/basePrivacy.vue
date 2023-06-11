@@ -1,4 +1,8 @@
 <script>
+import { computed } from 'vue';
+
+import LibraryClientUtility from '@thzero/library_client/utility/index';
+
 import { useBaseComponent } from './base';
 
 export function useBasePrivacyComponent(props, context, options) {
@@ -15,6 +19,10 @@ export function useBasePrivacyComponent(props, context, options) {
 		successResponse
 	} = useBaseComponent(props, context, options);
 
+	const privacyMarkup = computed(() => {
+		return LibraryClientUtility.$trans.t('strings.privacy.text1');
+	});
+
 	return {
 		correlationId,
 		error,
@@ -25,7 +33,8 @@ export function useBasePrivacyComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
-		successResponse
+		successResponse,
+		privacyMarkup
 	};
 };
 </script>
