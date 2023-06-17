@@ -42,7 +42,7 @@ export function useBaseFormControlComponent(props, context, options) {
 
 	const buttonCancelDisabled = computed(() => {
 		if (dirty.value === false)
-			return true;
+			return false;
 		return (invalid.value || props.disabled);
 	});
 	const buttonOkDisabled = computed(() => {
@@ -65,7 +65,13 @@ export function useBaseFormControlComponent(props, context, options) {
 
 	const handleCancel = async () => {
 		serverErrors.value = [];
-		dialogCancelConfirmSignal.value.open(correlationId());
+		if (dirty.value) {
+			dialogCancelConfirmSignal.value.open(correlationId());
+			return;
+		}
+
+		await reset(correlationId, false);
+		context.emit('cancel');
 	};
 	const handleCancelConfirmOk = async () => {
 		serverErrors.value = [];
