@@ -73,19 +73,10 @@ export function useBaseSettingsComponent(props, context, options) {
 	// eslint-disable-next-line
 	const preCompleteI = async (correlationId, value) =>  {
 	};
-	const reset = async (correlationId, notify) => {
-		if (options && LibraryCommonUtility.isObject(options) && options.formRef)
-			await options.formRef.value.reset(correlationId, notify);
-		// setTimeout(async () => {
-		// 	if (options && LibraryCommonUtility.isObject(options) && options.formRef)
-		// 		await options.formRef.value.reset(correlationId, notify);
-		// },
-		// 150);
-	};
-	// eslint-disable-next-line
 
 	onMounted(async () => {
-		await reset(correlationId(), false);
+		if (options && LibraryCommonUtility.isObject(options) && options.formRef)
+			await options.formRef.value.resetForm(correlationId, false);
 	});
 
 	return {
@@ -117,7 +108,6 @@ export function useBaseSettingsComponent(props, context, options) {
 		preComplete,
 		preCompleteI,
 		requestReset,
-		reset,
 		serviceStore,
 		serviceUsers,
 		user
