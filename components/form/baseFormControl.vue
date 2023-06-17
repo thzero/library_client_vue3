@@ -98,7 +98,7 @@ export function useBaseFormControlComponent(props, context, options) {
 		isClearing.value = true;
 		try {
 			logger.debug('useBaseFormControlComponent', 'clear', 'clear', null, correlationId);
-			await reset(correlationId);
+			await resetForm(correlationId);
 		}
 		finally {
 			isClearing.value = false;
@@ -135,9 +135,7 @@ export function useBaseFormControlComponent(props, context, options) {
 		await handleClear(correlationId);
 	};
 	const reset = async (correlationId, notify, options) => {
-		if (props.resetForm)
-			props.resetForm(correlationId, options);
-		logger.debug('useBaseFormControlComponent', 'clear', null, null, correlationId);
+		logger.debug('useBaseFormControlComponent', 'reset', null, null, correlationId);
 		serverErrors.value = [];
 		await props.validation.$validate();
 		await props.validation.$reset();
@@ -148,6 +146,11 @@ export function useBaseFormControlComponent(props, context, options) {
 		notify = LibraryCommonUtility.isNotNull(notify) ? notify : true;
 		if (props.notify && notify)
 			setNotify(correlationId, props.notifyMessageReset);
+	};
+	const resetForm = async (correlationId, notify, options) => {
+		if (props.resetForm)
+			props.resetForm(correlationId, options);
+		reset(correlationIdnotify, options);
 	};
 	const setNotify = (correlationId, message, transformed) => {
 		if (String.isNullOrEmpty(message))
