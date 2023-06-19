@@ -6,6 +6,7 @@ import LibraryClientUtility from '@thzero/library_client/utility/index';
 import LibraryCommonUtility from '@thzero/library_common/utility';
 
 import { useBaseEditComponent } from '@thzero/library_client_vue3/components/baseEdit';
+import { useNotify } from '@thzero/library_client_vue3/components/notify';
 
 import DialogSupport from '@thzero/library_client_vue3/components/support/dialog';
 
@@ -26,6 +27,14 @@ export function useBaseFormControlComponent(props, context, options) {
 		setErrors
 	} = useBaseEditComponent(props, context, options);
 
+	const {
+		notifyColor,
+		notifyMessage,
+		notifySignal,
+		notifyTimeout,
+		setNotify
+	} = useNotify(props, context, options);
+
 	// if (!props.dirtyCallback)
 	// 	throw Error('Requires dirtyCallback callback.');
 
@@ -34,17 +43,17 @@ export function useBaseFormControlComponent(props, context, options) {
 	const dialogDeleteConfirmSignal = ref(new DialogSupport());
 	const dirty = ref(false);
 	const invalid = ref(true);
-	const isClearing = ref(false);
 	const messageCancel = ref(LibraryClientUtility.$trans.t('questions.formDirty.cancel'));
 	const messageClear = ref(LibraryClientUtility.$trans.t('questions.formDirty.clear'));
-	const notifyColor = ref(null);
-	const notifyMessage = ref(null);
-	const notifySignal = ref(false);
-	const notifyTimeout = ref(3000);
 
 	const buttonCancelDisabled = computed(() => {
 		if (dirty.value === false)
 			return false;
+		return (invalid.value || props.disabled);
+	});
+	const buttonClearDisabled = computed(() => {
+		if (dirty.value === false)
+			return true;
 		return (invalid.value || props.disabled);
 	});
 	const buttonOkDisabled = computed(() => {
@@ -54,6 +63,9 @@ export function useBaseFormControlComponent(props, context, options) {
 	});
 	const isCancelling = computed(() => {
 		return dialogCancelConfirmSignal.value.signal;
+	});
+	const isClearing = computed(() => {
+		return dialogClearConfirmSignal.value.signal;
 	});
 	const isDeleting = computed(() => {
 		return dialogDeleteConfirmSignal.value.signal;
@@ -66,29 +78,27 @@ export function useBaseFormControlComponent(props, context, options) {
 	});
 
 	const handleCancel = async () => {
+		const correlationIdI = correlationId();
 		serverErrors.value = [];
 		if (dirty.value) {
-			dialogCancelConfirmSignal.value.open(correlationId());
+			dialogCancelConfirmSignal.value.open(correlationIdI);
 			return;
 		}
 
-		await reset(correlationId, false);
+		await reset(correlationIdI, false);
 		context.emit('cancel');
 	};
-	const handleCancelConfirmOk = async () => {
+	const handleCancelConfirmOk = async (correlationId) => {
+		dialogCancelConfirmSignal.value.ok();
 		serverErrors.value = [];
 
-		const correlationIdI = correlationId();
-
-		dialogCancelConfirmSignal.value.ok();
-
 		if (props.preCompleteCancel) {
-			const response = await props.preCompleteCancel(correlationIdI);
-			logger.debug('useBaseFormControlComponent', 'handleCancelConfirmOk', 'response', response, correlationIdI);
+			const response = await props.preCompleteCancel(correlationId);
+			logger.debug('useBaseFormControlComponent', 'handleCancelConfirmOk', 'response', response, correlationId);
 			if (hasFailed(response)) {
-				logger.error('useBaseFormControlComponent', 'handleCancelConfirmOk', 'response', response, correlationIdI);
+				logger.error('useBaseFormControlComponent', 'handleCancelConfirmOk', 'response', response, correlationId);
 				// TODO
-				// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationIdI);
+				// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationId);
 
 				const notify = LibraryCommonUtility.isNotNull(notify) ? notify : true;
 				if (props.notify && notify)
@@ -102,40 +112,39 @@ export function useBaseFormControlComponent(props, context, options) {
 		await reset(correlationId, false);
 		context.emit('cancel');
 	};
-	const handleClear = async (correlationId) => {
-		isClearing.value = true;
-		try {
-			if (dirty.value) {
-				dialogClearConfirmSignal.value.open(correlationId);
-				return;
-			}
+	const handleClear = async () => {
+		const correlationIdI = correlationId();
+		if (dirty.value) {
+			dialogClearConfirmSignal.value.open(correlationIdI);
+			return;
+		}
 
-			logger.debug('useBaseFormControlComponent', 'clear', 'clear', null, correlationId);
-			await resetForm(correlationId);
-			context.emit('reset');
-		}
-		finally {
-			isClearing.value = false;
-		}
+		logger.debug('useBaseFormControlComponent', 'clear', 'clear', null, correcorrelationIdIlationId);
+		await resetForm(correlationId);
+		context.emit('reset');
+	};
+	const handleClearConfirmOk = async (correlationId) => {
+		dialogClearConfirmSignal.value.ok();
+
+		logger.debug('useBaseFormControlComponent', 'clear', 'clear', null, correlationId);
+		await resetForm(correlationId);
+		context.emit('reset');
 	};
 	const handleDelete = async () => {
 		serverErrors.value = [];
 		dialogDeleteConfirmSignal.value.open(correlationId());
 	};
-	const handleDeleteConfirmOk = async () => {
+	const handleDeleteConfirmOk = async (correlationId) => {
+		dialogDeleteConfirmSignal.value.ok();
 		serverErrors.value = [];
 
-		const correlationIdI = correlationId();
-
-		dialogDeleteConfirmSignal.value.ok();
-
 		if (props.preCompleteDelete) {
-			const response = await props.preCompleteDelete(correlationIdI);
-			logger.debug('useBaseFormControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationIdI);
+			const response = await props.preCompleteDelete(correlationId);
+			logger.debug('useBaseFormControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationId);
 			if (hasFailed(response)) {
-				logger.error('useBaseFormControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationIdI);
+				logger.error('useBaseFormControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationId);
 				// TODO
-				// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationIdI);
+				// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationId);
 
 				const notify = LibraryCommonUtility.isNotNull(notify) ? notify : true;
 				if (props.notify && notify)
@@ -146,7 +155,8 @@ export function useBaseFormControlComponent(props, context, options) {
 		}
 
 		logger.debug('useBaseFormControlComponent', 'handleDeleteConfirmOk', 'delete', null, correlationId);
-		await handleClear(correlationId);
+		await resetForm(correlationId);
+		context.emit('delete');
 	};
 	const reset = async (correlationId, notify, options) => {
 		logger.debug('useBaseFormControlComponent', 'reset', null, null, correlationId);
@@ -162,21 +172,9 @@ export function useBaseFormControlComponent(props, context, options) {
 			setNotify(correlationId, props.notifyMessageReset);
 	};
 	const resetForm = async (correlationId, notify, options) => {
-		if (props.resetForm)
-			props.resetForm(correlationId, options);
-		reset(correlationIdnotify, options);
-	};
-	const setNotify = (correlationId, message, transformed) => {
-		if (String.isNullOrEmpty(message))
-			return;
-
-		message = (!transformed ? LibraryClientUtility.$trans.t(message) : message);
-		if (String.isNullOrEmpty(message))
-			return;
-
-		notifyColor.value = null;
-		notifyMessage.value = (!transformed ? LibraryClientUtility.$trans.t(message) : message);
-		notifySignal.value = true;
+		if (props.resetFormAdditional)
+			props.resetFormAdditional(correlationId, options);
+		reset(correlationId, notify, options);
 	};
 	const submit = async () => {
 		const correlationIdI = correlationId();
@@ -261,13 +259,21 @@ export function useBaseFormControlComponent(props, context, options) {
 		isSaving,
 		serverErrors,
 		setErrors,
-		buttonCancelDisabled,
-		buttonOkDisabled,
+		notifyColor,
+		notifyMessage,
+		notifySignal,
+		notifyTimeout,
+		setNotify,
 		dialogCancelConfirmSignal,
 		dialogClearConfirmSignal,
 		dialogDeleteConfirmSignal,
 		dirty,
 		invalid,
+		messageCancel,
+		messageClear,
+		buttonCancelDisabled,
+		buttonClearDisabled,
+		buttonOkDisabled,
 		isCancelling,
 		isClearing,
 		isDeleting,
@@ -276,16 +282,11 @@ export function useBaseFormControlComponent(props, context, options) {
 		handleCancel,
 		handleCancelConfirmOk,
 		handleClear,
+		handleClearConfirmOk,
 		handleDelete,
 		handleDeleteConfirmOk,
-		messageCancel,
-		messageClear,
-		notifyColor,
-		notifyMessage,
-		notifySignal,
-		notifyTimeout,
 		reset,
-		setNotify,
+		resetForm,
 		submit
 	};
 };

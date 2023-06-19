@@ -83,7 +83,7 @@ export const baseFormControlProps = {
 		type: Boolean,
 		default: null
 	},
-	resetForm: {
+	resetFormAdditional: {
 		type: Function,
 		default: null
 	},
