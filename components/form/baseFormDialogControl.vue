@@ -2,7 +2,6 @@
 import { computed, onMounted, ref, watch } from 'vue';
 
 import LibraryClientUtility from '@thzero/library_client/utility/index';
-// import LibraryClientVueUtility from '@thzero/library_client_vue/utility/index';
 
 import { useBaseEditComponent } from '@thzero/library_client_vue3/components/baseEdit';
 import { useNotify } from '@thzero/library_client_vue3/components/notify';
@@ -35,20 +34,46 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 	} = useNotify(props, context, options);
 
 	const dialogHeightI = ref(300);
+	const dialogCancelConfirmSignal = ref(new DialogSupport());
+	const dialogClearConfirmSignal = ref(new DialogSupport());
+	const dialogCloseConfirmSignal = ref(new DialogSupport());
 	const dialogDeleteConfirmSignal = ref(new DialogSupport());
 	const dialogSignal = ref(false);
 	const dirty = ref(false);
-	const loading = ref(false);
 	const invalid = ref(true);
-	// const notifyColor = ref(null);
-	// const notifyMessage = ref(null);
-	// const notifySignal = ref(false);
-	// const notifyTimeout = ref(3000);
+	const messageCancel = ref(LibraryClientUtility.$trans.t('questions.formDirty.cancel'));
+	const messageClear = ref(LibraryClientUtility.$trans.t('questions.formDirty.clear'));
+	const messageClose = ref(LibraryClientUtility.$trans.t('questions.formDirty.close'));
 
+	const buttonCancelDisabled = computed(() => {
+		if (dirty.value === false)
+			return false;
+		return (invalid.value || props.disabled);
+	});
+	const buttonClearDisabled = computed(() => {
+		if (dirty.value === false)
+			return true;
+		return (invalid.value || props.disabled);
+	});
 	const buttonOkDisabled = computed(() => {
 		if (dirty.value === false)
 			return true;
-		return invalid.value;
+		return (invalid.value || props.disabled);
+	});
+	const isCancelling = computed(() => {
+		return dialogCancelConfirmSignal.value.signal;
+	});
+	const isClearing = computed(() => {
+		return dialogClearConfirmSignal.value.signal;
+	});
+	const isDeleting = computed(() => {
+		return dialogDeleteConfirmSignal.value.signal;
+	});
+	const isLoading = computed(() => {
+		return isClearing.value || isDeleting.value || isSaving.value;
+	});
+	const overlayLoading = computed(() => {
+		return isSaving.value && props.autoSave;
 	});
 	const scrollableI = computed(() => {
 		return props.scrollable ? 'scrollable' : '';
@@ -57,13 +82,66 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		return props.scrollableAutoResize ? 'height: ' + (!String.isNullOrEmpty(props.scrollableHeight) ? props.scrollableHeight : dialogHeightI).value + 'px;' : '';
 	});
 
-	const handleClear = () => {
+	const handleCancel = async () => {
 		const correlationIdI = correlationId();
-		logger.debug('useBaseFormDialogControlComponent', 'clear', 'clear', null, correlationIdI);
-		reset(correlationIdI, true);
+		serverErrors.value = [];
+		if (dirty.value) {
+			dialogCancelConfirmSignal.value.open(correlationIdI);
+			return;
+		}
+
+		await reset(correlationIdI, false);
+		context.emit('cancel');
 	};
-	const handleClose = () => {
+	const handleCancelConfirmOk = async (correlationId) => {
+		dialogCancelConfirmSignal.value.ok();
+		serverErrors.value = [];
+
+		if (props.preCompleteCancel) {
+			const response = await props.preCompleteCancel(correlationId);
+			logger.debug('useBaseFormControlComponent', 'handleCancelConfirmOk', 'response', response, correlationId);
+			if (hasFailed(response)) {
+				logger.error('useBaseFormControlComponent', 'handleCancelConfirmOk', 'response', response, correlationId);
+				// TODO
+				// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationId);
+
+				const notify = LibraryCommonUtility.isNotNull(notify) ? notify : true;
+				if (props.notify && notify)
+					setNotify(correlationId, props.notifyMessageError);
+
+				return;
+			}
+		}
+
+		logger.debug('useBaseFormControlComponent', 'handleCancelConfirmOk', 'cancel', null, correlationId);
+		await reset(correlationId, false);
+		context.emit('cancel');
+	};
+	const handleClear = async () => {
 		const correlationIdI = correlationId();
+		if (dirty.value) {
+			dialogClearConfirmSignal.value.open(correlationIdI);
+			return;
+		}
+
+		logger.debug('useBaseFormDialogControlComponent', 'clear', 'clear', null, correlationIdI);
+		await resetForm(correlationIdI, true);
+	};
+	const handleClearConfirmOk = async (correlationId) => {
+		dialogClearConfirmSignal.value.ok();
+
+		logger.debug('useBaseFormDialogControlComponent', 'clear', 'clear', null, correlationId);
+		await resetForm(correlationId);
+		context.emit('reset');
+	};
+	const handleClose = async () => {
+		const correlationIdI = correlationId();
+		serverErrors.value = [];
+		if (dirty.value) {
+			dialogCloseConfirmSignal.value.open(correlationIdI);
+			return;
+		}
+
 		serverErrors.value = [];
 		dialogSignal.value = false;
 		reset(correlationIdI, false);
@@ -72,22 +150,19 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 	};
 	const handleDelete = async () => {
 		serverErrors.value = [];
-		dialogDeleteConfirmSignal.value.open(this.correlationId());
+		dialogDeleteConfirmSignal.value.open(correlationId());
 	};
-	const handleDeleteConfirmOk = async() => {
+	const handleDeleteConfirmOk = async(correlationId) => {
+		dialogDeleteConfirmSignal.value.ok();
 		serverErrors.value = [];
 
-		const correlationIdI = correlationId();
-
-		dialogDeleteConfirmSignal.value.ok();
-
 		if (props.preCompleteDelete) {
-			const response = await props.preCompleteDelete(correlationIdI);
-			logger.debug('useBaseFormDialogControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationIdI);
+			const response = await props.preCompleteDelete(correlationId);
+			logger.debug('useBaseFormDialogControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationId);
 			if (hasFailed(response)) {
-				logger.error('useBaseFormDialogControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationIdI);
+				logger.error('useBaseFormDialogControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationId);
 				// TODO
-				// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationIdI);
+				// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationId);
 
 				if (props.notify)
 					setNotify(correlationId, props.notifyMessageError);
@@ -97,43 +172,33 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		}
 
 		dialogSignal.value = false;
-		logger.debug('useBaseFormDialogControlComponent', 'handleDeleteConfirmOk', 'delete', null, correlationIdI);
-		context.emit('ok');
-		clear(correlationIdI);
+		logger.debug('useBaseFormDialogControlComponent', 'handleDeleteConfirmOk', 'delete', null, correlationId);
+		reset(correlationId, false);
+		context.emit('delete');
 	};
 	const onResize = () => {
 		const temp = window.innerHeight - 200;
 		dialogHeightI.value = Math.ceil(temp * props.scrollableAutoResizeFactor);
 	};
 	const reset = async (correlationId, notify, options) => {
-		if (props.resetDialog)
-			props.resetDialog(correlationId, options);
 		serverErrors.value = [];
 		await props.validation.$validate();
 		await props.validation.$reset();
-		loading.value = false;
+		isSaving.value = false;
 
 		notify = notify !== null || notify !== undefined ? notify : true;
 		if (props.notify && notify)
 			setNotify(correlationId, props.notifyMessageReset);
 	};
-	// const setNotify = (correlationId, message, transformed) => {
-	// 	if (String.isNullOrEmpty(message))
-	// 		return;
-
-	// 	message = (!transformed ? LibraryClientUtility.$trans.t(message) : message);
-	// 	if (String.isNullOrEmpty(message))
-	// 		return;
-
-	// 	notifyColor.value = null;
-	// 	notifyMessage.value = (!transformed ? LibraryClientUtility.$trans.t(message) : message);
-	// 	notifySignal.value = true;
-	// };
+	const resetDialog = async (correlationId, notify, options) => {
+		if (props.resetDialogAdditional)
+			props.resetDialogAdditional(correlationId, options);
+		reset(correlationIdnotify, options);
+	};
 	const submit = async () => {
 		const correlationIdI = correlationId();
 		try {
-			loading.value = true;
-
+			isSaving.value = true;
 			serverErrors.value = [];
 
 			const result = await props.validation.$validate();
@@ -173,7 +238,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 			logger.exception('useBaseFormDialogControlComponent', 'submit', err, correlationId);
 		}
 		finally {
-			loading.value = false;
+			isSaving.value = false;
 		}
 	};
 
@@ -223,26 +288,37 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		notifySignal,
 		notifyTimeout,
 		setNotify,
-		buttonOkDisabled,
 		dialogHeightI,
+		dialogCancelConfirmSignal,
+		dialogClearConfirmSignal,
+		dialogCloseConfirmSignal,
 		dialogDeleteConfirmSignal,
 		dialogSignal,
 		dirty,
 		invalid,
+		messageCancel,
+		messageClear,
+		messageClose,
+		buttonCancelDisabled,
+		buttonClearDisabled,
+		buttonOkDisabled,
+		isCancelling,
+		isClearing,
+		isDeleting,
+		isLoading,
+		overlayLoading,
+		scrollableI,
+		scrollableHeightI,
+		handleCancel,
+		handleCancelConfirmOk,
 		handleClear,
+		handleClearConfirmOk,
 		handleClose,
 		handleDelete,
 		handleDeleteConfirmOk,
-		loading,
-		// notifyColor,
-		// notifyMessage,
-		// notifySignal,
-		// notifyTimeout,
 		onResize,
 		reset,
-		scrollableI,
-		scrollableHeightI,
-		// setNotify,
+		resetDialog,
 		submit
 	};
 };
