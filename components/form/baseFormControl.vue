@@ -30,11 +30,13 @@ export function useBaseFormControlComponent(props, context, options) {
 	// 	throw Error('Requires dirtyCallback callback.');
 
 	const dialogCancelConfirmSignal = ref(new DialogSupport());
+	const dialogClearConfirmSignal = ref(new DialogSupport());
 	const dialogDeleteConfirmSignal = ref(new DialogSupport());
 	const dirty = ref(false);
 	const invalid = ref(true);
 	const isClearing = ref(false);
-	const messageCancel = ref(LibraryClientUtility.$trans.t('questions.formDirty'));
+	const messageCancel = ref(LibraryClientUtility.$trans.t('questions.formDirty.cancel'));
+	const messageClear = ref(LibraryClientUtility.$trans.t('questions.formDirty.clear'));
 	const notifyColor = ref(null);
 	const notifyMessage = ref(null);
 	const notifySignal = ref(false);
@@ -103,8 +105,14 @@ export function useBaseFormControlComponent(props, context, options) {
 	const handleClear = async (correlationId) => {
 		isClearing.value = true;
 		try {
+			if (dirty.value) {
+				dialogClearConfirmSignal.value.open(correlationId);
+				return;
+			}
+
 			logger.debug('useBaseFormControlComponent', 'clear', 'clear', null, correlationId);
 			await resetForm(correlationId);
+			context.emit('reset');
 		}
 		finally {
 			isClearing.value = false;
@@ -256,6 +264,7 @@ export function useBaseFormControlComponent(props, context, options) {
 		buttonCancelDisabled,
 		buttonOkDisabled,
 		dialogCancelConfirmSignal,
+		dialogClearConfirmSignal,
 		dialogDeleteConfirmSignal,
 		dirty,
 		invalid,
@@ -270,6 +279,7 @@ export function useBaseFormControlComponent(props, context, options) {
 		handleDelete,
 		handleDeleteConfirmOk,
 		messageCancel,
+		messageClear,
 		notifyColor,
 		notifyMessage,
 		notifySignal,
