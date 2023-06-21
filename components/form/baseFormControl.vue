@@ -49,17 +49,22 @@ export function useBaseFormControlComponent(props, context, options) {
 	const buttonCancelDisabled = computed(() => {
 		if (dirty.value === false)
 			return false;
-		return (invalid.value || props.disabled);
+		return (invalid.value || (props.disabled === true));
 	});
 	const buttonClearDisabled = computed(() => {
 		if (dirty.value === false)
 			return true;
-		return (invalid.value || props.disabled);
+		return (props.disabled === true);
+	});
+	const buttonDeleteDisabled = computed(() => {
+		if (dirty.value === false)
+			return true;
+		return (props.disabled === true);
 	});
 	const buttonOkDisabled = computed(() => {
 		if (dirty.value === false)
 			return true;
-		return (invalid.value || props.disabled);
+		return (invalid.value || (props.disabled === true));
 	});
 	const isCancelling = computed(() => {
 		return dialogCancelConfirmSignal.value.signal;
@@ -273,6 +278,7 @@ export function useBaseFormControlComponent(props, context, options) {
 		messageClear,
 		buttonCancelDisabled,
 		buttonClearDisabled,
+		buttonDeleteDisabled,
 		buttonOkDisabled,
 		isCancelling,
 		isClearing,

@@ -1,19 +1,43 @@
 export const baseFormDialogControlProps = {
+	buttonClear: {
+		type: Boolean,
+		default: true
+	},
+	buttonClearName: {
+		type: String,
+		default: 'buttons.clear'
+	},
 	buttonCancel: {
 		type: Boolean,
 		default: true
 	},
-	buttonClear: {
-		type: Boolean,
-		default: true
+	buttonCancelName: {
+		type: String,
+		default: 'buttons.cancel'
+	},
+	buttonCloseName: {
+		type: String,
+		default: 'buttons.close'
 	},
 	buttonDelete: {
 		type: Boolean,
 		default: false
 	},
+	buttonDeleteName: {
+		type: String,
+		default: 'buttons.delete'
+	},
 	buttonOk: {
 		type: Boolean,
 		default: true
+	},
+	buttonOkDisabledOverride: {
+		type: Function,
+		default: null
+	},
+	buttonOkName: {
+		type: String,
+		default: 'buttons.ok'
 	},
 	fullscreen: {
 		type: Boolean,
