@@ -79,7 +79,7 @@ export const baseFormDialogControlProps = {
 		type: Function,
 		default: null
 	},
-	resetDialogAdditional: {
+	resetAdditional: {
 		type: Function,
 		default: null
 	},

@@ -125,14 +125,14 @@ export function useBaseFormControlComponent(props, context, options) {
 		}
 
 		logger.debug('useBaseFormControlComponent', 'clear', 'clear', null, correcorrelationIdIlationId);
-		await resetForm(correlationId);
+		await reset(correlationId);
 		context.emit('reset');
 	};
 	const handleClearConfirmOk = async (correlationId) => {
 		dialogClearConfirmSignal.value.ok();
 
 		logger.debug('useBaseFormControlComponent', 'clear', 'clear', null, correlationId);
-		await resetForm(correlationId);
+		await reset(correlationId);
 		context.emit('reset');
 	};
 	const handleDelete = async () => {
@@ -160,10 +160,12 @@ export function useBaseFormControlComponent(props, context, options) {
 		}
 
 		logger.debug('useBaseFormControlComponent', 'handleDeleteConfirmOk', 'delete', null, correlationId);
-		await resetForm(correlationId);
+		await reset(correlationId);
 		context.emit('delete');
 	};
 	const reset = async (correlationId, notify, options) => {
+		if (props.resetAdditional)
+			props.resetAdditional(correlationId, options);
 		logger.debug('useBaseFormControlComponent', 'reset', null, null, correlationId);
 		serverErrors.value = [];
 		await props.validation.$validate();
@@ -175,11 +177,6 @@ export function useBaseFormControlComponent(props, context, options) {
 		notify = LibraryCommonUtility.isNotNull(notify) ? notify : true;
 		if (props.notify && notify)
 			setNotify(correlationId, props.notifyMessageReset);
-	};
-	const resetForm = async (correlationId, notify, options) => {
-		if (props.resetFormAdditional)
-			props.resetFormAdditional(correlationId, options);
-		reset(correlationId, notify, options);
 	};
 	const submit = async () => {
 		const correlationIdI = correlationId();
@@ -292,7 +289,6 @@ export function useBaseFormControlComponent(props, context, options) {
 		handleDelete,
 		handleDeleteConfirmOk,
 		reset,
-		resetForm,
 		submit
 	};
 };

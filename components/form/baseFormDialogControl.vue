@@ -118,7 +118,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		}
 
 		logger.debug('useBaseFormDialogControlComponent', 'clear', 'clear', null, correlationIdI);
-		await resetDialog(correlationIdI, true);
+		await reset(correlationIdI, true);
 	};
 	const handleClearConfirmOk = async (correlationId) => {
 		dialogClearConfirmSignal.value.ok();
@@ -160,6 +160,9 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		dialogHeightI.value = Math.ceil(temp * props.scrollableAutoResizeFactor);
 	};
 	const reset = async (correlationId, notify, options) => {
+		if (props.resetAdditional)
+			await props.resetAdditional(correlationId, options);
+
 		serverErrors.value = [];
 		await props.validation.$validate();
 		await props.validation.$reset();
@@ -168,11 +171,6 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		notify = notify !== null || notify !== undefined ? notify : true;
 		if (props.notify && notify)
 			setNotify(correlationId, props.notifyMessageReset);
-	};
-	const resetDialog = async (correlationId, notify, options) => {
-		if (props.resetDialogAdditional)
-			props.resetDialogAdditional(correlationId, options);
-		reset(correlationId, notify, options);
 	};
 	const submit = async () => {
 		const correlationIdI = correlationId();
@@ -208,7 +206,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 			if (LibraryCommonUtility.isNull(options) || 
 				(!LibraryCommonUtility.isNull(options) && LibraryCommonUtility.isNull(options.resetOnSubmit)) || 
 				options.resetOnSubmit == true) {
-				await resetDialog(correlationIdI, true);
+				await reset(correlationIdI, true);
 			}
 
 			if (props.notify && !String.isNullOrEmpty(props.notifyMessageSaved))
@@ -304,7 +302,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		handleDeleteConfirmOk,
 		onResize,
 		reset,
-		resetDialog,
+		reset,
 		submit
 	};
 };
