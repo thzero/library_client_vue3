@@ -47,17 +47,13 @@ export function useBaseFormControlComponent(props, context, options) {
 	const messageClear = ref(LibraryClientUtility.$trans.t('questions.formDirty.clear'));
 
 	const buttonCancelDisabled = computed(() => {
-		if (dirty.value === false)
-			return false;
-		return (invalid.value || (props.disabled === true));
+		return (props.disabled === true);
 	});
 	const buttonClearDisabled = computed(() => {
-		if (dirty.value === false)
-			return true;
 		return (props.disabled === true);
 	});
 	const buttonDeleteDisabled = computed(() => {
-		if (dirty.value === false)
+		if (dirty.value === true)
 			return true;
 		return (props.disabled === true);
 	});

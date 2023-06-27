@@ -45,25 +45,21 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 	const messageClear = ref(LibraryClientUtility.$trans.t('questions.formDirty.clear'));
 
 	const buttonCancelDisabled = computed(() => {
-		if (dirty.value === false)
-			return false;
-		return (invalid.value || props.disabled === true);
+		return (props.disabled === true);
 	});
 	const buttonClearDisabled = computed(() => {
-		if (dirty.value === false)
-			return true;
 		return (props.disabled === true);
 	});
 	const buttonDeleteDisabled = computed(() => {
-		if (dirty.value === false)
+		if (dirty.value === true)
 			return true;
 		return (props.disabled === true);
 	});
 	const buttonOkDisabled = computed(() => {
-		if (dirty.value === false)
-			return true;
 		if (props.buttonOkDisabledOverride)
 			return props.buttonOkDisabledOverride(props.disabled, invalid.value, props.invalidOverride);
+		if (dirty.value === false)
+			return true;
 		return (invalid.value || (props.disabled === true) || (props.invalidOverride != null ? props.invalidOverride : false));
 	});
 	const isCanceling = computed(() => {
@@ -201,7 +197,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 			}
 
 			logger.debug('useBaseFormDialogControlComponent', 'submit', 'ok', null, correlationId);
-			context.emit('ok');
+			context.emit('ok', response);
 
 			if (LibraryCommonUtility.isNull(options) || 
 				(!LibraryCommonUtility.isNull(options) && LibraryCommonUtility.isNull(options.resetOnSubmit)) || 
