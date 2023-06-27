@@ -35,6 +35,10 @@ export const baseFormControlProps = {
 		type: String,
 		default: 'buttons.ok'
 	},
+	debug: {
+		type: Boolean,
+		default: false
+	},
 	dirtyCallback: {
 		type: Function,
 		default: () => null

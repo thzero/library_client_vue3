@@ -39,6 +39,10 @@ export const baseFormDialogControlProps = {
 		type: String,
 		default: 'buttons.ok'
 	},
+	debug: {
+		type: Boolean,
+		default: false
+	},
 	fullscreen: {
 		type: Boolean,
 		default: false
