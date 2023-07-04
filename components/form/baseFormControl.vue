@@ -120,7 +120,7 @@ export function useBaseFormControlComponent(props, context, options) {
 			return;
 		}
 
-		logger.debug('useBaseFormControlComponent', 'clear', 'clear', null, correcorrelationIdIlationId);
+		logger.debug('useBaseFormControlComponent', 'clear', 'clear', null, correlationIdI);
 		await reset(correlationId);
 		context.emit('reset');
 	};
