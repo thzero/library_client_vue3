@@ -45,7 +45,7 @@ export function useBaseOpenSourceComponent(props, context, options) {
 	};
 	const initializeDependenciesClientBase = async () => {
 		const temp = await import('open-source-config');
-		const openSournce = temp.useDependenciesClientBase();
+		const openSournce = await temp.useDependenciesClientBase();
 		let output = [];
 		let items;
 		for (const source of openSournce) {
