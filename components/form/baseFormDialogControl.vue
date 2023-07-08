@@ -94,7 +94,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 
 		serverErrors.value = [];
 		dialogSignal.value = false;
-		reset(correlationIdI, false);
+		reset(correlationIdI, true, true);
 		logger.debug('useBaseFormDialogControlComponent', 'handleCancel', 'cancel', null, correlationIdI);
 		context.emit('close');
 	};
@@ -103,7 +103,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 
 		dialogSignal.value = false;
 		logger.debug('useBaseFormDialogControlComponent', 'handleCancelConfirmOk', 'delete', null, correlationId);
-		reset(correlationId, false);
+		reset(correlationId, true, true);
 		context.emit('close');
 	};
 	const handleClear = async () => {
@@ -114,13 +114,13 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		}
 
 		logger.debug('useBaseFormDialogControlComponent', 'clear', 'clear', null, correlationIdI);
-		await reset(correlationIdI, true);
+		await reset(correlationIdI, true, true);
 	};
 	const handleClearConfirmOk = async (correlationId) => {
 		dialogClearConfirmSignal.value.ok();
 
 		logger.debug('useBaseFormDialogControlComponent', 'clear', 'clear', null, correlationId);
-		await resetForm(correlationId);
+		await reset(correlationId, true, true);
 		context.emit('reset');
 	};
 	const handleDelete = async () => {
@@ -155,9 +155,9 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		const temp = window.innerHeight - 200;
 		dialogHeightI.value = Math.ceil(temp * props.scrollableAutoResizeFactor);
 	};
-	const reset = async (correlationId, notify, options) => {
+	const reset = async (correlationId, notify, previous) => {
 		if (props.resetAdditional)
-			await props.resetAdditional(correlationId, options);
+			await props.resetAdditional(correlationId, previous);
 
 		serverErrors.value = [];
 		await props.validation.$validate();
@@ -185,6 +185,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 				response = await props.preCompleteOk(correlationIdI);
 				logger.debug('useBaseFormDialogControlComponent', 'submit', 'response', response, correlationIdI);
 				if (hasFailed(response)) {
+					context.emit('error', response.err);
 					logger.error('useBaseFormDialogControlComponent', 'submit', 'response', response, correlationIdI);
 					// TODO
 					// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationIdI);
@@ -202,7 +203,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 			if (LibraryCommonUtility.isNull(options) || 
 				(!LibraryCommonUtility.isNull(options) && LibraryCommonUtility.isNull(options.resetOnSubmit)) || 
 				options.resetOnSubmit == true) {
-				await reset(correlationIdI, true);
+				await reset(correlationIdI, false);
 			}
 
 			if (props.notify && !String.isNullOrEmpty(props.notifyMessageSaved))
@@ -212,15 +213,16 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 				LibraryClientUtility.$navRouter.push(response.route);
 		}
 		catch (err) {
+			context.emit('error', err);
 			logger.exception('useBaseFormDialogControlComponent', 'submit', err, correlationId);
 		}
 		finally {
+			isSaving.value = false;
 			if (LibraryCommonUtility.isNull(options) || 
 				(!LibraryCommonUtility.isNull(options) && LibraryCommonUtility.isNull(options.signalOnSubmit)) || 
 				options.signalOnSubmit == true) {
 					dialogSignal.value = false;
 			}
-			isSaving.value = false;
 		}
 	};
 
@@ -297,7 +299,6 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		handleDelete,
 		handleDeleteConfirmOk,
 		onResize,
-		reset,
 		reset,
 		submit
 	};

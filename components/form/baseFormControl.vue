@@ -121,14 +121,14 @@ export function useBaseFormControlComponent(props, context, options) {
 		}
 
 		logger.debug('useBaseFormControlComponent', 'clear', 'clear', null, correlationIdI);
-		await reset(correlationId);
+		await reset(correlationId, true, true);
 		context.emit('reset');
 	};
 	const handleClearConfirmOk = async (correlationId) => {
 		dialogClearConfirmSignal.value.ok();
 
 		logger.debug('useBaseFormControlComponent', 'clear', 'clear', null, correlationId);
-		await reset(correlationId);
+		await reset(correlationId, true, true);
 		context.emit('reset');
 	};
 	const handleDelete = async () => {
@@ -156,12 +156,12 @@ export function useBaseFormControlComponent(props, context, options) {
 		}
 
 		logger.debug('useBaseFormControlComponent', 'handleDeleteConfirmOk', 'delete', null, correlationId);
-		await reset(correlationId);
+		await reset(correlationId, false);
 		context.emit('delete');
 	};
-	const reset = async (correlationId, notify, options) => {
+	const reset = async (correlationId, notify, previous) => {
 		if (props.resetAdditional)
-			props.resetAdditional(correlationId, options);
+			props.resetAdditional(correlationId, previous);
 		logger.debug('useBaseFormControlComponent', 'reset', null, null, correlationId);
 		serverErrors.value = [];
 		await props.validation.$validate();
