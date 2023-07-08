@@ -32,6 +32,10 @@ export function useBaseConfirmationDialogComponent(props, context, options) {
 		dialogSignal.value = false;
 		context.emit('cancel');
 	};
+	const dialogError = () => {
+		dialogSignal.value = false;
+		context.emit('error');
+	};
 	const dialogOk = async () => {
 		const correlationIdI = correlationId();
 		if (props.preCompleteOk) {
@@ -72,6 +76,7 @@ export function useBaseConfirmationDialogComponent(props, context, options) {
 		successResponse,
 		buttonOkDisabled,
 		dialogCancel,
+		dialogError,
 		dialogOk,
 		dialogSignal,
 		handleError,
