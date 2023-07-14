@@ -43,6 +43,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 	const invalid = ref(true);
 	const messageCancel = ref(LibraryClientUtility.$trans.t('questions.formDirty.cancel'));
 	const messageClear = ref(LibraryClientUtility.$trans.t('questions.formDirty.clear'));
+	const silentErrors = ref(true);
 
 	const buttonCancelDisabled = computed(() => {
 		return (props.disabled === true);
@@ -162,6 +163,9 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		serverErrors.value = [];
 		await props.validation.$validate();
 		await props.validation.$reset();
+		invalid.value = props.validation.$invalid;
+		silentErrors.value = props.validation.$silentErrors;
+		dirty.value = props.validation.$anyDirty;
 		isSaving.value = false;
 
 		notify = notify !== null || notify !== undefined ? notify : true;
@@ -244,6 +248,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 			// console.log('v.error: ' + value.$error);
 			// console.log('v.errors: ' + JSON.stringify(value));
 			invalid.value = value.$invalid;
+			silentErrors.value = value.$silentErrors;
 			dirty.value = value.$anyDirty;
 			// console.log('v.invalid: ' + invalid.value);
 		}
@@ -279,6 +284,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		dialogSignal,
 		dirty,
 		invalid,
+		silentErrors,
 		messageCancel,
 		messageClear,
 		buttonCancelDisabled,
