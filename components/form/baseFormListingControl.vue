@@ -1,5 +1,5 @@
 <script>
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import LibraryClientUtility from '@thzero/library_client/utility/index';
 import LibraryCommonUtility from '@thzero/library_common/utility/index';
@@ -222,10 +222,6 @@ export function useBaseFormListingControlComponent(props, context, options) {
 		}
 	);
 
-	onMounted(async () => {
-		onResize();
-	});
-
 	return {
 		correlationId,
 		error,
@@ -268,7 +264,6 @@ export function useBaseFormListingControlComponent(props, context, options) {
 		handleClearConfirmOk,
 		handleDelete,
 		handleDeleteConfirmOk,
-		onResize,
 		reset,
 		submit
 	};
