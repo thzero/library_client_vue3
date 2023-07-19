@@ -172,6 +172,13 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		if (props.notify && notify)
 			setNotify(correlationId, props.notifyMessageReset);
 	};
+	const resetForm = async (value) => {
+		if (value) {
+			invalid.value = value.$invalid;
+			silentErrors.value = value.$silentErrors;
+			dirty.value = value.$anyDirty;
+		}
+	};
 	const submit = async () => {
 		const correlationIdI = correlationId();
 		try {
@@ -230,6 +237,12 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		}
 	};
 
+	onMounted(async () => {
+		onResize();
+
+		await resetForm(props.validation);
+	});
+
 	watch(() => props.signal,
 		(value) => {
 			const correlationIdI = correlationId();
@@ -243,20 +256,17 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		}
 	);
 	watch(() => props.validation,
-		(value) => {
-			// console.log('v.invalid: ' + value.$invalid);
-			// console.log('v.error: ' + value.$error);
-			// console.log('v.errors: ' + JSON.stringify(value));
-			invalid.value = value.$invalid;
-			silentErrors.value = value.$silentErrors;
-			dirty.value = value.$anyDirty;
-			// console.log('v.invalid: ' + invalid.value);
+		async (value) => {
+			// // console.log('v.invalid: ' + value.$invalid);
+			// // console.log('v.error: ' + value.$error);
+			// // console.log('v.errors: ' + JSON.stringify(value));
+			// invalid.value = value.$invalid;
+			// silentErrors.value = value.$silentErrors;
+			// dirty.value = value.$anyDirty;
+			// // console.log('v.invalid: ' + invalid.value);
+			resetForm(value);
 		}
 	);
-
-	onMounted(async () => {
-		onResize();
-	});
 
 	return {
 		correlationId,
