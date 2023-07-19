@@ -1,5 +1,5 @@
 <script>
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 import LibraryClientUtility from '@thzero/library_client/utility/index';
 // import LibraryClientVueUtility from '@thzero/library_client_vue/utility/index';
@@ -176,6 +176,13 @@ export function useBaseFormControlComponent(props, context, options) {
 		if (props.notify && notify)
 			setNotify(correlationId, props.notifyMessageReset);
 	};
+	const resetForm = async (value) => {
+		if (value) {
+			invalid.value = value.$invalid;
+			silentErrors.value = value.$silentErrors;
+			dirty.value = value.$anyDirty;
+		}
+	};
 	const submit = async () => {
 		const correlationIdI = correlationId();
 		try {
@@ -218,6 +225,10 @@ export function useBaseFormControlComponent(props, context, options) {
 		}
 	};
 
+	onMounted(async () => {
+		await resetForm(props.validation);
+	});
+
 	watch(() => dirty.value,
 		(value) => {
 			if (props.dirtyCallback)
@@ -232,17 +243,18 @@ export function useBaseFormControlComponent(props, context, options) {
 	);
 	watch(() => props.validation,
 		async (value) => {
-			// console.log('v.invalid: ' + value.$invalid);
-			// console.log('v.error: ' + value.$error);
-			// console.log('v.errors: ' + JSON.stringify(value));
-			invalid.value = value.$invalid;
-			silentErrors.value = value.$silentErrors;
-			// if (props.invalidCallback)
-			// 	props.invalidCallback(correlationId(), invalid);
-			dirty.value = value.$anyDirty;
-			// if (props.dirtyCallback)
-			// 	props.dirtyCallback(correlationId(), dirty);
-			// console.log('v.invalid: ' + invalid.value);
+			// // console.log('v.invalid: ' + value.$invalid);
+			// // console.log('v.error: ' + value.$error);
+			// // console.log('v.errors: ' + JSON.stringify(value));
+			// invalid.value = value.$invalid;
+			// silentErrors.value = value.$silentErrors;
+			// // if (props.invalidCallback)
+			// // 	props.invalidCallback(correlationId(), invalid);
+			// dirty.value = value.$anyDirty;
+			// // if (props.dirtyCallback)
+			// // 	props.dirtyCallback(correlationId(), dirty);
+			// // console.log('v.invalid: ' + invalid.value);
+		await resetForm(value);
 		}
 	);
 

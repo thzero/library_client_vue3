@@ -1,5 +1,5 @@
 <script>
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 import LibraryClientUtility from '@thzero/library_client/utility/index';
 import LibraryCommonUtility from '@thzero/library_common/utility/index';
@@ -57,8 +57,6 @@ export function useBaseFormListingControlComponent(props, context, options) {
 	const buttonOkDisabled = computed(() => {
 		if (props.buttonOkDisabledOverride)
 			return props.buttonOkDisabledOverride(props.disabled, invalid.value, props.invalidOverride);
-		if (dirty.value === false)
-			return true;
 		return (invalid.value || (props.disabled === true) || (props.invalidOverride != null ? props.invalidOverride : false));
 	});
 	const isCanceling = computed(() => {
@@ -157,6 +155,13 @@ export function useBaseFormListingControlComponent(props, context, options) {
 		if (props.notify && notify)
 			setNotify(correlationId, props.notifyMessageReset);
 	};
+	const resetForm = async (value) => {
+		if (value) {
+			invalid.value = value.$invalid;
+			silentErrors.value = value.$silentErrors;
+			dirty.value = value.$anyDirty;
+		}
+	};
 	const submit = async () => {
 		const correlationIdI = correlationId();
 		try {
@@ -210,15 +215,20 @@ export function useBaseFormListingControlComponent(props, context, options) {
 		}
 	};
 
+	onMounted(async () => {
+		await resetForm(props.validation);
+	});
+
 	watch(() => props.validation,
-		(value) => {
-			// console.log('v.invalid: ' + value.$invalid);
-			// console.log('v.error: ' + value.$error);
-			// console.log('v.errors: ' + JSON.stringify(value));
-			invalid.value = value.$invalid;
-			silentErrors.value = value.$silentErrors;
-			dirty.value = value.$anyDirty;
-			// console.log('v.invalid: ' + invalid.value);
+		async (value) => {
+			// // console.log('v.invalid: ' + value.$invalid);
+			// // console.log('v.error: ' + value.$error);
+			// // console.log('v.errors: ' + JSON.stringify(value));
+			// invalid.value = value.$invalid;
+			// silentErrors.value = value.$silentErrors;
+			// dirty.value = value.$anyDirty;
+			// // console.log('v.invalid: ' + invalid.value);
+			await resetForm(value);
 		}
 	);
 
