@@ -95,7 +95,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 
 		serverErrors.value = [];
 		dialogSignal.value = false;
-		reset(correlationIdI, true, true);
+		reset(correlationIdI, false, true);
 		logger.debug('useBaseFormDialogControlComponent', 'handleCancel', 'cancel', null, correlationIdI);
 		context.emit('close');
 	};
@@ -104,7 +104,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 
 		dialogSignal.value = false;
 		logger.debug('useBaseFormDialogControlComponent', 'handleCancelConfirmOk', 'delete', null, correlationId);
-		reset(correlationId, true, true);
+		reset(correlationId, false, true);
 		context.emit('close');
 	};
 	const handleClear = async () => {
