@@ -85,13 +85,13 @@ export function useBaseFormListingControlComponent(props, context, options) {
 
 		serverErrors.value = [];
 		reset(correlationIdI, true, true);
-		logger.debug('useBaseFormDialogControlComponent', 'handleCancel', 'cancel', null, correlationIdI);
+		logger.debug('useBaseFormListingControlComponent', 'handleCancel', 'cancel', null, correlationIdI);
 		context.emit('close');
 	};
 	const handleCancelConfirmOk = async(correlationId) => {
 		dialogCancelConfirmSignal.value.ok();
 
-		logger.debug('useBaseFormDialogControlComponent', 'handleCancelConfirmOk', 'delete', null, correlationId);
+		logger.debug('useBaseFormListingControlComponent', 'handleCancelConfirmOk', 'delete', null, correlationId);
 		reset(correlationId, true, true);
 		context.emit('close');
 	};
@@ -102,13 +102,13 @@ export function useBaseFormListingControlComponent(props, context, options) {
 			return;
 		}
 
-		logger.debug('useBaseFormDialogControlComponent', 'clear', 'clear', null, correlationIdI);
+		logger.debug('useBaseFormListingControlComponent', 'clear', 'clear', null, correlationIdI);
 		await reset(correlationIdI, true, true);
 	};
 	const handleClearConfirmOk = async (correlationId) => {
 		dialogClearConfirmSignal.value.ok();
 
-		logger.debug('useBaseFormDialogControlComponent', 'clear', 'clear', null, correlationId);
+		logger.debug('useBaseFormListingControlComponent', 'clear', 'clear', null, correlationId);
 		await reset(correlationId, true, true);
 		context.emit('reset');
 	};
@@ -122,9 +122,9 @@ export function useBaseFormListingControlComponent(props, context, options) {
 
 		if (props.preCompleteDelete) {
 			const response = await props.preCompleteDelete(correlationId);
-			logger.debug('useBaseFormDialogControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationId);
+			logger.debug('useBaseFormListingControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationId);
 			if (hasFailed(response)) {
-				logger.error('useBaseFormDialogControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationId);
+				logger.error('useBaseFormListingControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationId);
 				// TODO
 				// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationId);
 
@@ -135,7 +135,7 @@ export function useBaseFormListingControlComponent(props, context, options) {
 			}
 		}
 
-		logger.debug('useBaseFormDialogControlComponent', 'handleDeleteConfirmOk', 'delete', null, correlationId);
+		logger.debug('useBaseFormListingControlComponent', 'handleDeleteConfirmOk', 'delete', null, correlationId);
 		reset(correlationId, false);
 		context.emit('delete');
 	};
@@ -170,17 +170,17 @@ export function useBaseFormListingControlComponent(props, context, options) {
 
 			const result = await props.validation.$validate();
 			await props.validation.$reset();
-			logger.debug('useBaseFormDialogControlComponent', 'submit', 'result', result, correlationIdI);
+			logger.debug('useBaseFormListingControlComponent', 'submit', 'result', result, correlationIdI);
 			if (!result)
 				return;
 
 			let response = { success: true, route: null };
 			if (props.preCompleteOk) {
 				response = await props.preCompleteOk(correlationIdI);
-				logger.debug('useBaseFormDialogControlComponent', 'submit', 'response', response, correlationIdI);
+				logger.debug('useBaseFormListingControlComponent', 'submit', 'response', response, correlationIdI);
 				if (hasFailed(response)) {
 					context.emit('error', response.err);
-					logger.error('useBaseFormDialogControlComponent', 'submit', 'response', response, correlationIdI);
+					logger.error('useBaseFormListingControlComponent', 'submit', 'response', response, correlationIdI);
 					// TODO
 					// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationIdI);
 
@@ -191,7 +191,7 @@ export function useBaseFormListingControlComponent(props, context, options) {
 				}
 			}
 
-			logger.debug('useBaseFormDialogControlComponent', 'submit', 'ok', null, correlationId);
+			logger.debug('useBaseFormListingControlComponent', 'submit', 'ok', null, correlationId);
 			context.emit('ok', response);
 
 			if (LibraryCommonUtility.isNull(options) || 
@@ -208,7 +208,7 @@ export function useBaseFormListingControlComponent(props, context, options) {
 		}
 		catch (err) {
 			context.emit('error', err);
-			logger.exception('useBaseFormDialogControlComponent', 'submit', err, correlationId);
+			logger.exception('useBaseFormListingControlComponent', 'submit', err, correlationId);
 		}
 		finally {
 			isSaving.value = false;
