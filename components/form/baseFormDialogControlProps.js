@@ -87,10 +87,6 @@ export const baseFormDialogControlProps = {
 		type: Function,
 		default: null
 	},
-	resetOnSignal: {
-		type: Boolean,
-		default: true
-	},
 	scrollable: {
 		type: Boolean,
 		default: false
@@ -106,6 +102,10 @@ export const baseFormDialogControlProps = {
 	scrollableHeight: {
 		type: String,
 		default: '500'
+	},
+	setAdditional: {
+		type: Function,
+		default: null
 	},
 	signal: {
 		type: Boolean,
