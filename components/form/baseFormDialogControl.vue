@@ -163,21 +163,28 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		serverErrors.value = [];
 		await props.validation.$validate();
 		await props.validation.$reset();
-		invalid.value = props.validation.$invalid;
-		silentErrors.value = props.validation.$silentErrors;
-		dirty.value = props.validation.$anyDirty;
+		// invalid.value = props.validation.$invalid;
+		// silentErrors.value = props.validation.$silentErrors;
+		// dirty.value = props.validation.$anyDirty;
+		resetFormValidation(correlationId);
 		isSaving.value = false;
 
 		notify = notify !== null || notify !== undefined ? notify : true;
 		if (props.notify && notify)
 			setNotify(correlationId, props.notifyMessageReset);
 	};
-	const resetForm = async (value) => {
-		if (value) {
-			invalid.value = value.$invalid;
-			silentErrors.value = value.$silentErrors;
-			dirty.value = value.$anyDirty;
+	const resetFormValidation = (correlationId) => {
+		if (props.validation) {
+			invalid.value = props.validation.$invalid;
+			silentErrors.value = props.validation.$silentErrors;
+			dirty.value = props.validation.$anyDirty;
 		}
+	};
+	const set = async (correlationId) => {
+		if (props.resetAdditional)
+			await props.setAdditional(correlationId);
+
+		reset(correlationId, false, false);
 	};
 	const submit = async () => {
 		const correlationIdI = correlationId();
@@ -191,7 +198,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 			if (!result)
 				return;
 
-			let response = { success: true, route: null };
+			let response = { success: true };
 			if (props.preCompleteOk) {
 				response = await props.preCompleteOk(correlationIdI);
 				logger.debug('useBaseFormDialogControlComponent', 'submit', 'response', response, correlationIdI);
@@ -240,7 +247,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 	onMounted(async () => {
 		onResize();
 
-		await resetForm(props.validation);
+		resetFormValidation(correlationId());
 	});
 
 	watch(() => props.signal,
@@ -251,20 +258,15 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 			dialogSignal.value = value;
 			logger.debug('useBaseFormDialogControlComponent', 'signal', 'dialogSignal', dialogSignal.value, correlationIdI);
 
-			if (value && props.resetOnSignal)
-				reset(correlationIdI, false);
+			if (value)
+				set(correlationIdI);
+
+			reset(correlationIdI, false, false);
 		}
 	);
 	watch(() => props.validation,
 		async (value) => {
-			// // console.log('v.invalid: ' + value.$invalid);
-			// // console.log('v.error: ' + value.$error);
-			// // console.log('v.errors: ' + JSON.stringify(value));
-			// invalid.value = value.$invalid;
-			// silentErrors.value = value.$silentErrors;
-			// dirty.value = value.$anyDirty;
-			// // console.log('v.invalid: ' + invalid.value);
-			resetForm(value);
+			resetFormValidation(correlationId());
 		}
 	);
 
@@ -294,9 +296,9 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		dialogSignal,
 		dirty,
 		invalid,
-		silentErrors,
 		messageCancel,
 		messageClear,
+		silentErrors,
 		buttonCancelDisabled,
 		buttonClearDisabled,
 		buttonDeleteDisabled,

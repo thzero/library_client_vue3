@@ -167,20 +167,21 @@ export function useBaseFormControlComponent(props, context, options) {
 		serverErrors.value = [];
 		await props.validation.$validate();
 		await props.validation.$reset();
-		invalid.value = props.validation.$invalid;
-		silentErrors.value = props.validation.$silentErrors;
-		dirty.value = props.validation.$anyDirty;
+		// invalid.value = props.validation.$invalid;
+		// silentErrors.value = props.validation.$silentErrors;
+		// dirty.value = props.validation.$anyDirty;
+		resetFormValidation(correlationId);
 		isSaving.value = false;
 
 		notify = LibraryCommonUtility.isNotNull(notify) ? notify : true;
 		if (props.notify && notify)
 			setNotify(correlationId, props.notifyMessageReset);
 	};
-	const resetForm = async (value) => {
-		if (value) {
-			invalid.value = value.$invalid;
-			silentErrors.value = value.$silentErrors;
-			dirty.value = value.$anyDirty;
+	const resetFormValidation = (correlationId) => {
+		if (props.validation) {
+			invalid.value = props.validation.$invalid;
+			silentErrors.value = props.validation.$silentErrors;
+			dirty.value = props.validation.$anyDirty;
 		}
 	};
 	const submit = async () => {
@@ -226,7 +227,7 @@ export function useBaseFormControlComponent(props, context, options) {
 	};
 
 	onMounted(async () => {
-		await resetForm(props.validation);
+		resetFormValidation(correlationId());
 	});
 
 	watch(() => dirty.value,
@@ -243,18 +244,7 @@ export function useBaseFormControlComponent(props, context, options) {
 	);
 	watch(() => props.validation,
 		async (value) => {
-			// // console.log('v.invalid: ' + value.$invalid);
-			// // console.log('v.error: ' + value.$error);
-			// // console.log('v.errors: ' + JSON.stringify(value));
-			// invalid.value = value.$invalid;
-			// silentErrors.value = value.$silentErrors;
-			// // if (props.invalidCallback)
-			// // 	props.invalidCallback(correlationId(), invalid);
-			// dirty.value = value.$anyDirty;
-			// // if (props.dirtyCallback)
-			// // 	props.dirtyCallback(correlationId(), dirty);
-			// // console.log('v.invalid: ' + invalid.value);
-		await resetForm(value);
+			resetFormValidation(correlationId());
 		}
 	);
 
