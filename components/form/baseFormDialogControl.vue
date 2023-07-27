@@ -181,7 +181,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		}
 	};
 	const set = async (correlationId) => {
-		if (props.resetAdditional)
+		if (props.setAdditional)
 			await props.setAdditional(correlationId);
 
 		reset(correlationId, false, false);
@@ -257,9 +257,6 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 			logger.debug('useBaseFormDialogControlComponent', 'signal', 'value', value, correlationIdI);
 			dialogSignal.value = value;
 			logger.debug('useBaseFormDialogControlComponent', 'signal', 'dialogSignal', dialogSignal.value, correlationIdI);
-
-			if (value)
-				set(correlationIdI);
 
 			reset(correlationIdI, false, false);
 		}
