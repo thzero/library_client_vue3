@@ -19,6 +19,14 @@ export const baseFormControlProps = {
 		type: String,
 		default: 'buttons.clear'
 	},
+	buttonClose: {
+		type: Boolean,
+		default: false
+	},
+	buttonCloseName: {
+		type: String,
+		default: 'buttons.close'
+	},
 	buttonDelete: {
 		type: Boolean,
 		default: false

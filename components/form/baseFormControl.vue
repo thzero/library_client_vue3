@@ -40,17 +40,22 @@ export function useBaseFormControlComponent(props, context, options) {
 
 	const dialogCancelConfirmSignal = ref(new DialogSupport());
 	const dialogClearConfirmSignal = ref(new DialogSupport());
+	const dialogCloseConfirmSignal = ref(new DialogSupport());
 	const dialogDeleteConfirmSignal = ref(new DialogSupport());
 	const dirty = ref(false);
 	const invalid = ref(true);
 	const messageCancel = ref(LibraryClientUtility.$trans.t('questions.formDirty.cancel'));
 	const messageClear = ref(LibraryClientUtility.$trans.t('questions.formDirty.clear'));
+	const messageClose = ref(LibraryClientUtility.$trans.t('questions.formDirty.close'));
 	const silentErrors = ref(true);
 
 	const buttonCancelDisabled = computed(() => {
 		return (props.disabled === true);
 	});
 	const buttonClearDisabled = computed(() => {
+		return (props.disabled === true);
+	});
+	const buttonCloseDisabled = computed(() => {
 		return (props.disabled === true);
 	});
 	const buttonDeleteDisabled = computed(() => {
@@ -69,11 +74,14 @@ export function useBaseFormControlComponent(props, context, options) {
 	const isClearing = computed(() => {
 		return dialogClearConfirmSignal.value.signal;
 	});
+	const isClosing = computed(() => {
+		return dialogCloseConfirmSignal.value.signal;
+	});
 	const isDeleting = computed(() => {
 		return dialogDeleteConfirmSignal.value.signal;
 	});
 	const isLoading = computed(() => {
-		return isClearing.value || isDeleting.value || isSaving.value;
+		return isClearing.value || isClosing.value || isDeleting.value || isSaving.value;
 	});
 	const overlayLoading = computed(() => {
 		return isSaving.value && props.autoSave;
@@ -131,6 +139,22 @@ export function useBaseFormControlComponent(props, context, options) {
 		logger.debug('useBaseFormControlComponent', 'clear', 'clear', null, correlationId);
 		await reset(correlationId, true, true);
 		context.emit('reset');
+	};
+	const handleClose = async () => {
+		const correlationIdI = correlationId();
+		if (dirty.value) {
+			dialogCloseConfirmSignal.value.open(correlationIdI);
+			return;
+		}
+
+		logger.debug('useBaseFormControlComponent', 'close', 'close', null, correlationIdI);
+		await reset(correlationId, false);
+		context.emit('cancel');
+	};
+	const handleCloseConfirmOk = async (correlationId) => {
+		dialogCloseConfirmSignal.value.ok();
+
+		logger.debug('useBaseFormControlComponent', 'close', 'close', null, correlationId);
 	};
 	const handleDelete = async () => {
 		serverErrors.value = [];
@@ -269,18 +293,22 @@ export function useBaseFormControlComponent(props, context, options) {
 		setNotify,
 		dialogCancelConfirmSignal,
 		dialogClearConfirmSignal,
+		dialogCloseConfirmSignal,
 		dialogDeleteConfirmSignal,
 		dirty,
 		invalid,
 		messageCancel,
 		messageClear,
+		messageClose,
 		silentErrors,
 		buttonCancelDisabled,
 		buttonClearDisabled,
+		buttonCloseDisabled,
 		buttonDeleteDisabled,
 		buttonOkDisabled,
 		isCancelling,
 		isClearing,
+		isClosing,
 		isDeleting,
 		isLoading,
 		overlayLoading,
@@ -288,6 +316,8 @@ export function useBaseFormControlComponent(props, context, options) {
 		handleCancelConfirmOk,
 		handleClear,
 		handleClearConfirmOk,
+		handleClose,
+		handleCloseConfirmOk,
 		handleDelete,
 		handleDeleteConfirmOk,
 		reset,
