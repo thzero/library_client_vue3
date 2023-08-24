@@ -173,8 +173,9 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		resetFormValidation(correlationId);
 		isSaving.value = false;
 
+		const notifyReset = !LibraryCommonUtility.isNull(options) && !LibraryCommonUtility.isNull(options.notifyReset) ? options.notifyReset : true;
 		notify = notify !== null || notify !== undefined ? notify : true;
-		if (props.notify && notify)
+		if (props.notify && notify && notifyReset)
 			setNotify(correlationId, props.notifyMessageReset);
 	};
 	const resetFormValidation = (correlationId) => {
@@ -228,7 +229,8 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 				await reset(correlationIdI, false);
 			}
 
-			if (props.notify && !String.isNullOrEmpty(props.notifyMessageSaved))
+			const notifySaved = !LibraryCommonUtility.isNull(options) && !LibraryCommonUtility.isNull(options.notifySaved) ? options.notifySaved : true;
+			if (props.notify && notifySaved && !String.isNullOrEmpty(props.notifyMessageSaved))
 				setNotify(correlationIdI, props.notifyMessageSaved);
 
 			if (!String.isNullOrEmpty(response.route))
