@@ -1,9 +1,9 @@
 {
   "name": "@thzero/library_client_vue3",
-  "version": "0.17.50",
+  "version": "0.17.51",
   "version_major": 0,
   "version_minor": 17,
-  "version_patch": 50,
+  "version_patch": 51,
   "version_date": "08/24/2023",
   "description": "An opinionated library of common functionality to bootstrap a VueJs based SPA application.",
   "author": "thZero",
