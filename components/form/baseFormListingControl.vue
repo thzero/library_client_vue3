@@ -200,7 +200,8 @@ export function useBaseFormListingControlComponent(props, context, options) {
 				await reset(correlationIdI, false);
 			}
 
-			if (props.notify && !String.isNullOrEmpty(props.notifyMessageSaved))
+			const notifySaved = options.notifySaved ?? true;
+			if (props.notify && notifySaved &&!String.isNullOrEmpty(props.notifyMessageSaved))
 				setNotify(correlationIdI, props.notifyMessageSaved);
 
 			if (!String.isNullOrEmpty(response.route))
