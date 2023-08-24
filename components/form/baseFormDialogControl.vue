@@ -152,6 +152,10 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		reset(correlationId, false);
 		context.emit('delete');
 	};
+	const onKeydown = async (e) => {
+		if (e.key === 'Escape')
+			await handleCancel();
+	};
 	const onResize = () => {
 		const temp = window.innerHeight - 200;
 		dialogHeightI.value = Math.ceil(temp * props.scrollableAutoResizeFactor);
@@ -259,6 +263,11 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 			logger.debug('useBaseFormDialogControlComponent', 'signal', 'dialogSignal', dialogSignal.value, correlationIdI);
 
 			reset(correlationIdI, false, false);
+
+			if (value)
+				window.addEventListener('keydown', onKeydown);
+			else
+				window.removeEventListener('keydown', onKeydown);
 		}
 	);
 	watch(() => props.validation,
