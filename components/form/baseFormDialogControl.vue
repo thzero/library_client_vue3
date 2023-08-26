@@ -160,9 +160,9 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		const temp = window.innerHeight - 200;
 		dialogHeightI.value = Math.ceil(temp * props.scrollableAutoResizeFactor);
 	};
-	const reset = async (correlationId, notify, previous) => {
+	const reset = async (correlationId, notify, previous, loaded) => {
 		if (props.resetAdditional)
-			await props.resetAdditional(correlationId, previous);
+			await props.resetAdditional(correlationId, previous, loaded);
 
 		serverErrors.value = [];
 		await props.validation.$validate();
@@ -185,12 +185,12 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 			dirty.value = props.validation.$anyDirty;
 		}
 	};
-	const set = async (correlationId) => {
-		if (props.setAdditional)
-			await props.setAdditional(correlationId);
+	// const set = async (correlationId) => {
+	// 	if (props.setAdditional)
+	// 		await props.setAdditional(correlationId);
 
-		reset(correlationId, false, false);
-	};
+	// 	reset(correlationId, false, false);
+	// };
 	const submit = async () => {
 		const correlationIdI = correlationId();
 		try {
@@ -264,7 +264,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 			dialogSignal.value = value;
 			logger.debug('useBaseFormDialogControlComponent', 'signal', 'dialogSignal', dialogSignal.value, correlationIdI);
 
-			reset(correlationIdI, false, false);
+			reset(correlationIdI, false, false, value);
 
 			if (value)
 				window.addEventListener('keydown', onKeydown);
