@@ -11,6 +11,14 @@ export const useBaseControlEditProps = {
 		type: Boolean,
 		default: false
 	},
+	errors: {
+		type: Array,
+		default: null
+	},
+	errorsReadonly: {
+		type: Array,
+		default: null
+	},
 	readonly: {
 		type: Boolean,
 		default: false

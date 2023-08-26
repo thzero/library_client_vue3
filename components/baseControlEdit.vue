@@ -34,13 +34,27 @@ export function useBaseControlEditComponent(props, context, options) {
 	};
 	const errorI = computed(() => {
 		if (props.readonly)
-			return false;
-		return props.validation ? props.validation[vid] ? props.validation[vid].$silentErrors && (props.validation[vid].$silentErrors.length > 0) : false : false;
+			return props.errorsReadonly ? (props.errorsReadonly.length > 0) : false;
+
+		// return props.validation ? props.validation[vid] ? props.validation[vid].$silentErrors && (props.validation[vid].$silentErrors.length > 0) : false : false;
+		const errors = [];
+		if (props.errors)
+			errors.push(...props.errors);
+		if (props.validation && props.validation[vid])
+			errors.push(...props.validation[vid].$silentErrors);
+		return errors.length > 0;
 	});
 	const errorsI = computed(() => {
 		if (props.readonly)
-			return [];
-		return props.validation ? props.validation[vid] ? props.validation[vid].$silentErrors : [] : [];
+			return props.errorsReadonly;
+
+		// return props.validation ? props.validation[vid] ? props.validation[vid].$silentErrors : [] : [];
+		const errors = [];
+		if (props.errors)
+			errors.push(...props.errors);
+		if (props.validation && props.validation[vid])
+			errors.push(...props.validation[vid].$silentErrors);
+		return errors;
 	});
 	const hideDetails = computed(() => {
 		return (!errorsI.value || (errorsI.value && errorsI.value.length === 0));
