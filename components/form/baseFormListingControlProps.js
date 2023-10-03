@@ -43,6 +43,10 @@ export const baseFormListingControlProps = {
 		type: Boolean,
 		default: false
 	},
+	filterDrawer: {
+		type: Boolean,
+		default: false
+	},
 	invalidOverride: {
 		type: Boolean,
 		default: null
@@ -59,9 +63,9 @@ export const baseFormListingControlProps = {
 		type: String,
 		default: 'messages.reset'
 	},
-	notifyMessageSaved: {
+	notifyMessageSearch: {
 		type: String,
-		default: 'messages.saved'
+		default: null
 	},
 	preCompleteDelete: {
 		type: Function,
