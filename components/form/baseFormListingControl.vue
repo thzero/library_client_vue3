@@ -39,9 +39,11 @@ export function useBaseFormListingControlComponent(props, context, options) {
 	const dialogDeleteConfirmSignal = ref(new DialogSupport());
 	const dirty = ref(false);
 	const invalid = ref(true);
+	const isSearching = ref(false);
 	const messageCancel = ref(LibraryClientUtility.$trans.t('questions.formDirty.cancel'));
 	const messageClear = ref(LibraryClientUtility.$trans.t('questions.formDirty.clear'));
 	const silentErrors = ref(true);
+	const toggleDrawer = ref(false);
 
 	const buttonCancelDisabled = computed(() => {
 		return (props.disabled === true);
@@ -69,10 +71,10 @@ export function useBaseFormListingControlComponent(props, context, options) {
 		return dialogDeleteConfirmSignal.value.signal;
 	});
 	const isLoading = computed(() => {
-		return isClearing.value || isDeleting.value || isSaving.value;
+		return isClearing.value || isDeleting.value || isSearching.value;
 	});
 	const overlayLoading = computed(() => {
-		return isSaving.value && props.autoSave;
+		return isSearching.value && props.autoSave;
 	});
 
 	const handleCancel = async () => {
@@ -139,6 +141,9 @@ export function useBaseFormListingControlComponent(props, context, options) {
 		reset(correlationId, false);
 		context.emit('delete');
 	};
+	const handleFilter = async () => {
+		toggleDrawer.value = true;
+	};
 	const reset = async (correlationId, notify, previous) => {
 		if (props.resetAdditional)
 			await props.resetAdditional(correlationId, previous);
@@ -149,7 +154,7 @@ export function useBaseFormListingControlComponent(props, context, options) {
 		invalid.value = props.validation.$invalid;
 		silentErrors.value = props.validation.$silentErrors;
 		dirty.value = props.validation.$anyDirty;
-		isSaving.value = false;
+		isSearching.value = false;
 
 		notify = notify !== null || notify !== undefined ? notify : true;
 		if (props.notify && notify)
@@ -165,7 +170,7 @@ export function useBaseFormListingControlComponent(props, context, options) {
 	const submit = async () => {
 		const correlationIdI = correlationId();
 		try {
-			isSaving.value = true;
+			isSearching.value = true;
 			serverErrors.value = [];
 
 			const result = await props.validation.$validate();
@@ -201,8 +206,8 @@ export function useBaseFormListingControlComponent(props, context, options) {
 			}
 
 			const notifySaved = options.notifySaved ?? true;
-			if (props.notify && notifySaved &&!String.isNullOrEmpty(props.notifyMessageSaved))
-				setNotify(correlationIdI, props.notifyMessageSaved);
+			if (props.notify && notifySaved &&!String.isNullOrEmpty(props.notifyMessageSearch))
+				setNotify(correlationIdI, props.notifyMessageSearch);
 
 			if (!String.isNullOrEmpty(response.route))
 				LibraryClientUtility.$navRouter.push(response.route);
@@ -212,7 +217,8 @@ export function useBaseFormListingControlComponent(props, context, options) {
 			logger.exception('useBaseFormListingControlComponent', 'submit', err, correlationId);
 		}
 		finally {
-			isSaving.value = false;
+			isSearching.value = false;
+			toggleDrawer.value = false;
 		}
 	};
 
@@ -257,9 +263,11 @@ export function useBaseFormListingControlComponent(props, context, options) {
 		dialogDeleteConfirmSignal,
 		dirty,
 		invalid,
-		silentErrors,
+		isSearching,
 		messageCancel,
 		messageClear,
+		silentErrors,
+		toggleDrawer,
 		buttonCancelDisabled,
 		buttonClearDisabled,
 		buttonDeleteDisabled,
@@ -275,6 +283,7 @@ export function useBaseFormListingControlComponent(props, context, options) {
 		handleClearConfirmOk,
 		handleDelete,
 		handleDeleteConfirmOk,
+		handleFilter,
 		reset,
 		submit
 	};
