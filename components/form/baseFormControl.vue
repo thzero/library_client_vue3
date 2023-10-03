@@ -50,12 +50,16 @@ export function useBaseFormControlComponent(props, context, options) {
 	const silentErrors = ref(true);
 
 	const buttonCancelDisabled = computed(() => {
+		if (dirty.value === false)
+			return true;
 		return (props.disabled === true);
 	});
 	const buttonClearDisabled = computed(() => {
 		return (props.disabled === true);
 	});
 	const buttonCloseDisabled = computed(() => {
+		if (dirty.value === true)
+			return true;
 		return (props.disabled === true);
 	});
 	const buttonDeleteDisabled = computed(() => {
