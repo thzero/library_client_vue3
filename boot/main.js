@@ -141,19 +141,22 @@ async function start(appComponent, router, storeRequest, bootFiles, starter, opt
 		}
 	}
 
-	framework.mount('#app');
-
 	if (starter) {
-		starter({
-			framework,
-			app,
-			router,
-			store: LibraryClientUtility.$store
-		}).catch(err => {
+		try {
+			await starter({
+				framework,
+				app,
+				router,
+				store: LibraryClientUtility.$store
+			});
+		}
+		catch(err) {
 			// eslint-disable-next-line
 			console.error('boot error:', err);
-		});
+		}
 	}
+
+	framework.mount('#app');
 
 	// if (!starter) {
 	// 	framework.use(storeInitialized).use(router).mount('#app');
