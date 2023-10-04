@@ -43,6 +43,10 @@ export const baseFormListingControlProps = {
 		type: Boolean,
 		default: false
 	},
+	filterDisabled: {
+		type: Boolean,
+		default: false
+	},
 	filterDrawer: {
 		type: Boolean,
 		default: false
