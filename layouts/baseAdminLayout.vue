@@ -44,7 +44,7 @@ export function useBaseAdminLayout(props, context, options) {
 	};
 	const dialogSignOutOk = async () => {
 		dialogSignOut.value.ok();
-		await instance.ctx.serviceAuth.signOut(this.correlationId());
+		await serviceAuth.signOut(correlationId());
 	};
 
 	return {
