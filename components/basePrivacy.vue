@@ -20,7 +20,18 @@ export function useBasePrivacyComponent(props, context, options) {
 	} = useBaseComponent(props, context, options);
 
 	const privacyMarkup = computed(() => {
-		return LibraryClientUtility.$trans.t('strings.privacy.text1', { url: `<a href="/">${LibraryClientUtility.$trans.t('titles.application')}</a>` });
+		let url = '/';
+		if (options && options.url)
+			url = options.url;
+
+		let urlTitle = LibraryClientUtility.$trans.t('titles.application');
+		if (options && options.urlTitle)
+			urlTitle = options.urlTitle;
+		let link = null;
+		if (urlTitle)
+			link = `<a href="${url}">${urlTitle}</a>`;
+
+		return LibraryClientUtility.$trans.t('strings.privacy.text1', { title: LibraryClientUtility.$trans.t('titles.application'), url: link });
 	});
 
 	return {
