@@ -212,16 +212,20 @@ export function useBaseFormControlComponent(props, context, options) {
 			dirty.value = props.validation.$anyDirty;
 		}
 	};
-	const submit = async () => {
+	const submit = async (ignoreValidation) => {
 		const correlationIdI = correlationId();
 		try {
 			isSaving.value = true;
 			serverErrors.value = [];
 
-			const result = await props.validation.$validate();
-			logger.debug('useBaseFormControlComponent', 'submit', 'result', result, correlationIdI);
-			if (!result)
-				return;
+			ignoreValidation = ignoreValidation ?? false;
+
+			if (!ignoreValidation) {
+				const result = await props.validation.$validate();
+				logger.debug('useBaseFormControlComponent', 'submit', 'result', result, correlationIdI);
+				if (!result)
+					return;
+			}
 
 			if (props.preCompleteOk) {
 				const response = await props.preCompleteOk(correlationIdI);
@@ -239,9 +243,11 @@ export function useBaseFormControlComponent(props, context, options) {
 				}
 			}
 
-			await props.validation.$reset();
-			logger.debug('useBaseFormControlComponent', 'submit', 'ok', null, correlationIdI);
-			context.emit('ok');
+			if (!ignoreValidation) {
+				await props.validation.$reset();
+				logger.debug('useBaseFormControlComponent', 'submit', 'ok', null, correlationIdI);
+				context.emit('ok');
+			}
 
 			if (props.notify && !String.isNullOrEmpty(props.notifyMessageSaved))
 				setNotify(correlationIdI, props.notifyMessageSaved);
