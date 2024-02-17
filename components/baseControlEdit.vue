@@ -68,12 +68,53 @@ export function useBaseControlEditComponent(props, context, options) {
 		// 	context.emit('update:modelValue', newVal);
 		// });
 	};
-
 	const innerValueUpdate = (value) => {
 		if (props.change)
 			props.change(value);
 
 		context.emit('update:modelValue', value);
+	};
+	const validateNumericField = (evt) => {
+		// evt = evt || window.event;
+
+		let exp = `^[${(props.min < 0 ? '-' : '')}0-9,${(props.type === 'decimal' ? '\\.' : '')}]+$`;
+
+		let key = null;
+		if (evt.type === 'paste') {
+			exp = `^${(props.min < 0 ? '-?' : '')}(?:\\d+|\\d{1,3}(?:,\\d{3})+)?(?:${(props.type === 'decimal' ? '\\.' : '')}\d+)?$`
+			// Handle paste
+			key = evt.clipboardData.getData('text/plain');
+		} else {
+			// Handle key press
+			const charCode = evt.keyCode || theEvent.which;
+			if (!((charCode >= 48 && charCode <= 57) || charCode == 31 || charCode === 44 || charCode === 45 || charCode === 46)) {
+				evt.returnValue = false;
+				if (evt.preventDefault)
+					evt.preventDefault();
+				return true;
+			}
+			key = String.fromCharCode(charCode);
+		}
+
+		const regex2 = new RegExp(exp);
+		if (!regex2.test(key)) {
+			evt.returnValue = false;
+			if (evt.preventDefault)
+				evt.preventDefault();
+		}
+
+		return true;
+	};
+	const validateNumericFieldMinMax = (value) => {
+		const n = Number(value);
+		if (!isNaN(n) && (props.min && n < props.min)) {
+			innerValue.value = props.min;
+			innerValueUpdate(innerValue.value);
+		}
+		if (!isNaN(n) && (props.max && n > props.max)) {
+			innerValue.value = props.max;
+			innerValueUpdate(innerValue.value);
+		}
 	};
 
 	watch(() => props.modelValue,
@@ -110,8 +151,10 @@ export function useBaseControlEditComponent(props, context, options) {
 		errorsI,
 		hideDetails,
 		innerValue,
+		initValue,
 		innerValueUpdate,
-		initValue
+		validateNumericField,
+		validateNumericFieldMinMax
 	}
 };
 </script>
