@@ -212,7 +212,10 @@ export function useBaseFormControlComponent(props, context, options) {
 			dirty.value = props.validation.$anyDirty;
 		}
 	};
-	const submit = async (ignoreValidation) => {
+	const submit = async () => {
+		submitEx();
+	};
+	const submitEx = async (ignoreValidation) => {
 		const correlationIdI = correlationId();
 		try {
 			isSaving.value = true;
