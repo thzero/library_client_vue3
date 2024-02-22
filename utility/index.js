@@ -138,7 +138,7 @@ class LibraryClientVueUtility {
 	}
 	
 	static selectOptions(options, trans, prefix, funcId, funcName, funcValue) {
-		if (!options || !trans || !Array.isArray(options))
+		if (!options || !Array.isArray(options))
 			return [];
 
 		prefix = (prefix && prefix !== '') ? prefix + '.' : '';
@@ -148,13 +148,17 @@ class LibraryClientVueUtility {
 			if (funcId)
 				id = funcId(l);
 
-			let nameLookup = id;
-			if (funcName)
-				nameLookup = funcName(l);
-			nameLookup = prefix + nameLookup;
-			let name = trans(nameLookup);
-			if (String.isNullOrEmpty(name) || name === nameLookup)
-				name = trans(nameLookup + '.title');
+			let name = id;
+			if (trans) {
+				let nameLookup = id;
+				if (funcName)
+					nameLookup = funcName(l);
+				nameLookup = prefix + nameLookup;
+
+				name = trans(nameLookup);
+				if (String.isNullOrEmpty(name) || name === nameLookup)
+					name = trans(nameLookup + '.title');
+			}
 
 			let value = l;
 			if (funcValue)
