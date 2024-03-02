@@ -88,7 +88,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 	const handleCancel = async () => {
 		const correlationIdI = correlationId();
 		serverErrors.value = [];
-		if (dirty.value) {
+		if (dirty.value && !props.buttonCancelIgnoreConfirm) {
 			dialogCancelConfirmSignal.value.open(correlationIdI);
 			return;
 		}
