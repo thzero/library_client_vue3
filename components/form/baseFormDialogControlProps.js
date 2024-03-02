@@ -11,6 +11,10 @@ export const baseFormDialogControlProps = {
 		type: Boolean,
 		default: true
 	},
+	buttonCancelIgnoreConfirm: {
+		type: Boolean,
+		default: false
+	},
 	buttonCancelName: {
 		type: String,
 		default: 'buttons.cancel'
