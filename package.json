@@ -1,10 +1,10 @@
 {
   "name": "@thzero/library_client_vue3",
-  "version": "0.18.9",
+  "version": "0.18.10",
   "version_major": 0,
   "version_minor": 18,
-  "version_patch": 9,
-  "version_date": "07/23/2024",
+  "version_patch": 10,
+  "version_date": "08/20/2024",
   "description": "An opinionated library of common functionality to bootstrap a VueJs based SPA application.",
   "author": "thZero",
   "license": "MIT",
@@ -26,10 +26,10 @@
     "@thzero/library_common": "^0.18",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
-    "vue": "^3.4.33",
+    "vue": "^3.4.38",
     "vue-cookie-comply": "^0.0.3",
-    "vue-i18n": "^9.13.1",
-    "vue-router": "^4.4.0",
+    "vue-i18n": "^9.14.0",
+    "vue-router": "^4.4.3",
     "vue-scrollto": "^2.20.0",
     "vue3-async-computed": "^3.0.0"
   }
