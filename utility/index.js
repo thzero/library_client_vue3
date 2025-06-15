@@ -159,6 +159,8 @@ class LibraryClientVueUtility {
 				if (String.isNullOrEmpty(name) || name === nameLookup)
 					name = trans(nameLookup + '.title');
 			}
+			else if (funcName)
+				name = funcName(l);
 
 			let value = l;
 			if (funcValue)
