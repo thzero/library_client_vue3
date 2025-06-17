@@ -208,7 +208,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 				response = await props.preCompleteOk(correlationIdI);
 				logger.debug('useBaseFormDialogControlComponent', 'submit', 'response', response, correlationIdI);
 				if (hasFailed(response)) {
-					context.emit('error', response.err);
+					context.emit('error', response, correlationId);
 					logger.error('useBaseFormDialogControlComponent', 'submit', 'response', response, correlationIdI);
 					// TODO
 					// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationIdI);
