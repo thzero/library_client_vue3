@@ -55,6 +55,7 @@ export function useBaseConfirmationDialogComponent(props, context, options) {
 	const handleError = (response, correlationId) => {
 		if (options && LibraryCommonUtility.isObject(options) && LibraryCommonUtility.isFunction(options.handleErrorI))
 			options.handleErrorI(response, correlationId);
+		context.emit('error', response, correlationId);
 	};
 
 	watch(() => props.signal,
