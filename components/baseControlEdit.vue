@@ -124,6 +124,7 @@ export function useBaseControlEditComponent(props, context, options) {
 	);
 	watch(() => innerValue,
 		(value) => {
+			console.log('update:modelValue', value);
 			context.emit('update:modelValue', value);
 		}
 	);
