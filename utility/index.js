@@ -45,12 +45,12 @@ class LibraryClientVueUtility {
 	}
 
 	static checkId(to, from, next) {
-		return Utility.checkHasParams(to, from, next, 'id');
+		return LibraryClientVueUtility.checkHasParams(to, from, next, 'id');
 	}
 
 	static checkHasParams(to, from, next, keys) {
 		if (!to || !to.params) {
-			Utility.invalid(next);
+			LibraryClientVueUtility.invalid(next);
 			return false;
 		}
 
@@ -62,7 +62,7 @@ class LibraryClientVueUtility {
 
 		for (const key of keys) {
 			if (!to.params[key] || (String.isNullOrEmpty(to.params[key])) || (to.params[key] === 'null') || (to.params[key] === 'undefined')) {
-				Utility.invalid(next);
+				LibraryClientVueUtility.invalid(next);
 				return false;
 			}
 		}
@@ -80,7 +80,7 @@ class LibraryClientVueUtility {
 		let errors = {};
 		let error;
 		for (const field in response.errors) {
-			error = Utility.applyError(response.errors[field]);
+			error = LibraryClientVueUtility.applyError(response.errors[field]);
 			if (error.field === LibraryCommonConstants.ErrorFields.Generic) {
 				serverErrors.push(error.message);
 				continue;
