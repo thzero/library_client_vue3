@@ -145,7 +145,6 @@ async function start(appComponent, router, storeRequest, bootFiles, starter, opt
 		try {
 			await starter({
 				framework,
-				app,
 				router,
 				store: LibraryClientUtility.$store
 			});
