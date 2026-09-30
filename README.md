@@ -46,7 +46,6 @@ These dependencies must be installed as 'devDependencies'.  Version numbers are 
 * "@vue/cli-plugin-babel": "~5.0.8"
 * "@vue/cli-plugin-eslint": "~5.0.8"
 * "@vue/cli-plugin-router": "~5.0.8"
-* "@vue/cli-plugin-vuex": "~5.0.8",
 * "@vue/eslint-config-standard": "^6.1.0"
 * "babel-eslint": "^10.1.0"
 * "babel-plugin-lodash": "^3.3.4"
