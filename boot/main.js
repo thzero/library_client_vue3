@@ -73,7 +73,7 @@ async function start(appComponent, router, storeRequest, bootFiles, starter, opt
 		}
 		catch (err) {
 			console.log(err);
-			throw Error('Invalid store wrapper.');
+			throw new Error('Invalid store wrapper.');
 		}
 
 		if (storeWrapper) {
@@ -82,7 +82,7 @@ async function start(appComponent, router, storeRequest, bootFiles, starter, opt
 			}
 			catch (err) {
 				console.log(err);
-				throw Error('Invalid store initialization.');
+				throw new Error('Invalid store initialization.');
 			}
 
 			try {
@@ -90,7 +90,7 @@ async function start(appComponent, router, storeRequest, bootFiles, starter, opt
 			}
 			catch (err) {
 				console.log(err);
-				throw Error('Invalid store setup.');
+				throw new Error('Invalid store setup.');
 			}
 		}
 	}

@@ -5,7 +5,7 @@ import LibraryClientConstants from '@thzero/library_client/constants';
 
 import LibraryClientUtility from '@thzero/library_client/utility/index';
 
-import { useBaseLayout } from './baseLayout';
+import { useBaseLayout } from '@thzero/library_client_vue3/layouts/baseLayout';
 
 import DialogSupport from '@thzero/library_client_vue3/components/support/dialog';
 

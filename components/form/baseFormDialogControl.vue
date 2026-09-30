@@ -7,7 +7,7 @@ import LibraryCommonUtility from '@thzero/library_common/utility/index';
 import { useBaseEditComponent } from '@thzero/library_client_vue3/components/baseEdit';
 import { useNotify } from '@thzero/library_client_vue3/components/notify';
 
-import DialogSupport from '../support/dialog';
+import DialogSupport from '@thzero/library_client_vue3/components/support/dialog';
 
 export function useBaseFormDialogControlComponent(props, context, options) {
 	const {
@@ -103,7 +103,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		dialogCancelConfirmSignal.value.ok();
 
 		dialogSignal.value = false;
-		logger.debug('useBaseFormDialogControlComponent', 'handleCancelConfirmOk', 'delete', null, correlationId);
+		logger.debug('useBaseFormDialogControlComponent', 'handleCancelConfirmOk', 'cancel', null, correlationId);
 		reset(correlationId, false, true);
 		context.emit('close');
 	};
@@ -114,13 +114,13 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 			return;
 		}
 
-		logger.debug('useBaseFormDialogControlComponent', 'clear', 'clear', null, correlationIdI);
+		logger.debug('useBaseFormDialogControlComponent', 'handleClear', 'clear', null, correlationIdI);
 		await reset(correlationIdI, true, true);
 	};
 	const handleClearConfirmOk = async (correlationId) => {
 		dialogClearConfirmSignal.value.ok();
 
-		logger.debug('useBaseFormDialogControlComponent', 'clear', 'clear', null, correlationId);
+		logger.debug('useBaseFormDialogControlComponent', 'handleClearConfirmOk', 'clear', null, correlationId);
 		await reset(correlationId, true, true);
 		context.emit('reset');
 	};
