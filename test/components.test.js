@@ -184,3 +184,23 @@ describe('useBaseAdminComponent', () => {
 		expect(LibraryClientUtility.$EventBus.all.get('toggle-drawer')).toHaveLength(1);
 	});
 });
+
+describe('useBaseSettingsComponent', () => {
+	it('turns every space and symbol in a gamer tag, not only the first', async () => {
+		services[LibraryClientConstants.InjectorKeys.SERVICE_STORE] = { user: null, getters: { user: { getUserSettings: () => ({}) } } };
+		try {
+			const { useBaseSettingsComponent } = await import('../components/baseSettings');
+			const { api } = mountComposable(useBaseSettingsComponent, { options: {} });
+			api.resetAdditionalI('id');
+
+			api.gamerTagDisplay.value = 'a b c\'d\'e';
+			await flushPromises();
+
+			// replace() with a string changes only the first match: "a_b c-d'e"
+			expect(api.gamerTag.value).toBe('a_b_c-d-e');
+		}
+		finally {
+			delete services[LibraryClientConstants.InjectorKeys.SERVICE_STORE];
+		}
+	});
+});

@@ -112,7 +112,8 @@ export function useBaseSettingsComponent(props, context, options) {
 			return;
 
 		//  '"_\-=\.,a-zA-Z0-9 
-		tag = tag.replace(' ', '_').replace("'", '-').replace('"', '-').replace('=', '-').replace(',','_');
+		// replaceAll: replace() with a string changes only the first match
+		tag = tag.replaceAll(' ', '_').replaceAll("'", '-').replaceAll('"', '-').replaceAll('=', '-').replaceAll(',', '_');
 		if (options.toGamerTagAdditional)
 			tag = options.toGamerTagAdditional(tag);
 		return tag;

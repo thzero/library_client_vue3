@@ -16,13 +16,10 @@ console.log('vue.config.NODE_ENV', configEnv);
 if (!configEnv)
 	configEnv = 'development';
 const config = process.env._CONFIG;
-console.log('vue.config._CONFIG', config);
 if (config) {
 	const filename = path.join(__dirname, `./src/config/${configEnv}.json`);
 	console.log('vue.config.filename', filename);
 	fs.writeFileSync(filename, config);
-	const contents = fs.readFileSync(filename, 'utf8');
-	console.log('vue.config.file', contents);
 }
 console.log('vue.config._CONFIG_ENV', configEnv);
 
