@@ -114,8 +114,9 @@ export function useBaseFormControlComponent(props, context, options) {
 				// TODO
 				// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationId);
 
-				const notify = LibraryCommonUtility.isNotNull(notify) ? notify : true;
-				if (props.notify && notify)
+				// this read a notify declared on the same line: a ReferenceError, so the
+				// error was never shown
+				if (props.notify)
 					setNotify(correlationId, props.notifyMessageError);
 
 				return;
@@ -134,7 +135,7 @@ export function useBaseFormControlComponent(props, context, options) {
 		}
 
 		logger.debug('useBaseFormControlComponent', 'handleClear', 'clear', null, correlationIdI);
-		await reset(correlationId, true, true);
+		await reset(correlationIdI, true, true);
 		context.emit('reset');
 	};
 	const handleClearConfirmOk = async (correlationId) => {
@@ -152,7 +153,7 @@ export function useBaseFormControlComponent(props, context, options) {
 		}
 
 		logger.debug('useBaseFormControlComponent', 'handleClose', 'close', null, correlationIdI);
-		await reset(correlationId, false);
+		await reset(correlationIdI, false);
 		context.emit('cancel');
 	};
 	const handleCloseConfirmOk = async (correlationId) => {
@@ -176,8 +177,9 @@ export function useBaseFormControlComponent(props, context, options) {
 				// TODO
 				// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationId);
 
-				const notify = LibraryCommonUtility.isNotNull(notify) ? notify : true;
-				if (props.notify && notify)
+				// this read a notify declared on the same line: a ReferenceError, so the
+				// error was never shown
+				if (props.notify)
 					setNotify(correlationId, props.notifyMessageError);
 
 				return;
@@ -240,7 +242,7 @@ export function useBaseFormControlComponent(props, context, options) {
 					// LibraryClientVueUtility.handleError($refs.obs, instance.ctx.serverErrors, response, correlationIdI);
 
 					if (props.notify)
-						setNotify(correlationId, props.notifyMessageError);
+						setNotify(correlationIdI, props.notifyMessageError);
 
 					return;
 				}

@@ -82,7 +82,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		return props.scrollable ? 'scrollable' : '';
 	});
 	const scrollableHeightI = computed(() => {
-		return props.scrollableAutoResize ? 'height: ' + (!String.isNullOrEmpty(props.scrollableHeight) ? props.scrollableHeight : dialogHeightI).value + 'px;' : '';
+		return props.scrollableAutoResize ? 'height: ' + (!String.isNullOrEmpty(props.scrollableHeight) ? props.scrollableHeight : dialogHeightI.value) + 'px;' : '';
 	});
 
 	const handleCancel = async () => {
@@ -174,7 +174,10 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		isSaving.value = false;
 
 		const notifyReset = !LibraryCommonUtility.isNull(options) && !LibraryCommonUtility.isNull(options.notifyReset) ? options.notifyReset : true;
-		notify = notify !== null || notify !== undefined ? notify : true;
+		// was `notify !== null || notify !== undefined ? notify : true`, always the first
+		// branch, so unset has always meant no notification; the lookup dialogs pass null
+		// and rely on that
+		notify = notify ?? false;
 		if (props.notify && notify && notifyReset)
 			setNotify(correlationId, props.notifyMessageReset);
 	};
@@ -193,6 +196,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 	// };
 	const submit = async () => {
 		const correlationIdI = correlationId();
+		let saved = false;
 		try {
 			isSaving.value = true;
 			serverErrors.value = [];
@@ -208,20 +212,21 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 				response = await props.preCompleteOk(correlationIdI);
 				logger.debug('useBaseFormDialogControlComponent', 'submit', 'response', response, correlationIdI);
 				if (hasFailed(response)) {
-					context.emit('error', response, correlationId);
+					context.emit('error', response, correlationIdI);
 					logger.error('useBaseFormDialogControlComponent', 'submit', 'response', response, correlationIdI);
 					// TODO
 					// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationIdI);
 
 					if (props.notify)
-						setNotify(correlationId, props.notifyMessageError);
+						setNotify(correlationIdI, props.notifyMessageError);
 
 					return;
 				}
 			}
 
-			logger.debug('useBaseFormDialogControlComponent', 'submit', 'ok', null, correlationId);
+			logger.debug('useBaseFormDialogControlComponent', 'submit', 'ok', null, correlationIdI);
 			context.emit('ok', response);
+			saved = true;
 
 			if (LibraryCommonUtility.isNull(options) || 
 				(!LibraryCommonUtility.isNull(options) && LibraryCommonUtility.isNull(options.resetOnSubmit)) || 
@@ -238,13 +243,15 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 		}
 		catch (err) {
 			context.emit('error', err);
-			logger.exception('useBaseFormDialogControlComponent', 'submit', err, correlationId);
+			logger.exception('useBaseFormDialogControlComponent', 'submit', err, correlationIdI);
 		}
 		finally {
 			isSaving.value = false;
-			if (LibraryCommonUtility.isNull(options) || 
+			// only after a successful save: closing on a failed validation or a
+			// rejected save threw away what the user had entered
+			if (saved && (LibraryCommonUtility.isNull(options) || 
 				(!LibraryCommonUtility.isNull(options) && LibraryCommonUtility.isNull(options.signalOnSubmit)) || 
-				options.signalOnSubmit == true) {
+				options.signalOnSubmit == true)) {
 					dialogSignal.value = false;
 			}
 		}

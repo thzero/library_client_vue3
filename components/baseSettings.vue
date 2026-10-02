@@ -119,7 +119,7 @@ export function useBaseSettingsComponent(props, context, options) {
 
 	onMounted(async () => {
 		if (options && LibraryCommonUtility.isObject(options) && options.formRef && options.formRef.value)
-			await options.formRef.value.reset(correlationId, false);
+			await options.formRef.value.reset(correlationId(), false);
 	});
 
 	return {

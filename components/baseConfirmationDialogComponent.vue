@@ -40,7 +40,7 @@ export function useBaseConfirmationDialogComponent(props, context, options) {
 		const correlationIdI = correlationId();
 		if (props.preCompleteOk) {
 			const response = await props.preCompleteOk(correlationIdI);
-			logger.debug('useBaseConfirmationDialogComponent', 'dialogOk', 'response', response, correlationId);
+			logger.debug('useBaseConfirmationDialogComponent', 'dialogOk', 'response', response, correlationIdI);
 			if (hasFailed(response)) {
 				handleError(response, correlationIdI);
 				return;
@@ -48,7 +48,8 @@ export function useBaseConfirmationDialogComponent(props, context, options) {
 		}
 
 		dialogSignal.value = false;
-		context.emit('ok');
+		// the form controls' handle*ConfirmOk(correlationId) handlers expect one
+		context.emit('ok', correlationIdI);
 		if (props.completeOk)
 			props.completeOk();
 	};

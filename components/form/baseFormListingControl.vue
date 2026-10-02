@@ -156,7 +156,10 @@ export function useBaseFormListingControlComponent(props, context, options) {
 		dirty.value = props.validation.$anyDirty;
 		isSearching.value = false;
 
-		notify = notify !== null || notify !== undefined ? notify : true;
+		// was `notify !== null || notify !== undefined ? notify : true`, always the first
+		// branch, so unset has always meant no notification; the lookup dialogs pass null
+		// and rely on that
+		notify = notify ?? false;
 		if (props.notify && notify)
 			setNotify(correlationId, props.notifyMessageReset);
 	};
@@ -190,13 +193,13 @@ export function useBaseFormListingControlComponent(props, context, options) {
 					// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationIdI);
 
 					if (props.notify)
-						setNotify(correlationId, props.notifyMessageError);
+						setNotify(correlationIdI, props.notifyMessageError);
 
 					return;
 				}
 			}
 
-			logger.debug('useBaseFormListingControlComponent', 'submit', 'ok', null, correlationId);
+			logger.debug('useBaseFormListingControlComponent', 'submit', 'ok', null, correlationIdI);
 			context.emit('ok', response);
 
 			if (LibraryCommonUtility.isNull(options) || 
@@ -214,7 +217,7 @@ export function useBaseFormListingControlComponent(props, context, options) {
 		}
 		catch (err) {
 			context.emit('error', err);
-			logger.exception('useBaseFormListingControlComponent', 'submit', err, correlationId);
+			logger.exception('useBaseFormListingControlComponent', 'submit', err, correlationIdI);
 		}
 		finally {
 			isSearching.value = false;
