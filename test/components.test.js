@@ -170,6 +170,17 @@ describe('useDisplayDialogBaseComponent names', () => {
 	});
 });
 
+describe('useBaseAboutComponent', () => {
+	it('titles the inquiry email from titles.contact, beside contributing', async () => {
+		const { useBaseAboutComponent } = await import('../components/baseAbout');
+		const { api } = mountComposable(useBaseAboutComponent, { options: { emails: { contributing: 'c@x', inquiry: 'i@x' } } });
+
+		// looked up titles.inquiry, which the apps never define, so the raw key showed
+		expect(api.emailsInquiryTitle.value).toBe('titles.contact.inquiry');
+		expect(api.emailsContributingTitle.value).toBe('titles.contact.contributing');
+	});
+});
+
 describe('useBaseAdminComponent', () => {
 	it('toggles the drawer once per event after a second visit', async () => {
 		LibraryClientUtility.$EventBus = mitt();
