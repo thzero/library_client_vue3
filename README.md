@@ -1,162 +1,58 @@
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/thzero/library_client_vue3)
-![David](https://img.shields.io/david/thzero/library_client_vue3)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # library_client_vue3
 
-An opinionated library of common functionality to bootstrap a VueJs 3.0 based SPA application.
+An opinionated library for building a Vue 3 single page application on [library_client](https://github.com/thzero/library_client): the boot sequence, the Vue services, and the composables behind the application's pages, dialogs and forms. It has no markup of its own; [library_client_vue3_vuetify3](https://github.com/thzero/library_client_vue3_vuetify3) provides the Vuetify components built on it.
 
 ## Requirements
 
 ### NodeJs
 
-[NodeJs](https://nodejs.org) version 18+
+[NodeJs](https://nodejs.org) version 22+.
 
-### Vue
+### Vite
 
-In order to use this opinionated library successfully, it is advised to create a new Vue application using the vue-cli with the following options.
-
-* babel
-* router
-* eslint
+Applications are built with [Vite](https://vitejs.dev). The `_config` folder holds the files to start from (see [Project files](#project-files)).
 
 ## Installation
 
 [![NPM](https://nodei.co/npm/@thzero/library_client_vue3.png?compact=true)](https://npmjs.org/package/@thzero/library_client_vue3)
 
-### Dependencies
-
-These dependencies must be installed as 'Dependencies'.  Version numbers are important.
-
-[![NPM](https://nodei.co/npm/@thzero/library_common.png?compact=true)](https://npmjs.org/package/@thzero/library_common)
-[![NPM](https://nodei.co/npm/@thzero/library_client.png?compact=true)](https://npmjs.org/package/@thzero/library_client)
-[![NPM](https://nodei.co/npm/@thzero/library_client_vue3.png?compact=true)](https://npmjs.org/package/@thzero/library_client_vue3)
-
-* "vue": "^3.2.45",
-* "vue-i18n"
-* "vue-router": "^4.1.6"
-
-### Dev Dependencies
-
-These dependencies must be installed as 'devDependencies'.  Version numbers are important.
-
-* "@alienfast/i18next-loader": "^2.0.1"
-* "@babel/core": "^7.20.2"
-* "@babel/eslint-parser": "^7.19.1"
-* "@vue/cli-plugin-babel": "~5.0.8"
-* "@vue/cli-plugin-eslint": "~5.0.8"
-* "@vue/cli-plugin-router": "~5.0.8"
-* "@vue/eslint-config-standard": "^6.1.0"
-* "babel-eslint": "^10.1.0"
-* "babel-plugin-lodash": "^3.3.4"
-* "eslint": "^7.32.0"
-* "eslint-plugin-import": "^2.25.3"
-* "eslint-plugin-node": "^11.1.0"
-* "eslint-plugin-promise": "^5.2.0"
-* "eslint-plugin-vue": "^7.20.0"
-* "sass": "1.56.1"
-* "sass-loader": "^13.2.0"
-
-### Package.json
-
-Add the following to the package.json for postcss process.ing
-
 ```
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "> 4%",
-    "last 2 Chrome versions",
-    "last 2 Firefox versions",
-    "last 2 Safari versions",
-    "last 2 FirefoxAndroid versions",
-    "not Edge <= 18"
-  ]
+npm install @thzero/library_client_vue3
 ```
 
-### Sub Modules
+It installs `@thzero/library_client`, `@thzero/library_common`, `vue`, `vue-router`, `vue-i18n`, `@vuelidate/core` and the rest of what it needs. It requires `vuetify` (`^4`) as a peer.
 
-The following library contains the Vue components required by this module as needs to be installed as a submodule
+A complete application usually adds:
 
-```
-git submodule add https://github.com/thzero/library_client_vue3_components "src\library_vue"
-```
+| Package | For |
+|---|---|
+| [library_client_vue3_store_pinia](https://github.com/thzero/library_client_vue3_store_pinia) | the store |
+| [library_client_vue3_vuetify3](https://github.com/thzero/library_client_vue3_vuetify3) | the Vuetify components |
+| [library_client_service_rest_fetch](https://github.com/thzero/library_client_service_rest_fetch) or [library_client_service_rest_axios](https://github.com/thzero/library_client_service_rest_axios) | calls to a server |
+| [library_client_firebase_vue](https://github.com/thzero/library_client_firebase_vue) | sign in, and route authorization |
 
-## Refresh
+## Project files
 
-To refresh this submodule, you can execute the following commands
+Copy these from `_config` into the application's root folder:
 
-```
-git submodule init
-git submodule update --remote
-```
+* `vite.config.js`: also writes the configuration from the `_CONFIG` environment variable when a build provides one, maps the `local-config` and `open-source-config` imports, and generates `src/openSource.js`, the credits list, from the `openSource.js` of each installed `@thzero` package.
+* `jsconfig.json`, `.eslintrc.js`, `.eslintignore`, `.browserslistrc`, `.editorconfig`
 
-## Configuration
+Add the version fields after `version` in the application's `package.json`; the version service and the version display read them:
 
-### Application Configuration
-
-* Setup the configuration files for the application
-  * Create a 'config' folder under the 'src' folder.
-  * For development, create a 'development.json' file in the config folder.
-    * Note that this is ignored in the .gitignore
-  * For production, create a 'production.json' file in the config folder.
-
-The configuration file has the following basic format.
-
-```
-{
-	"backend": [
-    // Only needed if using backing APIs for your application
-		{
-			"key": "backend",
-			"apiKey": "<apikey required by the server component>",
-			"baseUrl": "<base url for the api of the server component>"
-		}
-	]
-}
-```
-
-* For production, create a config\production.json
-
-#### APIs
-
-To use the backend APIs feature, install a REST communication dependency, i.e.
-
-![@thzero/library_client_vue_service_rest_fetch](https://www.npmjs.com/package/@thzero/library_client_vue_service_rest_fetch)
-
-or
-
-![@thzero/library_client_vue_service_rest_axios](https://www.npmjs.com/package/@thzero/library_client_vue_service_rest_axios)
-
-### Development
-
-Applications are built with Vite.
-
-* Copy the files in the '_config' folder to the root folder of the application.
-
-  * .browserslistrc
-  * .eslintignore
-  * .eslintrc.js
-  * jsconfig.json
-  * vite.config.js
-
-### Package.json
-
-* Include the following after the version property in the 'package.json' for the application.
-
-```
-  "version_major": #,
-  "version_minor": #,
-  "version_patch": #,
+```json
+  "version_major": 0,
+  "version_minor": 1,
+  "version_patch": 0,
   "version_date": "MM/DD/YYYY",
 ```
 
-* Include the following at the end of the 'package.json' for the application.
-```
-  ,
+The supported browsers are listed in `.browserslistrc`, copied from `_config` above. To add vendor prefixes to the CSS as well, install `autoprefixer` (`npm install -D autoprefixer`) and add this at the end of `package.json`; Vite reads it:
+
+```json
   "postcss": {
     "plugins": {
       "autoprefixer": {}
@@ -164,68 +60,101 @@ Applications are built with Vite.
   }
 ```
 
-## Application Setup
+## Configuration
 
-The following lists the various folders and files to create the basic opinionated Vue application using the @thzero/library_client_vue dependency.
+Create `src/config/development.json` and `src/config/production.json`, kept out of source control. The format is described in [library_client](https://github.com/thzero/library_client#configuration).
+
+## Application setup
+
+The following lists the folders and files that make up a basic application on this library.
+
+### index.html
+
+Vite serves `index.html` from the application's root folder (not `public`) and loads `src/main.js` from it. Files in `public`, such as the icons, are served from `/`.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0" />
+
+		<meta http-equiv="cache-control" content="max-age=0" />
+		<meta http-equiv="cache-control" content="no-cache" />
+		<meta http-equiv="expires" content="-1" />
+		<meta http-equiv="pragma" content="no-cache" />
+
+		<link rel="icon" href="/icons/favicon.ico" />
+		<link rel="manifest" href="/manifest.json" />
+		<meta name="msapplication-TileColor" content="#ffffff" />
+		<meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
+		<meta name="theme-color" content="#ffffff" />
+		<link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png" />
+		<link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png" />
+		<link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png" />
+		<link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png" />
+		<link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png" />
+		<link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png" />
+		<link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png" />
+		<link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png" />
+		<link rel="shortcut icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png" />
+		<link rel="shortcut icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+		<link rel="shortcut icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+		<link rel="shortcut icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+		<!-- optional: the Roboto font, and the styles for markdown rendered with the markdown-body class -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css" />
+
+		<title><name of your application></title>
+	</head>
+	<body>
+		<noscript>
+			<strong>We're sorry but <name of your application> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+		</noscript>
+		<div id="app"></div>
+		<script type="module" src="/src/main.js"></script>
+	</body>
+</html>
+```
+
+The icon fonts are installed as packages (`@mdi/font`, `material-design-icons-iconfont`) and imported in `main.js`, rather than linked from a CDN.
 
 ### Constants
 
-* Create a 'constants.js' file in the 'src' folder.
-* Update the script with the following code.
+Keep the keys for the application's own injectable services in `src/constants.js`:
 
-```
-const Constants = {
+```js
+const AppConstants = {
 	InjectorKeys: {
-	// TODO: Keys for injectable services
-	// i.e. SERVICE_YOUR_SERVICE: 'YourService'
+		// keys for the application's injectable services, for example
+		// SERVICE_LAUNCHES: 'serviceLaunches'
 	}
 };
 
-export default Constants;
-
+export default AppConstants;
 ```
 
-### Boot
+### Boot files
 
-The boot folder holds the boot scripts for application services and plugins.
+A boot file is a class with an `execute(framework, router, store, options)` method, or a function taking `{ framework, router, store, options }`. Each runs, in order, before the application mounts.
 
-* Create a 'boot' folder under the 'src' folder.
-* Create a 'i18n.js' under the 'boot' folder .
-* Update the script with the following code.
+**Services**, `src/boot/services.js`: extend the Vue root services and supply the services the application needs (see [library_client](https://github.com/thzero/library_client#boot) for which ones must be supplied).
 
-```
-import VueBasei18n from '@thzero/library_client_vue3/boot/basei18n';
+```js
+import RootServicesBoot from '@thzero/library_client_vue3/boot/rootServices';
 
-import resources from '@/locales';
-
-export default class AppVueBasei18n extends VueBasei18n {
-	_initMessages() {
-		return resources;
-	}
-}
-
-```
-
-* Create a 'services.js' under the 'boot' folder.
-* Update the script with the following code.
-
-```
-import versionService from '@/service/version';
-
-// TODO:Constants for service imports
-
-import BaseServices from '@thzero/library_client_vue3/boot/baseServices';
-
-class Services extends BaseServices {
+class ServiceBoot extends RootServicesBoot {
 	_initialize() {
-		// TODO: Define any custom services that you want to be injected.
-		// The format of a function call to inject a service looks like:
-		// this._injectService(Constants.InjectorKeys.SERVICE_YOUR_SERVICE, new yourService());
-		// 'yourService' is a defined constant from an import.
-		// The keys are recommended to be kept in a Constants file.
+		super._initialize();
+
+		// the application's own services
+		this._injectService(AppConstants.InjectorKeys.SERVICE_LAUNCHES, new launchesService());
 	}
 
-	_initialize() {
+	_initializeSecurity() {
+		return new securityService();
 	}
 
 	_initializeVersion() {
@@ -233,332 +162,395 @@ class Services extends BaseServices {
 	}
 }
 
-export default Services;
-
+export default ServiceBoot;
 ```
 
-* Create a 'validate.js' under the 'boot' folder.
-* Update the script with the following code.
+`boot/adminServices` adds the admin news and users services, for an application with an admin area.
 
-```
-import BaseValidation from '@thzero/library_client_vue3/boot/baseValidation';
+**Translations**, `src/boot/i18n.js`:
 
-class Validation extends BaseValidation {
-	_initialize(extend) {
-		super._initialize(extend);
+```js
+import Vuei18nBaseBoot from '@thzero/library_client_vue3/boot/basei18n';
 
-		// TODO: define any Joi validation extensions here.
+const resources = {};
+const modules = import.meta.glob('@/locales/*.json', { eager: true });
+for (const locale of [ 'en' ])
+	resources[locale] = modules[`/src/locales/${locale}.json`];
+
+export default class Vuei18nBoot extends Vuei18nBaseBoot {
+	_initMessages() {
+		return resources;
 	}
 }
-
-export default Validation;
-
 ```
+
+**Validation**, `src/boot/validate.js`: extend `@thzero/library_client_vue3/boot/baseValidation` and add any validation extensions in `_initialize(extend)`.
 
 ### Services
 
-The service folder holds javascript classes that are injected as services into the framework.
+Services are classes registered with the injector in the services boot, and looked up by key.
 
-* Create a 'service' folder under the 'src' folder.
-* Create a 'version.js' under the 'service' folder.
-* Update the script with the following code.
+**Version**, `src/service/version.js`: reports the version fields from `package.json`. Vite imports `package.json` through `import.meta.glob`:
 
-```
-const { version_major, version_minor, version_patch, version_date } = require('../../package.json');
+```js
+import VersionService from '@thzero/library_client/service/version';
 
-import VersionService from '@thzero/library_client_vue/service/version';
+const modules = import.meta.glob('../../package.json', { eager: true });
+// eslint-disable-next-line camelcase
+const { version_major, version_minor, version_patch, version_date, copyright, author, author_url } = modules['../../package.json'];
 
 class AppVersionService extends VersionService {
 	async _version(correlationId) {
-		return this._generate(correlationId, version_major, version_minor, version_patch, version_date);
+		return this._generate(correlationId, version_major, version_minor, version_patch, version_date, copyright, author, author_url);
 	}
 }
 
 export default AppVersionService;
-
 ```
 
-#### Custom Services
+**Custom services** can live anywhere under `src`; `src/service` is recommended. A custom service extends `Service` and looks up the services it uses in `init`:
 
-Custom services can be generated and stored anywehre with the 'src' folder, although it is recommended to store them in the 'src/service' folder.
+```js
+import AppConstants from '@/constants';
+import LibraryClientConstants from '@thzero/library_client/constants';
 
-A custom service is a class that has the following format.
+import Service from '@thzero/library_client/service/index';
 
-```
-import Service from '@thzero/library_client_vue/service';
-
-class YourServiceNameService extends Service {
+class LaunchesService extends Service {
 	constructor() {
 		super();
 
-		// TODO: Define any variables to hold injected services
-	  // i.e. this._serviceYourService = null;
+		this._serviceCommunicationRest = null;
 	}
 
 	async init(injector) {
 		await super.init(injector);
 
-		// TODO: Inject any services into your component
-		// i.e. this._serviceYourService = this._injector.getService(Constants.InjectorKeys.SERVICE_YOUR_SERVICE);
+		this._serviceCommunicationRest = this._injector.getService(LibraryClientConstants.InjectorKeys.SERVICE_COMMUNICATION_REST);
 	}
 
-	// TODO: define any class methods that the service exposes
+	async retrieve(correlationId, id) {
+		this._enforceNotEmpty('LaunchesService', 'retrieve', id, 'id', correlationId);
+
+		return await this._serviceCommunicationRest.getById(correlationId, LibraryClientConstants.ExternalKeys.BACKEND, 'launches', id);
+	}
 }
 
-export default YourServiceNameService;
-
+export default LaunchesService;
 ```
 
-### Locales
+Register it in the services boot under a key from `src/constants.js`:
 
-For internationalization and localization, the following needs to be setup.  The opinionated default is standard English.
-
-* Create a 'locales' folder under the 'src' folder.
-* Create an 'en' folder under the 'locales' folder.
-* Create an 'index.json' file under the 'en' folder.
-* Update the script with the following JSON.
-
-```
-{
-	"admin": {
-		"news": "News"
-	},
-	"buttons": {
-		"cancel": "Cancel",
-		"clear": "Clear",
-		"collapseAll": "Collapse",
-		"delete": "Delete",
-		"edit": "Edit",
-		"expandAll": "Expand",
-		"ok": "Ok",
-		"select": "Select"
-	},
-	"errors": {
-		"adminNews": {
-		  "article": {
-			 "string": {
-				"empty": "Article content is required."
-			 }
-		  }
-		},
-		"copyToClipboard": "Failed to copy to the clipboard.",
-		"description": "Invalid value, must be of the following ! @ # $ % ^ & * ( ) _ - + = [ ] { } | : ; \" \\' < > , . ? a-z A-Z 0-9",
-		"duplicateName": "There is already a {objectType} with the name of \\'{name}\\'.",
-		"duplicateNumber": "There is already a {objectType} with the number of \\'{number}\\'.",
-		"duplicateOrder": "There is already a {objectType} with order \\'{order}\\'.",
-		"error": "An error occured, plesae try again.",
-		"invalidPermissions": "You do not have permission to perform the requested action.",
-		"invalidRequest": "Invalid request.",
-		"notFound": "You have been led astray.",
-		"objectChanged": "The \\'{objectType}\\' has changed, please refresh and try again.",
-		"type": "Type is required."
-	},
-	"forms": {
-		"id": "Id",
-		"name": "Name",
-		"news": {
-		  "article": "Article",
-		  "publishDate": "Publish Date",
-		  "sticky": "Sticky"
-		},
-		"number": "Number",
-		"sorting": {
-		  "ascending": "Ascending",
-		  "ascendingAbbr": "Asc",
-		  "descending": "Descending",
-		  "descendingAbbr": "Desc",
-		  "name": "Sorting",
-		  "nameShort": "Sort"
-		},
-		"title": "Title"
-	},
-	"home": {
-		"welcome": "Hello {msg}!"
-	},
-	"messages": {
-		"failed": "Action failed",
-		"loading": "Loading...",
-		"saved": "Saved successfully.",
-		"success": "Action was successful"
-	},
-	"news": {
-		"actions": "Actions",
-		"article": "Article",
-		"name": "Name",
-		"new": "News",
-		"noData": "No news available...",
-		"publishDate": "Publish Date",
-		"status": {
-		  "active": "Active"
-		},
-		"statusName": "Status",
-		"sticky": "Sticky"
-	},
-	"openSource": {
-		"client": "Client",
-		"name": "Name",
-		"license": "License",
-		"resource": "Resource",
-		"server": "Server"
-	},
-	"questions": {
-		"areYouSure": "Are you sure?"
-	},
-	"strings": {
-		"add": "Add",
-		"copyright": "Copyright",
-		"copyToClipboard": "Copied to the clipboard!",
-		"delete": "Delete",
-		"edit": "Edit",
-		"load": "Load",
-		"new": "New",
-		"no": "No",
-		"save": "Save",
-		"yes": "Yes"
-	},
-	"titles": {
-		"about": "About",
-		"application": "<your application name goes here>",
-		"edit": "Edit",
-		"editType": "Edit {type}",
-		"home": "Home",
-		"new": "New",
-		"newType": "New {type}",
-		"news": "News",
-		"newsLatest": "Latest News",
-		"openSource": "Open Source",
-		"settings": "Settings",
-		"support": "Support"
-	},
-	"users": {
-		"actions": "Actions",
-		"externalId": "External Id",
-		"id": "Id",
-		"name": "Name",
-		"role": "Role",
-		"roles": "Roles"
-	},
-	"version": {
-		"majorMinorDate": "{major}.{minor}.{patch} {date}",
-		"label": "Version"
-	}
- }
+```js
+this._injectService(AppConstants.InjectorKeys.SERVICE_LAUNCHES, new LaunchesService());
 ```
 
-See ![Vue l18n](https://kazupon.github.io/vue-i18n/) for documentation on
+### Other boot files
 
-### Store.js
-
-Install the ![@thzero/library_client_vue3_store_pinia](https://www.npmjs.com/package/@thzero/library_client_vue3_store_pinia) library
-
-### App.vue
-
-* Create a 'components' folder under 'src'.
-* Create an 'App.vue' file in the 'components' folder.
-* Setup the 'App.vue' as follows:
-
-```
-<template>
-	<div id="app">
-		<router-view />
-	</div>
-</template>
-
-<script>
-import baseApp from '@thzero/library_client_vue3/components/baseApp';
-
-export default {
-	name: 'App',
-	extends: baseApp,
-	methods: {
-		initialize(correlationId) {
-			return [
-				this.$store.dispatcher.root.initialize(correlationId),
-        // TODO: any other initialization from the stores that needs to be done?
-			];
-		}
-	}
-};
-</script>
-
-<style scoped>
-</style>
-
-<style>
-</style>
-
-```
+**Other boot files** in this package: `boot/eventBus` (the event bus the components and services use; include it), `boot/asyncComputed`, `boot/scrollTo` and `boot/webComponents`. The UI boot comes from [library_client_vue3_vuetify3](https://github.com/thzero/library_client_vue3_vuetify3).
 
 ### Main.js
 
-* Replace the code in the 'main.js' script with the following code.
+Replace the code in `src/main.js` with the following. Remove the boot files the application does not use.
 
-```
-import App from '@/components/App.vue';
-import router from '@/router';
+```js
+import '@mdi/font/css/materialdesignicons.css';
 
+import 'vuetify/styles';
+
+import bootStarter from '@thzero/library_client_firebase_vue/boot/starter';
 import bootEventBus from '@thzero/library_client_vue3/boot/eventBus';
 import booti18n from '@/boot/i18n';
-import { bootServices, store } from '@/boot/services';
-import bootUi from '@thzero/library_client_vue3/boot/ui';
+import bootServices from '@/boot/services';
+import bootServicesAdmin from '@/boot/servicesAdmin';
+import bootUi from '@/boot/ui';
 import bootValidate from '@/boot/validate';
-import bootWebComponents from '@thzero/library_client_vue3/boot/webComponents';
+// import bootAsyncComputed from '@thzero/library_client_vue3/boot/asyncComputed';
+// import bootWebComponents from '@thzero/library_client_vue3/boot/webComponents';
+import bootCookieComply from '@thzero/library_client_vue3_vuetify3/boot/cookie';
+
+import router from '@/router';
 
 import store from '@/store/pinia';
 
-const starter = null;
-const options = {};
-
 import start from '@thzero/library_client_vue3/boot/main';
-start(App, router, store, [ booti18n, bootEventBus, bootServices, bootValidate, bootUi ], starter, options);
+
+import App from '@/components/App.vue';
+
+start(App, router, store, [ booti18n, bootEventBus, bootServices, bootServicesAdmin, bootValidate, bootUi, bootCookieComply ], bootStarter, {
+	// optional: the id generator's alphabet and lengths
+	idGenerator: {
+		alphabet: '<alphabet>',
+		lengthLong: 16,
+		lengthShort: 8
+	}
+});
 ```
 
-### Router.js
+`start(appComponent, router, store, bootFiles, starter, options)` creates the application, installs the store (a store class, such as one from [library_client_vue3_store_pinia](https://github.com/thzero/library_client_vue3_store_pinia)) and the router, runs each boot file in order, runs the starter, and mounts on `#app`.
 
-* Delete the 'router' folder.
-* Add a 'router.js' file to the 'src' folder.
-* Setup the 'router.js' as follows:
+* **`bootStarter`**: sign in and route authorization from [library_client_firebase_vue](https://github.com/thzero/library_client_firebase_vue). Pass `null` for an application without them.
+* **`bootServicesAdmin`**: only for an application with an admin area; it extends `@thzero/library_client_vue3/boot/adminServices`:
 
+```js
+import AdminServicesBaseBoot from '@thzero/library_client_vue3/boot/adminServices';
+
+class AdminServiceBoot extends AdminServicesBaseBoot {
+	_initialize() {
+		super._initialize();
+	}
+}
+
+export default AdminServiceBoot;
 ```
-import Vue from 'vue';
-import VueRouter from 'vue-router';
 
-Vue.use(VueRouter);
+* **`bootUi`** and **`bootCookieComply`**: from [library_client_vue3_vuetify3](https://github.com/thzero/library_client_vue3_vuetify3#ui-boot).
+* **`options.idGenerator`**: optional; `alphabet`, `lengthLong`, `lengthShort` and `override` configure the id generator from `library_common`.
 
-const router = new VueRouter({
-	scrollBehavior: () => ({ x: 0, y: 0 }),
-	routes: [
+### App.vue
+
+Put the root component's logic in a composable, `src/components/app.vue`, built on `useBaseAppComponent`. `initializeI` runs once when the application mounts:
+
+```js
+<script>
+import LibraryClientConstants from '@thzero/library_client/constants';
+
+import LibraryClientUtility from '@thzero/library_client/utility/index';
+
+import { useBaseAppComponent } from '@thzero/library_client_vue3/components/baseApp';
+
+export function useAppComponent(props, context, options) {
+	const {
+		correlationId,
+		error,
+		hasFailed,
+		hasSucceeded,
+		initialize,
+		logger,
+		noBreakingSpaces,
+		notImplementedError,
+		success
+	} = useBaseAppComponent(
+		props,
+		context,
 		{
-			path: '/',
-			component: () => import('./view/Home.vue'),
-		},
-		{
-			path: '/about',
-			component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-		},
-		// {
-		// 	path: '/openSource',
-		// 	component: () => import(/* webpackChunkName: "group-openSource" */ '<define a opensource vue>')
-		// },
-		// {
-		// 	path: '/support',
-		// 	component: () => import(/* webpackChunkName: "group-support" */ '<define a support vue>')
-		// },
-		// {
-		// 	path: '/notFound',
-		// 	component: () => import(/* webpackChunkName: "group-notFound" */ '<define a notFound vue>')
-		// },
-		// {
-		// 	path: '*',
-		// 	component: () => import(/* webpackChunkName: "group-blank" */ '<define a blank vue>'),
-		// 	meta: {
-		// 		notFound: true
-		// 	}
-		// }
-	]
+			initializeI: async () => {
+				return [
+					serviceStore.dispatcher.initialize(correlationId())
+				];
+			}
+		}
+	);
+
+	const serviceStore = LibraryClientUtility.$injector.getService(LibraryClientConstants.InjectorKeys.SERVICE_STORE);
+
+	return {
+		correlationId,
+		error,
+		hasFailed,
+		hasSucceeded,
+		initialize,
+		logger,
+		noBreakingSpaces,
+		notImplementedError,
+		success,
+		serviceStore
+	};
+};
+</script>
+```
+
+and use it from `src/components/App.vue`:
+
+```html
+<template>
+	<router-view />
+</template>
+
+<script>
+import { useAppComponent } from '@/components/app';
+
+export default {
+	name: 'App',
+	setup(props, context) {
+		const {
+			correlationId,
+			error,
+			hasFailed,
+			hasSucceeded,
+			initialize,
+			logger,
+			noBreakingSpaces,
+			notImplementedError,
+			success,
+			serviceStore
+		} = useAppComponent();
+
+		return {
+			correlationId,
+			error,
+			hasFailed,
+			hasSucceeded,
+			initialize,
+			logger,
+			noBreakingSpaces,
+			notImplementedError,
+			success,
+			serviceStore
+		};
+	}
+};
+</script>
+```
+
+### Router
+
+* Delete the `router` folder, if the project template created one.
+* Add a `router.js` file to the `src` folder.
+* Set it up as follows.
+
+Each page is a child of a layout route. Route authorization is set in each route's `meta`, and enforced by [library_client_firebase_vue](https://github.com/thzero/library_client_firebase_vue#protecting-routes). The layouts and `VtNotFound` come from [library_client_vue3_vuetify3](https://github.com/thzero/library_client_vue3_vuetify3).
+
+```js
+import { createRouter, createWebHistory } from 'vue-router';
+
+import LibraryClientUtility from '@thzero/library_client/utility/index';
+
+const routes = [
+	{
+		path: '/',
+		component: () => import('./layouts/MainLayout.vue'),
+		children: [
+			{
+				path: '',
+				name: 'default',
+				component: () => import('./components/Home.vue'),
+				meta: {
+					requiresAuth: false
+				}
+			}
+		]
+	},
+	{
+		path: '/openSource',
+		component: () => import('./layouts/MainLayout.vue'),
+		children: [
+			{
+				path: '',
+				name: 'openSource',
+				component: () => import('./components/OpenSource.vue'),
+				meta: {
+					requiresAuth: false
+				}
+			}
+		]
+	},
+	{
+		path: '/privacy',
+		component: () => import('./layouts/MainLayout.vue'),
+		children: [
+			{
+				path: '',
+				name: 'privacy',
+				component: () => import('./components/Privacy.vue'),
+				meta: {
+					requiresAuth: false
+				}
+			}
+		]
+	},
+	{
+		path: '/settings',
+		component: () => import('./layouts/MainLayout.vue'),
+		children: [
+			{
+				path: '',
+				name: 'settings',
+				component: () => import('./components/Settings.vue'),
+				meta: {
+					requiresAuth: true
+				}
+			}
+		]
+	},
+	{
+		path: '/about',
+		component: () => import('./layouts/MainLayout.vue'),
+		children: [
+			{
+				path: '',
+				name: 'about',
+				component: () => import('./components/About.vue'),
+				meta: {
+					requiresAuth: false
+				}
+			}
+		]
+	},
+	{
+		path: '/support',
+		component: () => import('./layouts/MainLayout.vue'),
+		children: [
+			{
+				path: '',
+				name: 'support',
+				component: () => import('./components/Support.vue'),
+				meta: {
+					requiresAuth: true
+				}
+			}
+		]
+	},
+	{
+		path: '/auth',
+		component: () => import('@thzero/library_client_vue3_vuetify3/layouts/AuthLayout.vue'),
+		children: [
+			{
+				path: '',
+				name: 'auth',
+				component: () => import('./components/Auth.vue'),
+				meta: {
+					requiresAuth: false
+				}
+			}
+		]
+	},
+	{
+		path: '/admin',
+		component: () => import('@thzero/library_client_vue3_vuetify3/layouts/AdminLayout.vue'),
+		children: [
+			{
+				path: '',
+				name: 'admin',
+				component: () => import('./components/admin/Admin.vue'),
+				meta: {
+					requiresAuth: true,
+					requiresAuthRoles: [ 'admin' ]
+				}
+			}
+		]
+	},
+	{
+		path: '/:catchAll(.*)*',
+		component: () => import('@thzero/library_client_vue3_vuetify3/layouts/BlankLayout.vue'),
+		children: [
+			{
+				path: '',
+				name: 'notFound',
+				component: () => import('@thzero/library_client_vue3_vuetify3/components/VtNotFound.vue'),
+				meta: {
+					requiresAuth: false
+				}
+			}
+		]
+	}
+];
+
+const router = createRouter({
+	history: createWebHistory(process.env.BASE_URL),
+	routes
 });
 
-// eslint-disable-next-line
 router.beforeResolve((to, from, next) => {
 	if (to.matched.some(record => record.meta.notFound)) {
 		LibraryClientUtility.$navRouter.push('/notFound');
@@ -571,78 +563,146 @@ router.beforeResolve((to, from, next) => {
 export default router;
 ```
 
-### Index.html
+The catch-all route renders `VtNotFound` for any path nothing else matches. The `beforeResolve` hook sends a route marked `meta: { notFound: true }` to `/notFound`, for an application that keeps a separate not found route.
 
-Replace the contents of the 'public/index.html' with the following code.
+## Composables
 
+The components are composables: functions a component calls from `setup()`, returning the state and handlers its template uses. Most take `(props, context, options)`, and the `*Props.js` files beside them hold the matching props. Each builds on `useBaseComponent`, which provides `correlationId()`, `logger`, `hasFailed`, `hasSucceeded`, `success`, `error` and `initialize`.
+
+| Area | Composables |
+|---|---|
+| Base | `useBaseComponent`, `useBaseEditComponent`, `useBaseControlEditComponent`, `useBasePageEditComponent`, `useNotify` |
+| Application and layouts | `useBaseAppComponent`, `useBaseLayout`, `useBaseMainLayout`, `useBaseAdminLayout`, `useBaseAdminComponent` |
+| Dialogs | `useDisplayDialogBaseComponent`, `useBaseConfirmationDialogComponent`, `useBaseLoadingOverlayComponent` |
+| Forms | `useBaseFormControlComponent`, `useBaseFormDialogControlComponent`, `useBaseFormListingControlComponent` |
+| Pages | `useBaseAboutComponent`, `useBaseAuthComponent`, `useBaseCopyrightComponent`, `useBaseMarkdownComponent`, `useBaseNotFoundComponent`, `useBaseOpenSourceComponent`, `useBasePrivacyComponent`, `useBaseSettingsComponent`, `useBaseSupportComponent`, `useBaseVersionComponent` |
+| Admin | `useAdminBaseListingComponent`, `useAdminNewsBaseListingComponent`, `useAdminUsersBaseListingComponent` |
+
+A composable lives in a `.vue` file with no default export, so import it by name:
+
+```js
+import { useBaseFormDialogControlComponent } from '@thzero/library_client_vue3/components/form/baseFormDialogControl';
 ```
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0"/>
 
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+The admin listings expect the store's `adminNews` and `adminUsers` modules (see [library_client_vue3_store_pinia](https://github.com/thzero/library_client_vue3_store_pinia#modules)).
 
-		<meta http-equiv="cache-control" content="max-age=0" />
-		<meta http-equiv="cache-control" content="no-cache" />
-		<meta http-equiv="expires" content="-1" />
-		<meta http-equiv="pragma" content="no-cache" />
+## Locales
 
-		<link rel="manifest" href="<%= BASE_URL %>manifest.json">
-		<meta name="msapplication-TileColor" content="#ffffff">
-		<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-		<meta name="theme-color" content="#ffffff">
-		<link rel="shortcut icon" href="<%= BASE_URL %>icons/favicon.ico">
-		<link rel="apple-touch-icon" sizes="57x57" href="<%= BASE_URL %>apple-icon-57x57.png">
-		<link rel="apple-touch-icon" sizes="60x60" href="<%= BASE_URL %>apple-icon-60x60.png">
-		<link rel="apple-touch-icon" sizes="72x72" href="<%= BASE_URL %>apple-icon-72x72.png">
-		<link rel="apple-touch-icon" sizes="76x76" href="<%= BASE_URL %>apple-icon-76x76.png">
-		<link rel="apple-touch-icon" sizes="114x114" href="<%= BASE_URL %>apple-icon-114x114.png">
-		<link rel="apple-touch-icon" sizes="120x120" href="<%= BASE_URL %>apple-icon-120x120.png">
-		<link rel="apple-touch-icon" sizes="144x144" href="<%= BASE_URL %>apple-icon-144x144.png">
-		<link rel="apple-touch-icon" sizes="152x152" href="<%= BASE_URL %>apple-icon-152x152.png">
-		<link rel="apple-touch-icon" sizes="180x180" href="<%= BASE_URL %>apple-icon-180x180.png">
-		<link rel="shortcut icon" type="image/png" sizes="192x192"	href="<%= BASE_URL %>android-icon-192x192.png">
-		<link rel="shortcut icon" type="image/png" sizes="32x32" href="<%= BASE_URL %>favicon-32x32.png">
-		<link rel="shortcut icon" type="image/png" sizes="96x96" href="<%= BASE_URL %>favicon-96x96.png">
-		<link rel="shortcut icon" type="image/png" sizes="16x16" href="<%= BASE_URL %>favicon-16x16.png">
+For translation, create `src/locales/en.json` (one file per locale) and load it in the translations boot above. English is the default. This is everything this package and [library_client_vue3_vuetify3](https://github.com/thzero/library_client_vue3_vuetify3) look up; add the application's own text beside it. Text in braces, such as `{max}`, is filled in by the library.
 
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
-		<!-- <link rel='preload' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900' as='style' onload="this.onload=null;this.rel='stylesheet'">
-		<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"></noscript> -->
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-design-icons-iconfont@5.0.1/dist/material-design-icons.min.css">
-		<!-- <link rel='preload' href='https://cdn.jsdelivr.net/npm/material-design-icons-iconfont@5.0.1/dist/material-design-icons.min.css' as='style' onload="this.onload=null;this.rel='stylesheet'">
-		<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-design-icons-iconfont@5.0.1/dist/material-design-icons.min.css"></noscript> -->
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/4.9.95/css/materialdesignicons.min.css">
-		<!-- <link rel='preload' href='https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/4.9.95/css/materialdesignicons.min.css' as='style' onload="this.onload=null;this.rel='stylesheet'">
-		<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/4.9.95/css/materialdesignicons.min.css"></noscript> -->
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css">
-		<!-- <link rel='preload' href='https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css' as='style' onload="this.onload=null;this.rel='stylesheet'">
-		<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css"></noscript> -->
-		<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css"> -->
-		<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"> -->
-		<title><name of your app goes here></title>
-		<style>
-.bg {
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
-	background: black url( '/images/background.png') no-repeat center center;
-	background-attachment: fixed;
+```json
+{
+	"auth": {
+		"google": "Google",
+		"rememberMe": "Remember Me"
+	},
+	"buttons": {
+		"cancel": "Cancel",
+		"clear": "Clear",
+		"close": "Close",
+		"delete": "Delete",
+		"filter": "Filter",
+		"ok": "Ok"
+	},
+	"errors": {
+		"duplicateName": "There is already a {objectType} with the name of '{name}'.",
+		"duplicateNumber": "There is already a {objectType} with the number of '{number}'.",
+		"duplicateOrder": "There is already a {objectType} with order '{order}'.",
+		"error": "An error occurred, please try again.",
+		"invalidPermissions": "You do not have permission to perform the requested action.",
+		"invalidRequest": "Invalid request.",
+		"notFound": "You have been led astray.",
+		"objectChanged": "The '{objectType}' has changed, please refresh and try again.",
+		"params": {
+		},
+		"quotaExceeded": "You have reached your quota of {quota} '{quotaType}'.",
+		"tagLine": {
+			"max": "No more than {max} tags."
+		}
+	},
+	"forms": {
+		"externalId": "External Id",
+		"id": "Id",
+		"name": "Name",
+		"roles": "Roles"
+	},
+	"messages": {
+		"error": "An error occurred, please try again.",
+		"loading": "Loading...",
+		"reset": "Reset",
+		"saved": "Saved"
+	},
+	"news": {
+		"actions": "Actions",
+		"article": "Article",
+		"name": "Name",
+		"publishDate": "Publish Date",
+		"requiresAuth": "Authenticated",
+		"statusName": "Status",
+		"sticky": "Sticky"
+	},
+	"openSource": {
+		"client": "Client",
+		"license": "License",
+		"resource": "Resource",
+		"server": "Server"
+	},
+	"questions": {
+		"areYouSure": "Are you sure?",
+		"areYouSureNonRecoverable": "Are you sure? This cannot be undone.",
+		"formDirty": {
+			"cancel": "You made changes, are you sure you wish to leave?",
+			"clear": "You made changes, are you sure you wish to reset?",
+			"close": "You made changes, are you sure you wish to close?"
+		}
+	},
+	"strings": {
+		"privacy": {
+			"text1": "<your privacy policy, in markdown>"
+		}
+	},
+	"titles": {
+		"application": "<your application name>",
+		"contact": {
+			"contributing": "{email} Contributing",
+			"inquiry": "{email} Inquiry"
+		},
+		"edit": "Edit",
+		"home": "Home",
+		"new": "New",
+		"profile": "Profile",
+		"settings": "Settings",
+		"signIn": "Sign In",
+		"signOut": "Sign Out"
+	},
+	"users": {
+		"actions": "Actions",
+		"externalId": "External Id",
+		"id": "Id",
+		"name": "Name",
+		"roles": "Roles"
+	},
+	"version": {
+		"label": "Version",
+		"majorMinorDate": "{major}.{minor}.{patch} {date}"
+	}
 }
-		</style>
-	</head>
-	<body class="bg">
-		<noscript>
-			<strong>We're sorry but test doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-		</noscript>
-		<div id="app"></div>
-		<!-- built files will be auto injected -->
-	</body>
-</html>
+```
+
+The `errors` entries other than `notFound` and `tagLine` translate errors from the server. `LibraryClientVueUtility.applyError` (`@thzero/library_client_vue3/utility`) looks up `errors.<code>` for an error's code, falling back to `errors.error`, and fills in its parameters; a parameter marked for translation is looked up in `errors.params` (for example `"news": "news"`).
+
+See [Vue I18n](https://vue-i18n.intlify.dev) for the message format.
+
+## Development
 
 ```
+npm install
+npm test
+npm run lint
+```
+
+Tests use [Vitest](https://vitest.dev); the composables are tested through a small mounted component. The `test` folder and the configuration files are not published.
+
+## License
+
+[MIT](license.md)
