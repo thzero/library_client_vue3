@@ -23,10 +23,24 @@ export default () => {
         },
         {
             category: 'client',
-            name: 'vuelidate',
+            name: '@vuelidate/core',
             url: 'https://github.com/vuelidate/vuelidate',
             licenseName: 'MIT',
-            licenseUrl: 'https://github.com/vuelidate/vuelidate/blob/next/LICENSE'
+            licenseUrl: 'https://github.com/vuelidate/vuelidate/blob/HEAD/LICENSE'
+        },
+        {
+            category: 'client',
+            name: '@vuelidate/validators',
+            url: 'https://github.com/vuelidate/vuelidate',
+            licenseName: 'MIT',
+            licenseUrl: 'https://github.com/vuelidate/vuelidate/blob/HEAD/LICENSE'
+        },
+        {
+            category: 'client',
+            name: 'mitt',
+            url: 'https://github.com/developit/mitt',
+            licenseName: 'MIT',
+            licenseUrl: 'https://github.com/developit/mitt/blob/main/LICENSE'
         },
         {
             category: 'client',
@@ -44,11 +58,6 @@ export default () => {
         },
         {
             category: 'client',
-            name: 'vue3-async-computed',
-            url: 'https://github.com/mainclass/vue3-async-computed'
-        },
-        {
-            category: 'client',
             name: 'vue-i18n',
             url: 'https://github.com/kazupon/vue-i18n',
             licenseName: 'MIT',
@@ -60,6 +69,27 @@ export default () => {
             url: 'https://github.com/vuejs/vue-router',
             licenseName: 'MIT',
             licenseUrl: 'https://github.com/vuejs/vue-router/blob/dev/LICENSE'
+        },
+        {
+            category: 'client',
+            name: 'vue-scrollto',
+            url: 'https://github.com/rigor789/vue-scrollto',
+            licenseName: 'MIT',
+            licenseUrl: 'https://github.com/rigor789/vue-scrollto/blob/HEAD/LICENSE'
+        },
+        {
+            category: 'client',
+            name: 'vue3-async-computed',
+            url: 'https://github.com/mainclass/vue3-async-computed',
+            licenseName: 'ISC',
+            licenseUrl: 'https://github.com/mainclass/vue3-async-computed'
+        },
+        {
+            category: 'client',
+            name: 'vuetify',
+            url: 'https://github.com/vuetifyjs/vuetify',
+            licenseName: 'MIT',
+            licenseUrl: 'https://github.com/vuetifyjs/vuetify/blob/HEAD/LICENSE.md'
         }
     ];
 }
