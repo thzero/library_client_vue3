@@ -230,7 +230,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 
 			if (LibraryCommonUtility.isNull(options) || 
 				(!LibraryCommonUtility.isNull(options) && LibraryCommonUtility.isNull(options.resetOnSubmit)) || 
-				options.resetOnSubmit == true) {
+				options.resetOnSubmit === true) {
 				await reset(correlationIdI, false);
 			}
 
@@ -251,7 +251,7 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 			// rejected save threw away what the user had entered
 			if (saved && (LibraryCommonUtility.isNull(options) || 
 				(!LibraryCommonUtility.isNull(options) && LibraryCommonUtility.isNull(options.signalOnSubmit)) || 
-				options.signalOnSubmit == true)) {
+				options.signalOnSubmit === true)) {
 					dialogSignal.value = false;
 			}
 		}

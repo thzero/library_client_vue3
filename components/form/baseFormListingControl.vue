@@ -204,7 +204,7 @@ export function useBaseFormListingControlComponent(props, context, options) {
 
 			if (LibraryCommonUtility.isNull(options) || 
 				(!LibraryCommonUtility.isNull(options) && LibraryCommonUtility.isNull(options.resetOnSubmit)) || 
-				options.resetOnSubmit == true) {
+				options.resetOnSubmit === true) {
 				await reset(correlationIdI, false);
 			}
 

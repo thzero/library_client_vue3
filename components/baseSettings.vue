@@ -55,7 +55,9 @@ export function useBaseSettingsComponent(props, context, options) {
 	});
 
 	const cancel = async () => {
-		await reset(correlationId(), true);
+		// called a reset this composable never had; the form's is what onMounted uses
+		if (options && LibraryCommonUtility.isObject(options) && options.formRef && options.formRef.value)
+			await options.formRef.value.reset(correlationId(), true);
 	};
 	const close = async () => {
 	};
@@ -71,10 +73,9 @@ export function useBaseSettingsComponent(props, context, options) {
 
 		const response = Response.success(correlationId);
 		for (const item of responses)
-			response.success &= item.success;
+			response.success = response.success && item.success;
 		return response;
 	};
-	// eslint-disable-next-line
 	const preCompleteI = async (correlationId, value) =>  {
 	};
 	const preCompleteOkI = async (correlationId, value) =>  {
