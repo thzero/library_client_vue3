@@ -76,6 +76,7 @@ export function useAdminBaseListingComponent(props, context, options) {
 		if (!id || !lookupsI)
 			return '';
 
+		// eslint-disable-next-line eqeqeq -- an id may arrive as a number or a string
 		const results = lookupsI.find(l => l.id == id);
 		return results ? results.name : '';
 	};

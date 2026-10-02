@@ -35,7 +35,6 @@ export function useBaseAppComponent(props, context, options) {
 				return;
 			await Promise.all(items);
 		})().catch(err => {
-			// eslint-disable-next-line
 			console.error(err);
 		});
 	});

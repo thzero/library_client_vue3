@@ -5,7 +5,6 @@ import LibraryCommonUtility from '@thzero/library_common/utility/index';
 
 import {} from '@thzero/library_common/utility/string';
 
-// eslint-disable-next-line
 async function start(appComponent, router, storeRequest, bootFiles, starter, options) {
 	const framework = createApp(appComponent);
 
@@ -117,7 +116,7 @@ async function start(appComponent, router, storeRequest, bootFiles, starter, opt
 					});
 					continue;
 				}
-				catch (err) {
+				catch {
 					obj = new bootFile();
 					await obj.execute(
 						framework,
@@ -134,7 +133,6 @@ async function start(appComponent, router, storeRequest, bootFiles, starter, opt
 					return;
 				}
 
-				// eslint-disable-next-line
 				console.error('boot error:', err);
 				return;
 			}
@@ -150,7 +148,6 @@ async function start(appComponent, router, storeRequest, bootFiles, starter, opt
 			});
 		}
 		catch(err) {
-			// eslint-disable-next-line
 			console.error('boot error:', err);
 		}
 	}
