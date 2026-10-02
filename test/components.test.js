@@ -159,13 +159,14 @@ describe('useBaseLoadingOverlayComponent', () => {
 });
 
 describe('useDisplayDialogBaseComponent names', () => {
-	it('returns the edit state it destructures', () => {
+	it('carries no edit state', () => {
 		const { api } = mountComposable(useDisplayDialogBaseComponent, { props: baseDisplayDialogBaseProps, emits: [ 'cancel', 'ok' ] });
 
-		// destructured from useBaseComponent, which does not return them: undefined
-		expect(api.isSaving.value).toBe(false);
-		expect(api.serverErrors.value).toEqual([]);
-		expect(typeof api.setErrors).toBe('function');
+		// a display dialog never saves; it once destructured these from
+		// useBaseComponent, which does not return them, and passed on undefined
+		expect('isSaving' in api).toBe(false);
+		expect('serverErrors' in api).toBe(false);
+		expect('setErrors' in api).toBe(false);
 	});
 });
 

@@ -18,10 +18,7 @@ export function useDisplayDialogBaseComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
-		successResponse,
-		isSaving,
-		serverErrors,
-		setErrors
+		successResponse
 	} = useBaseComponent(props, context, options);
 
 	const serviceMarkup = LibraryClientUtility.$injector.getService(LibraryClientConstants.InjectorKeys.SERVICE_MARKUP_PARSER);
@@ -78,9 +75,6 @@ export function useDisplayDialogBaseComponent(props, context, options) {
 		notImplementedError,
 		success,
 		successResponse,
-		isSaving,
-		serverErrors,
-		setErrors,
 		dialogCancel,
 		dialogOk,
 		dialogSignal,
