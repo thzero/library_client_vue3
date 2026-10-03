@@ -42,9 +42,13 @@ export function useBasePageEditComponent(props, context, options) {
 		return event.returnValue = LibraryClientUtility.$trans.t('questions.formDirty');
 	};
 
+	// A guard that takes next must call it on every path; returning without it on a
+	// cancel left the navigation pending.
 	onBeforeRouteLeave(async (to, from, next) => {
-		if (!leaveCheck())
+		if (!leaveCheck()) {
+			next(false);
 			return;
+		}
 
 		next();
 	});

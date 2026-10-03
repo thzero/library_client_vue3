@@ -19,8 +19,10 @@ class VueBaseUserService extends BaseUserService {
 		await this._serviceStore.dispatcher.user.resetUser(correlationId);
 	}
 
-	async setAuthCompleted(correlationId) {
-		await this._serviceStore.dispatcher.user.setUserAuthCompleted(correlationId, true);
+	// Sign-out passes false; without the value it was dropped and authCompleted
+	// stayed true.
+	async setAuthCompleted(correlationId, value = true) {
+		await this._serviceStore.dispatcher.user.setUserAuthCompleted(correlationId, value);
 	}
 
 	async setClaims(correlationId, claims) {
