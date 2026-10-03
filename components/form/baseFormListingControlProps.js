@@ -1,4 +1,8 @@
 export const baseFormListingControlProps = {
+	autoSave: {
+		type: Boolean,
+		default: false
+	},
 	buttonClear: {
 		type: Boolean,
 		default: true
@@ -40,6 +44,10 @@ export const baseFormListingControlProps = {
 		default: 'buttons.ok'
 	},
 	debug: {
+		type: Boolean,
+		default: false
+	},
+	disabled: {
 		type: Boolean,
 		default: false
 	},

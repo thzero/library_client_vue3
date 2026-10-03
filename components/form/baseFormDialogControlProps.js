@@ -1,4 +1,8 @@
 export const baseFormDialogControlProps = {
+	autoSave: {
+		type: Boolean,
+		default: false
+	},
 	buttonClear: {
 		type: Boolean,
 		default: true
@@ -44,6 +48,10 @@ export const baseFormDialogControlProps = {
 		default: 'buttons.ok'
 	},
 	debug: {
+		type: Boolean,
+		default: false
+	},
+	disabled: {
 		type: Boolean,
 		default: false
 	},

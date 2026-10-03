@@ -140,6 +140,16 @@ describe('useBaseFormDialogControlComponent', () => {
 		expect(api.scrollableHeightI.value).toBe(`height: ${Math.ceil((window.innerHeight - 200) * 0.5)}px;`);
 	});
 
+	// disabled was read but not declared, so it fell into $attrs and never reached props
+	it('disables the buttons when disabled', () => {
+		expect(formDialog().api.buttonCancelDisabled.value).toBe(false);
+
+		const { api } = formDialog({ disabled: true });
+		expect(api.buttonCancelDisabled.value).toBe(true);
+		expect(api.buttonClearDisabled.value).toBe(true);
+		expect(api.buttonDeleteDisabled.value).toBe(true);
+	});
+
 	it('notifies on reset only when asked', async () => {
 		const { api } = formDialog();
 
@@ -157,6 +167,21 @@ describe('useBaseFormListingControlComponent', () => {
 		props: baseFormListingControlProps,
 		emits: [ 'close', 'delete', 'error', 'ok', 'reset' ],
 		attrs: { validation: validation(), ...attrs }
+	});
+
+	// disabled was read but not declared, so it fell into $attrs and never reached props
+	it('disables the buttons when disabled', () => {
+		expect(listing().api.buttonCancelDisabled.value).toBe(false);
+
+		const { api } = listing({ disabled: true });
+		expect(api.buttonCancelDisabled.value).toBe(true);
+		expect(api.buttonClearDisabled.value).toBe(true);
+		expect(api.buttonDeleteDisabled.value).toBe(true);
+	});
+
+	it('hands disabled to buttonOkDisabledOverride', () => {
+		const { api } = listing({ disabled: true, buttonOkDisabledOverride: (disabled) => disabled });
+		expect(api.buttonOkDisabled.value).toBe(true);
 	});
 
 	it('notifies on reset only when asked', async () => {
