@@ -7,7 +7,7 @@ import LibraryCommonUtility from '@thzero/library_common/utility/index';
 import { useBaseEditComponent } from '@thzero/library_client_vue3/components/baseEdit';
 import { useNotify } from '@thzero/library_client_vue3/components/notify';
 
-import DialogSupport from '../support/dialog';
+import DialogSupport from '@thzero/library_client_vue3/components/support/dialog';
 
 export function useBaseFormListingControlComponent(props, context, options) {
 	const {
@@ -93,7 +93,7 @@ export function useBaseFormListingControlComponent(props, context, options) {
 	const handleCancelConfirmOk = async(correlationId) => {
 		dialogCancelConfirmSignal.value.ok();
 
-		logger.debug('useBaseFormListingControlComponent', 'handleCancelConfirmOk', 'delete', null, correlationId);
+		logger.debug('useBaseFormListingControlComponent', 'handleCancelConfirmOk', 'cancel', null, correlationId);
 		reset(correlationId, true, true);
 		context.emit('close');
 	};
@@ -104,13 +104,13 @@ export function useBaseFormListingControlComponent(props, context, options) {
 			return;
 		}
 
-		logger.debug('useBaseFormListingControlComponent', 'clear', 'clear', null, correlationIdI);
+		logger.debug('useBaseFormListingControlComponent', 'handleClear', 'clear', null, correlationIdI);
 		await reset(correlationIdI, true, true);
 	};
 	const handleClearConfirmOk = async (correlationId) => {
 		dialogClearConfirmSignal.value.ok();
 
-		logger.debug('useBaseFormListingControlComponent', 'clear', 'clear', null, correlationId);
+		logger.debug('useBaseFormListingControlComponent', 'handleClearConfirmOk', 'clear', null, correlationId);
 		await reset(correlationId, true, true);
 		context.emit('reset');
 	};
@@ -156,7 +156,10 @@ export function useBaseFormListingControlComponent(props, context, options) {
 		dirty.value = props.validation.$anyDirty;
 		isSearching.value = false;
 
-		notify = notify !== null || notify !== undefined ? notify : true;
+		// was `notify !== null || notify !== undefined ? notify : true`, always the first
+		// branch, so unset has always meant no notification; the lookup dialogs pass null
+		// and rely on that
+		notify = notify ?? false;
 		if (props.notify && notify)
 			setNotify(correlationId, props.notifyMessageReset);
 	};
@@ -190,18 +193,18 @@ export function useBaseFormListingControlComponent(props, context, options) {
 					// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationIdI);
 
 					if (props.notify)
-						setNotify(correlationId, props.notifyMessageError);
+						setNotify(correlationIdI, props.notifyMessageError);
 
 					return;
 				}
 			}
 
-			logger.debug('useBaseFormListingControlComponent', 'submit', 'ok', null, correlationId);
+			logger.debug('useBaseFormListingControlComponent', 'submit', 'ok', null, correlationIdI);
 			context.emit('ok', response);
 
 			if (LibraryCommonUtility.isNull(options) || 
 				(!LibraryCommonUtility.isNull(options) && LibraryCommonUtility.isNull(options.resetOnSubmit)) || 
-				options.resetOnSubmit == true) {
+				options.resetOnSubmit === true) {
 				await reset(correlationIdI, false);
 			}
 
@@ -214,7 +217,7 @@ export function useBaseFormListingControlComponent(props, context, options) {
 		}
 		catch (err) {
 			context.emit('error', err);
-			logger.exception('useBaseFormListingControlComponent', 'submit', err, correlationId);
+			logger.exception('useBaseFormListingControlComponent', 'submit', err, correlationIdI);
 		}
 		finally {
 			isSearching.value = false;

@@ -22,7 +22,7 @@ export function useBaseAboutComponent(props, context, options) {
 	const emailsContributing = ref(options.emails.contributing);
 	const emailsContributingTitle = ref(LibraryClientUtility.$trans.t('titles.contact.contributing', { email: options.emails.contributing }));
 	const emailsInquiry = ref(options.emails.inquiry);
-	const emailsInquiryTitle = ref(LibraryClientUtility.$trans.t('titles.inquiry', { email: options.emails.inquiry }));
+	const emailsInquiryTitle = ref(LibraryClientUtility.$trans.t('titles.contact.inquiry', { email: options.emails.inquiry }));
 
 	return {
 		correlationId,

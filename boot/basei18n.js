@@ -7,7 +7,6 @@ import i18nBaseBoot from '@thzero/library_client/boot/basei18n';
 import NotImplementedError from '@thzero/library_common/errors/notImplemented';
 
 class Vuei18nBaseBoot extends i18nBaseBoot {
-	// eslint-disable-next-line
 	async execute(framework) {
 		// Set i18n instance on app
 		let options = {

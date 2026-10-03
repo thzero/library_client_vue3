@@ -1,5 +1,5 @@
 <script>
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 
 import LibraryClientUtility from '@thzero/library_client/utility/index';
 import LibraryCommonUtility from '@thzero/library_common/utility';
@@ -38,10 +38,18 @@ export function useBaseAdminComponent(props, context, options) {
 
 	initializeTabs();
 
+	// removed on unmount: one stacked up per visit, and after two the toggle
+	// flipped the drawer twice and did nothing
+	const onToggleDrawer = () => {
+		drawer.value = !drawer.value;
+	};
+
 	onMounted(() => {
-		LibraryClientUtility.$EventBus.on('toggle-drawer', () => {
-			drawer.value = !drawer.value;
-		});
+		LibraryClientUtility.$EventBus.on('toggle-drawer', onToggleDrawer);
+	});
+
+	onUnmounted(() => {
+		LibraryClientUtility.$EventBus.off('toggle-drawer', onToggleDrawer);
 	});
 
 	return {

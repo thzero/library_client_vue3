@@ -24,7 +24,7 @@ export function useBaseComponent(props, context, options) {
 		return Response.hasSucceeded(response);
 	};
 	const initialize = async () => {
-		if (options && LibraryCommonUtility.isObject(options), LibraryCommonUtility.isFunction(options.initializeI))
+		if (options && LibraryCommonUtility.isObject(options) && LibraryCommonUtility.isFunction(options.initializeI))
 			return await options.initializeI();
 		return null;
 	};

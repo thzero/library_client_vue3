@@ -114,8 +114,9 @@ export function useBaseFormControlComponent(props, context, options) {
 				// TODO
 				// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationId);
 
-				const notify = LibraryCommonUtility.isNotNull(notify) ? notify : true;
-				if (props.notify && notify)
+				// this read a notify declared on the same line: a ReferenceError, so the
+				// error was never shown
+				if (props.notify)
 					setNotify(correlationId, props.notifyMessageError);
 
 				return;
@@ -133,14 +134,14 @@ export function useBaseFormControlComponent(props, context, options) {
 			return;
 		}
 
-		logger.debug('useBaseFormControlComponent', 'clear', 'clear', null, correlationIdI);
-		await reset(correlationId, true, true);
+		logger.debug('useBaseFormControlComponent', 'handleClear', 'clear', null, correlationIdI);
+		await reset(correlationIdI, true, true);
 		context.emit('reset');
 	};
 	const handleClearConfirmOk = async (correlationId) => {
 		dialogClearConfirmSignal.value.ok();
 
-		logger.debug('useBaseFormControlComponent', 'clear', 'clear', null, correlationId);
+		logger.debug('useBaseFormControlComponent', 'handleClearConfirmOk', 'clear', null, correlationId);
 		await reset(correlationId, true, true);
 		context.emit('reset');
 	};
@@ -151,14 +152,14 @@ export function useBaseFormControlComponent(props, context, options) {
 			return;
 		}
 
-		logger.debug('useBaseFormControlComponent', 'close', 'close', null, correlationIdI);
-		await reset(correlationId, false);
+		logger.debug('useBaseFormControlComponent', 'handleClose', 'close', null, correlationIdI);
+		await reset(correlationIdI, false);
 		context.emit('cancel');
 	};
 	const handleCloseConfirmOk = async (correlationId) => {
 		dialogCloseConfirmSignal.value.ok();
 
-		logger.debug('useBaseFormControlComponent', 'close', 'close', null, correlationId);
+		logger.debug('useBaseFormControlComponent', 'handleCloseConfirmOk', 'close', null, correlationId);
 	};
 	const handleDelete = async () => {
 		serverErrors.value = [];
@@ -176,8 +177,9 @@ export function useBaseFormControlComponent(props, context, options) {
 				// TODO
 				// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationId);
 
-				const notify = LibraryCommonUtility.isNotNull(notify) ? notify : true;
-				if (props.notify && notify)
+				// this read a notify declared on the same line: a ReferenceError, so the
+				// error was never shown
+				if (props.notify)
 					setNotify(correlationId, props.notifyMessageError);
 
 				return;
@@ -240,7 +242,7 @@ export function useBaseFormControlComponent(props, context, options) {
 					// LibraryClientVueUtility.handleError($refs.obs, instance.ctx.serverErrors, response, correlationIdI);
 
 					if (props.notify)
-						setNotify(correlationId, props.notifyMessageError);
+						setNotify(correlationIdI, props.notifyMessageError);
 
 					return;
 				}

@@ -31,7 +31,6 @@ export default {
 		}
 	},
 	watch: {
-		// eslint-disable-next-line
 		modelValue(newValue, preValue) {
 			this.initValue(newValue);
 		}

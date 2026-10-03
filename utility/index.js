@@ -85,7 +85,6 @@ class LibraryClientVueUtility {
 				serverErrors.push(error.message);
 				continue;
 			}
-			// eslint-disable-next-line
 			if (!errors.hasOwnProperty(error.field))
 				errors[error.field] = [];
 			errors[error.field].push(error.message);

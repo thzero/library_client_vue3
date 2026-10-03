@@ -81,13 +81,13 @@ export function useBaseControlEditComponent(props, context, options) {
 
 		let key = null;
 		if (evt.type === 'paste') {
-			exp = `^${(props.min < 0 ? '-?' : '')}(?:\\d+|\\d{1,3}(?:,\\d{3})+)?(?:${(props.type === 'decimal' ? '\\.' : '')}\d+)?$`
+			exp = `^${(props.min < 0 ? '-?' : '')}(?:\\d+|\\d{1,3}(?:,\\d{3})+)?(?:${(props.type === 'decimal' ? '\\.' : '')}\\d+)?$`
 			// Handle paste
 			key = evt.clipboardData.getData('text/plain');
 		} else {
 			// Handle key press
-			const charCode = evt.keyCode || theEvent.which;
-			if (!((charCode >= 48 && charCode <= 57) || charCode == 31 || charCode === 44 || charCode === 45 || charCode === 46)) {
+			const charCode = evt.keyCode || evt.which;
+			if (!((charCode >= 48 && charCode <= 57) || charCode === 31 || charCode === 44 || charCode === 45 || charCode === 46)) {
 				evt.returnValue = false;
 				if (evt.preventDefault)
 					evt.preventDefault();
@@ -120,12 +120,6 @@ export function useBaseControlEditComponent(props, context, options) {
 	watch(() => props.modelValue,
 		(value) => {
 			initValue(value);
-		}
-	);
-	watch(() => innerValue,
-		(value) => {
-			console.log('update:modelValue', value);
-			context.emit('update:modelValue', value);
 		}
 	);
 

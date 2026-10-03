@@ -5,7 +5,6 @@ import LibraryCommonUtility from '@thzero/library_common/utility/index';
 
 import {} from '@thzero/library_common/utility/string';
 
-// eslint-disable-next-line
 async function start(appComponent, router, storeRequest, bootFiles, starter, options) {
 	const framework = createApp(appComponent);
 
@@ -73,7 +72,7 @@ async function start(appComponent, router, storeRequest, bootFiles, starter, opt
 		}
 		catch (err) {
 			console.log(err);
-			throw Error('Invalid store wrapper.');
+			throw new Error('Invalid store wrapper.');
 		}
 
 		if (storeWrapper) {
@@ -82,7 +81,7 @@ async function start(appComponent, router, storeRequest, bootFiles, starter, opt
 			}
 			catch (err) {
 				console.log(err);
-				throw Error('Invalid store initialization.');
+				throw new Error('Invalid store initialization.');
 			}
 
 			try {
@@ -90,7 +89,7 @@ async function start(appComponent, router, storeRequest, bootFiles, starter, opt
 			}
 			catch (err) {
 				console.log(err);
-				throw Error('Invalid store setup.');
+				throw new Error('Invalid store setup.');
 			}
 		}
 	}
@@ -117,7 +116,7 @@ async function start(appComponent, router, storeRequest, bootFiles, starter, opt
 					});
 					continue;
 				}
-				catch (err) {
+				catch {
 					obj = new bootFile();
 					await obj.execute(
 						framework,
@@ -134,7 +133,6 @@ async function start(appComponent, router, storeRequest, bootFiles, starter, opt
 					return;
 				}
 
-				// eslint-disable-next-line
 				console.error('boot error:', err);
 				return;
 			}
@@ -145,13 +143,11 @@ async function start(appComponent, router, storeRequest, bootFiles, starter, opt
 		try {
 			await starter({
 				framework,
-				app,
 				router,
 				store: LibraryClientUtility.$store
 			});
 		}
 		catch(err) {
-			// eslint-disable-next-line
 			console.error('boot error:', err);
 		}
 	}

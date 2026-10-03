@@ -1,5 +1,5 @@
 <script>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 import LibraryClientConstants from '@thzero/library_client/constants';
 
@@ -24,10 +24,12 @@ export function useBaseAuthComponent(props, context, options) {
 	const serviceFeatures = LibraryClientUtility.$injector.getService(LibraryClientConstants.InjectorKeys.SERVICE_FEATURES);
 	const serviceAuth = LibraryClientUtility.$injector.getService(LibraryClientConstants.InjectorKeys.SERVICE_AUTH);
 
-	const allowRememberMe = ref(serviceFeatures && serviceFeatures.features ? serviceFeatures.features.RememberMe : false);
+	// features is a method on the service; read as a property, RememberMe was always undefined
+	const featuresI = serviceFeatures ? serviceFeatures.features() : null;
+	const allowRememberMe = ref(featuresI ? featuresI.RememberMe ?? false : false);
 	const authenticated = ref(false);
 	const disabled = ref(false);
-	const features = ref(serviceFeatures.features);
+	const features = ref(featuresI);
 	const isLoggedIn = ref(false);
 	const rememberMe = ref(false);
 
@@ -46,6 +48,13 @@ export function useBaseAuthComponent(props, context, options) {
 	// 		LibraryClientUtility.$navRouter.push('/');
 	// })();
 
+	const onAuth = (value) => {
+		// was this.correlationId(), and a parameter named isLoggedIn that hid the ref
+		logger.debug('useBaseAuthComponent', 'onAuth', 'isLoggedIn', value, correlationId());
+		isLoggedIn.value = value;
+		disabled.value = value;
+	};
+
 	onMounted(async () => {
 		// TODO: not sure what this was doing...
 		// await serviceAuth.signInCompleted();
@@ -54,11 +63,11 @@ export function useBaseAuthComponent(props, context, options) {
 		if (authenticated.value)
 			LibraryClientUtility.$navRouter.push('/');
 
-		LibraryClientUtility.$EventBus.on('auth', isLoggedIn => {
-			logger.debug('useBaseAuthComponent', 'mounted', 'isLoggedIn', isLoggedIn, this.correlationId());
-			isLoggedIn.value = isLoggedIn;
-			disabled.value = isLoggedIn;
-		});
+		LibraryClientUtility.$EventBus.on('auth', onAuth);
+	});
+
+	onUnmounted(() => {
+		LibraryClientUtility.$EventBus.off('auth', onAuth);
 	});
 
 

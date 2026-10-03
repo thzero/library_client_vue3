@@ -1,5 +1,5 @@
 <script>
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 import LibraryClientConstants from '@thzero/library_client/constants';
 
@@ -18,24 +18,23 @@ export function useDisplayDialogBaseComponent(props, context, options) {
 		noBreakingSpaces,
 		notImplementedError,
 		success,
-		successResponse,
-		isSaving,
-		serverErrors,
-		setErrors
+		successResponse
 	} = useBaseComponent(props, context, options);
 
 	const serviceMarkup = LibraryClientUtility.$injector.getService(LibraryClientConstants.InjectorKeys.SERVICE_MARKUP_PARSER);
 
+	const dialogHeightI = ref(300);
 	const dialogSignal = ref(false);
 	const internalItem = ref(null);
 
 	const fullscreenInternal = computed(() => {
-		return options.fullscreenInternal ? options.fullscreenInternal : false;
+		return options && options.fullscreenInternal ? options.fullscreenInternal : false;
 	});
 	const markup = computed(() => {
 		if (!props.markup)
 			return null;
-		return serviceMarkup.trimResults(correlationId(), serviceMarkup.render(correlationId, props.markup));
+		const correlationIdI = correlationId();
+		return serviceMarkup.trimResults(correlationIdI, serviceMarkup.render(correlationIdI, props.markup));
 	});
 	const scrollableI = computed(() => {
 		return props.scrollable ? 'scrollable' : '';
@@ -46,12 +45,18 @@ export function useDisplayDialogBaseComponent(props, context, options) {
 
 	const dialogCancel = () => {
 		dialogSignal.value = false;
-		context.$emit('cancel');
+		// the setup context has emit; $emit threw, so the parent never heard
+		context.emit('cancel');
 	};
 	const dialogOk = async () => {
 		dialogSignal.value = false;
-		context.$emit('ok');
+		context.emit('ok');
 	};
+
+	onMounted(() => {
+		// as the form dialog: a share of the window, used when scrollableAutoResize is on
+		dialogHeightI.value = Math.ceil((window.innerHeight - 200) * props.scrollableAutoResizeFactor);
+	});
 
 	watch(() => props.signal,
 		(value) => {
@@ -70,9 +75,6 @@ export function useDisplayDialogBaseComponent(props, context, options) {
 		notImplementedError,
 		success,
 		successResponse,
-		isSaving,
-		serverErrors,
-		setErrors,
 		dialogCancel,
 		dialogOk,
 		dialogSignal,
