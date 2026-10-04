@@ -29,8 +29,11 @@ export function useBaseAdminLayout(props, context, options) {
 	const closeOnContentClick = ref(true);
 	const dialogSignOut = ref(new DialogSupport());
 
+	// authCompleted alone marks that auth resolved, with or without a user;
+	// gating on a user left the loading overlay up forever for a visitor who is
+	// not signed in. The `&&` also handed the Boolean signal prop a null.
 	const isAuthCompleted = computed(() => {
-		return serviceStore.user && serviceStore.userAuthCompleted;
+		return serviceStore.userAuthCompleted;
 	});
 	const isLoggedIn = computed(() => {
 		return serviceStore.user && serviceStore.userAuthIsLoggedIn;
