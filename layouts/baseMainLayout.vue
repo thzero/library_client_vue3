@@ -31,8 +31,11 @@ export function useBaseMainLayout(props, context, options) {
 	const displayDrawer = ref(false);
 	const displayFooter = ref(options ? options.displayFooter ?? true : true);
 
+	// authCompleted alone marks that auth resolved, with or without a user;
+	// gating on a user left the loading overlay up forever for a visitor who is
+	// not signed in.
 	const isAuthCompleted = computed(() => {
-		return serviceStore.user != null ? serviceStore.userAuthCompleted : false;
+		return serviceStore.userAuthCompleted;
 	});
 	const isLoggedIn = computed(() => {
 		return serviceStore.user != null ? serviceStore.userAuthIsLoggedIn : false;

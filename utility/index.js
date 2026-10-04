@@ -107,16 +107,24 @@ class LibraryClientVueUtility {
 		LibraryClientUtility.$navRouter.push('/');
 	}
 
-	static overlayImageWidth() {
-		let width = (window.innerWidth > window.innerHeight ? window.innerHeight : window.innerWidth);
+	// innerWidth and innerHeight are optional, and default to the window's. Pass
+	// them from a reactive source, such as vuetify's useDisplay, when the caller
+	// wraps this in a computed: window.innerWidth is not reactive, so a computed
+	// that reads it is evaluated once and never again.
+	static overlayImageWidth(innerWidth, innerHeight) {
+		const outer = (innerWidth ?? window.innerWidth);
+		const height = (innerHeight ?? window.innerHeight);
+		const width = (outer > height ? height : outer);
 		if (width > 512)
 			return '512px';
 
 		return width *.75 + 'px';
 	}
 
-	static overlayProgressSize() {
-		return (window.innerWidth > window.innerHeight ? window.innerHeight : window.innerWidth) * .25;
+	static overlayProgressSize(innerWidth, innerHeight) {
+		const width = (innerWidth ?? window.innerWidth);
+		const height = (innerHeight ?? window.innerHeight);
+		return (width > height ? height : width) * .25;
 	}
 
 	static randomKeyGen() {
