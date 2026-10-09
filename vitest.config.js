@@ -26,6 +26,17 @@ export default defineConfig({
 		testTimeout: 30000,
 		include: [ 'test/**/*.test.js' ],
 		setupFiles: [ 'test/setup.js' ],
+		coverage: {
+			provider: 'v8',
+			reporter: [ 'text-summary', 'lcov' ],
+			// every source file, so a file no test loads counts as uncovered
+			include: [ '**/*.{js,vue}' ],
+			exclude: [ 'test/**', 'coverage/**', '_config/**', '*.config.*', 'openSource.js' ],
+			// a ratchet, about 2 points under what was measured on 2026-10-09
+			// (statements 47.17, branches 26.83, functions 40.06, lines 46.86);
+			// raise these as tests are added, never lower them
+			thresholds: { statements: 45, branches: 24, functions: 38, lines: 44 }
+		},
 		server: {
 			deps: {
 				// @thzero packages import without file extensions, which Vite resolves

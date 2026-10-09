@@ -1,6 +1,7 @@
 // Rules earned their place: each one catches a defect found in this codebase.
 // See AUDIT_CLIENT.md in the parent workspace for the catalogue.
 import pluginVue from 'eslint-plugin-vue';
+import vitest from '@vitest/eslint-plugin';
 
 const rules = {
 	// undeclared identifiers: caught _logger.info throwing on every call, and
@@ -47,7 +48,7 @@ const globals = {
 };
 
 export default [
-	{ ignores: [ 'node_modules/**', 'dist/**', '_config/**' ] },
+	{ ignores: [ 'node_modules/**', 'dist/**', '_config/**', 'coverage/**' ] },
 	{
 		files: [ '**/*.js', '**/*.mjs' ],
 		languageOptions: { ecmaVersion: 2022, sourceType: 'module', globals },
@@ -65,6 +66,17 @@ export default [
 			'vue/no-deprecated-dollar-listeners-api': 'error',
 			'vue/no-deprecated-v-bind-sync': 'error',
 			'vue/no-deprecated-slot-scope-attribute': 'error'
+		}
+	},
+	{
+		files: [ 'test/**/*.js' ],
+		plugins: { vitest },
+		rules: {
+			// a stray .only or .skip passes CI while running a fraction of the suite
+			'vitest/no-focused-tests': 'error',
+			'vitest/no-disabled-tests': 'error',
+			// a test with no assertion passes whatever the code does
+			'vitest/expect-expect': 'error'
 		}
 	}
 ];
