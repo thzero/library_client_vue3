@@ -38,10 +38,37 @@ class LibraryClientVueUtility {
 		if (String.isNullOrEmpty(messageCode))
 			messageCode = Constants.ErrorCodes.Default;
 
-		return {
-			message: LibraryClientUtility.$trans.t(`${Constants.ErrorCodes.Suffix}.${messageCode}`, messageParams),
-			field: (error.field ? error.field : LibraryCommonConstants.ErrorFields.Generic)
-		};
+		const field = (error.field ? error.field : LibraryCommonConstants.ErrorFields.Generic);
+
+		// The message for the error's own code, then one for its type alone (a
+		// validation's 'any.required', with the field as {field}), then the
+		// message the server sent, then the default. A missing translation came
+		// back as its key, so the user saw 'errors.fameFactionId.any.required'.
+		const keys = [ `${Constants.ErrorCodes.Suffix}.${messageCode}` ];
+		if (error.type)
+			keys.push(`${Constants.ErrorCodes.Suffix}.${error.type}`);
+		for (const key of keys) {
+			if (LibraryClientVueUtility._translationExists(key))
+				return { message: LibraryClientUtility.$trans.t(key, { field: LibraryClientVueUtility._fieldName(error.field), ...messageParams }), field };
+		}
+		if (!String.isNullOrEmpty(error.message))
+			return { message: error.message, field };
+		return { message: LibraryClientUtility.$trans.t(`${Constants.ErrorCodes.Suffix}.${Constants.ErrorCodes.Default}`), field };
+	}
+
+	// The messages a failed response's errors come to, translated as applyError
+	// does; field errors as well as generic ones, since a form can only show
+	// them all together.
+	static errorMessages(response) {
+		if (!response || !Array.isArray(response.errors))
+			return [];
+		const messages = [];
+		for (const item of response.errors) {
+			const error = LibraryClientVueUtility.applyError(item);
+			if (error && !String.isNullOrEmpty(error.message) && !messages.includes(error.message))
+				messages.push(error.message);
+		}
+		return messages;
 	}
 
 	static checkId(to, from, next) {
@@ -73,29 +100,29 @@ class LibraryClientVueUtility {
 		return true;
 	}
 
+	// Puts a failed response's messages in serverErrors, the list a form shows,
+	// field errors included: they used to go to vee-validate's setErrors, which
+	// Vue 3 forms do not have. An object with setErrors still gets them by field.
 	static handleError(object, serverErrors, response) {
-		if (!object || !serverErrors || !response)
+		if (!serverErrors || !response)
 			return;
 
-		let errors = {};
-		let error;
-		for (const field in response.errors) {
-			error = LibraryClientVueUtility.applyError(response.errors[field]);
-			if (error.field === LibraryCommonConstants.ErrorFields.Generic) {
-				serverErrors.push(error.message);
-				continue;
-			}
-			if (!errors.hasOwnProperty(error.field))
-				errors[error.field] = [];
-			errors[error.field].push(error.message);
+		for (const message of LibraryClientVueUtility.errorMessages(response)) {
+			if (!serverErrors.includes(message))
+				serverErrors.push(message);
 		}
 
+		if (!object || (typeof object.setErrors !== 'function'))
+			return;
+
+		const errors = {};
+		for (const item of (response.errors ?? [])) {
+			const error = LibraryClientVueUtility.applyError(item);
+			if (!error || (error.field === LibraryCommonConstants.ErrorFields.Generic))
+				continue;
+			(errors[error.field] ??= []).push(error.message);
+		}
 		object.setErrors(errors);
-		// object.validation().applyResult({
-		//     errors: [ LibraryClientUtility.$trans.t(`${Constants.ErrorCodes.Suffix}.${messageCode}`, messageParams) ],
-		//     valid: false,
-		//     failedRules: {} // should be empty since this is a manual error.
-		//   })
 	}
 
 	static invalid(next) {
@@ -204,6 +231,23 @@ class LibraryClientVueUtility {
 			object
 		];
 		return result;
+	}
+
+	// The field as the user knows it, from errors.fields.<field>, else as sent.
+	static _fieldName(field) {
+		if (String.isNullOrEmpty(field))
+			return field;
+		const key = `${Constants.ErrorCodes.Suffix}.fields.${field}`;
+		return LibraryClientVueUtility._translationExists(key) ? LibraryClientUtility.$trans.t(key) : field;
+	}
+
+	static _translationExists(key) {
+		const trans = LibraryClientUtility.$trans;
+		if (!trans)
+			return false;
+		if (typeof trans.te === 'function')
+			return trans.te(key);
+		return trans.t(key) !== key;
 	}
 }
 

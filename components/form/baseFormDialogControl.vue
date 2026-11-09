@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue';
 
 import LibraryClientUtility from '@thzero/library_client/utility/index';
+import LibraryClientVueUtility from '@thzero/library_client_vue3/utility/index';
 import LibraryCommonUtility from '@thzero/library_common/utility/index';
 
 import { useBaseEditComponent } from '@thzero/library_client_vue3/components/baseEdit';
@@ -137,8 +138,8 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 			logger.debug('useBaseFormDialogControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationId);
 			if (hasFailed(response)) {
 				logger.error('useBaseFormDialogControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationId);
-				// TODO
-				// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationId);
+				// the server's messages, which the form lists under its fields
+				LibraryClientVueUtility.handleError(null, serverErrors.value, response);
 
 				if (props.notify)
 					setNotify(correlationId, props.notifyMessageError);
@@ -214,8 +215,8 @@ export function useBaseFormDialogControlComponent(props, context, options) {
 				if (hasFailed(response)) {
 					context.emit('error', response, correlationIdI);
 					logger.error('useBaseFormDialogControlComponent', 'submit', 'response', response, correlationIdI);
-					// TODO
-					// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationIdI);
+					// the server's messages, which the form lists under its fields
+					LibraryClientVueUtility.handleError(null, serverErrors.value, response);
 
 					if (props.notify)
 						setNotify(correlationIdI, props.notifyMessageError);

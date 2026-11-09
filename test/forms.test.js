@@ -85,6 +85,18 @@ describe('useBaseFormDialogControlComponent', () => {
 		expect(wrapper.emitted('ok')).toBeUndefined();
 	});
 
+	// a TODO stood where the server's messages should have gone, so a rejected
+	// save showed only the notification
+	it('lists the server\'s messages when the save fails', async () => {
+		const rejected = async () => ({ success: false, errors: [ { message: '"fameFactionId" is required', code: 'fameFactionId', field: 'fameFactionId', type: 'any.required' } ] });
+		const { api } = await opened({ preCompleteOk: rejected });
+
+		await api.submit();
+
+		expect(api.dialogSignal.value).toBe(true);
+		expect(api.serverErrors.value).toEqual([ '"fameFactionId" is required' ]);
+	});
+
 	it('stays open when the form is invalid', async () => {
 		const { api } = await opened({ validation: validation(false) });
 
