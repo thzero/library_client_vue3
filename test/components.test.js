@@ -141,6 +141,71 @@ describe('useBaseControlEditComponent', () => {
 
 		expect(evt.preventDefault).toHaveBeenCalled();
 	});
+
+	describe('errors', () => {
+		const required = { $message: 'Value is required' };
+		// a vuelidate instance with one rule at the top and one under innerValue
+		const validation = {
+			scenarioName: { $silentErrors: [ required ] },
+			innerValue: { fameFactionId: { $silentErrors: [ required ] }, name: { $silentErrors: [] } }
+		};
+
+		it('shows the errors of a rule at the top level', () => {
+			const { api } = field({ vid: 'scenarioName', validation });
+
+			expect(api.errorI.value).toBe(true);
+			expect(api.errorsI.value).toEqual([ required ]);
+		});
+
+		// the rules sit under innerValue in most forms; a plain vid found none
+		// of them, so those fields never showed an error
+		it('shows the errors of a nested rule its vid is the path to', () => {
+			const { api } = field({ vid: 'innerValue.fameFactionId', validation });
+
+			expect(api.errorsI.value).toEqual([ required ]);
+		});
+
+		it('shows none for a valid rule', () => {
+			const { api } = field({ vid: 'innerValue.name', validation });
+
+			expect(api.errorI.value).toBe(false);
+		});
+
+		it('shows none for a vid that names no rule', () => {
+			const { api } = field({ vid: 'fameFaction', validation });
+
+			expect(api.errorsI.value).toEqual([]);
+		});
+
+		it('adds the errors it is given', () => {
+			const server = { $message: 'Taken' };
+			const { api } = field({ vid: 'scenarioName', validation, errors: [ server ] });
+
+			expect(api.errorsI.value).toEqual([ server, required ]);
+		});
+
+		// a required field says so even while it is filled in and valid
+		it('marks the label of a field whose rule is required', () => {
+			const rules = { innerValue: { name: { required: { $invalid: false }, $silentErrors: [] }, tagLine: { $silentErrors: [] } } };
+
+			expect(field({ vid: 'innerValue.name', validation: rules }).api.labelI('Name')).toBe('Name *');
+			expect(field({ vid: 'innerValue.tagLine', validation: rules }).api.labelI('Tag Line')).toBe('Tag Line');
+		});
+
+		it('leaves the label alone without validation', () => {
+			expect(field({ vid: 'name' }).api.labelI('Name')).toBe('Name');
+			expect(field({ vid: 'innerValue.name', validation }).api.labelI('')).toBe('');
+		});
+
+		// a field filled in from a lookup is readonly and can still be required;
+		// readonly hid the validation, so nothing said it was missing
+		it('shows a readonly field\'s validation, with its readonly errors', () => {
+			const readonly = { $message: 'Locked' };
+			const { api } = field({ vid: 'scenarioName', validation, readonly: true, errors: [ { $message: 'ignored' } ], errorsReadonly: [ readonly ] });
+
+			expect(api.errorsI.value).toEqual([ readonly, required ]);
+		});
+	});
 });
 
 describe('useBaseLoadingOverlayComponent', () => {

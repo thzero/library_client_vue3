@@ -2,7 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue';
 
 import LibraryClientUtility from '@thzero/library_client/utility/index';
-// import LibraryClientVueUtility from '@thzero/library_client_vue/utility/index';
+import LibraryClientVueUtility from '@thzero/library_client_vue3/utility/index';
 import LibraryCommonUtility from '@thzero/library_common/utility';
 
 import { useBaseEditComponent } from '@thzero/library_client_vue3/components/baseEdit';
@@ -111,8 +111,8 @@ export function useBaseFormControlComponent(props, context, options) {
 			logger.debug('useBaseFormControlComponent', 'handleCancelConfirmOk', 'response', response, correlationId);
 			if (hasFailed(response)) {
 				logger.error('useBaseFormControlComponent', 'handleCancelConfirmOk', 'response', response, correlationId);
-				// TODO
-				// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationId);
+				// the server's messages, which the form lists under its fields
+				LibraryClientVueUtility.handleError(null, serverErrors.value, response);
 
 				// this read a notify declared on the same line: a ReferenceError, so the
 				// error was never shown
@@ -174,8 +174,8 @@ export function useBaseFormControlComponent(props, context, options) {
 			logger.debug('useBaseFormControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationId);
 			if (hasFailed(response)) {
 				logger.error('useBaseFormControlComponent', 'handleDeleteConfirmOk', 'response', response, correlationId);
-				// TODO
-				// LibraryClientVueUtility.handleError(this.$refs.obs, this.serverErrors.value, response, correlationId);
+				// the server's messages, which the form lists under its fields
+				LibraryClientVueUtility.handleError(null, serverErrors.value, response);
 
 				// this read a notify declared on the same line: a ReferenceError, so the
 				// error was never shown
@@ -238,8 +238,8 @@ export function useBaseFormControlComponent(props, context, options) {
 				if (hasFailed(response)) {
 					logger.error('useBaseFormControlComponent', 'submit', 'response', response, correlationIdI);
 
-					// TODO
-					// LibraryClientVueUtility.handleError($refs.obs, instance.ctx.serverErrors, response, correlationIdI);
+					// the server's messages, which the form lists under its fields
+					LibraryClientVueUtility.handleError(null, serverErrors.value, response);
 
 					if (props.notify)
 						setNotify(correlationIdI, props.notifyMessageError);

@@ -32,30 +32,46 @@ export function useBaseControlEditComponent(props, context, options) {
 			return options.convertValueI(value);
 		return value;
 	};
+	// The field's validation: the vid names it, as a path when the rule is nested
+	// ('innerValue.name'); a plain name only ever found rules at the top level.
+	const validationI = () => {
+		if (!props.validation || String.isNullOrEmpty(vid))
+			return null;
+		return vid.split('.').reduce((value, key) => (value ? value[key] : null), props.validation) ?? null;
+	};
 	const errorI = computed(() => {
-		if (props.readonly)
-			return props.errorsReadonly ? (props.errorsReadonly.length > 0) : false;
-
-		// return props.validation ? props.validation[vid] ? props.validation[vid].$silentErrors && (props.validation[vid].$silentErrors.length > 0) : false : false;
-		const errors = [];
-		if (props.errors)
-			errors.push(...props.errors);
-		if (props.validation && props.validation[vid])
-			errors.push(...props.validation[vid].$silentErrors);
-		return errors.length > 0;
+		return (errorsI.value ?? []).length > 0;
 	});
 	const errorsI = computed(() => {
-		if (props.readonly)
-			return props.errorsReadonly;
-
-		// return props.validation ? props.validation[vid] ? props.validation[vid].$silentErrors : [] : [];
 		const errors = [];
-		if (props.errors)
+		if (props.readonly) {
+			if (props.errorsReadonly)
+				errors.push(...props.errorsReadonly);
+		}
+		else if (props.errors)
 			errors.push(...props.errors);
-		if (props.validation && props.validation[vid])
-			errors.push(...props.validation[vid].$silentErrors);
+		// a readonly field can still be required, as one filled in from a lookup
+		// is; readonly used to hide its validation, so nothing said it was missing
+		const validation = validationI();
+		if (validation && validation.$silentErrors)
+			errors.push(...validation.$silentErrors);
 		return errors;
 	});
+	// The label, marked when the field's rule has a required validator, so a
+	// required field says so before it is ever empty.
+	const labelI = (label) => {
+		if (String.isNullOrEmpty(label))
+			return label;
+		const validation = validationI();
+		return (validation && validation.required) ? `${label} *` : label;
+	};
+	// The attributes for the field's input, without the label, which goes
+	// through labelI; bound with inheritAttrs off, so the plain label cannot
+	// replace the marked one.
+	const attrsI = (attrs) => {
+		const { label, ...rest } = attrs ?? {};
+		return rest;
+	};
 	const hideDetails = computed(() => {
 		return (!errorsI.value || (errorsI.value && errorsI.value.length === 0));
 	});
@@ -143,8 +159,10 @@ export function useBaseControlEditComponent(props, context, options) {
 		setErrors,
 		convertValue,
 		errorI,
+		attrsI,
 		errorsI,
 		hideDetails,
+		labelI,
 		innerValue,
 		initValue,
 		innerValueUpdate,
