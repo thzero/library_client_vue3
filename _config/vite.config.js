@@ -59,6 +59,10 @@ try {
 
 // https://vitejs.dev/config/
 export default defineConfig({optimizeDeps: {
+    // library_client's config service imports local-config. Pre-bundled with the libraries, the
+    // app's config was baked into Vite's dependency cache, and edits to src/config never reached
+    // the page until the cache was rebuilt. Excluded, it's always read fresh.
+    exclude: [ 'local-config' ],
     force: configEnv === 'development'
   },
   plugins: [
