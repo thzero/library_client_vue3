@@ -63,11 +63,11 @@ export function useBaseAuthComponent(props, context, options) {
 		if (authenticated.value)
 			LibraryClientUtility.$navRouter.push('/');
 
-		LibraryClientUtility.$EventBus.on('auth', onAuth);
+		LibraryClientUtility.$EventBus.on(LibraryClientConstants.EventKeys.Auth.Auth, onAuth);
 	});
 
 	onUnmounted(() => {
-		LibraryClientUtility.$EventBus.off('auth', onAuth);
+		LibraryClientUtility.$EventBus.off(LibraryClientConstants.EventKeys.Auth.Auth, onAuth);
 	});
 
 
